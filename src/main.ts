@@ -4,6 +4,7 @@ import CampaignOverviewView from "@/views/CampaignOverviewView.vue";
 import CampaignView from "@/views/CampaignView.vue";
 import ConfigurationView from "@/views/ConfigurationView.vue";
 import KeywordView from "@/views/KeywordView.vue";
+import MonsterHealthView from "@/views/MonsterHealthView.vue";
 import RandomizerView from "@/views/RandomizerView.vue";
 import { createPinia } from "pinia";
 import { createApp } from "vue";
@@ -32,6 +33,7 @@ const routes = [
   },
   { path: "/campaign", name: "Campaign Overview", component: CampaignOverviewView },
   { path: "/keyword", name: "Keyword", component: KeywordView },
+  { path: "/monster-health", name: "MonsterHealth", component: MonsterHealthView },
 ];
 
 const router = createRouter({

@@ -7,6 +7,8 @@ import {
   ListBulletIcon,
   QuestionMarkCircleIcon,
   UserGroupIcon,
+  HeartIcon,
+  ClockIcon
 } from "@heroicons/vue/24/solid";
 
 const isOpen = ref(false);
@@ -45,6 +47,14 @@ function open() {
         <div class="fixed inset-0 z-50 flex">
           <DialogPanel>
             <ul class="w-80 h-full flex gap-1 flex-col pt-4 px-4 bg-base-300">
+              <li>
+                <router-link class="flex p-3 rounded items-center" to="/monster-health" @click="close">
+                  <span>
+                    <HeartIcon class="h-7 w-7" />
+                  </span>
+                  <span class="pl-2">Monster Health Tracker</span>
+                </router-link>
+              </li>
               <li>
                 <router-link class="flex p-3 rounded items-center" to="/" @click="close">
                   <span>
