@@ -3,6 +3,7 @@
   import type { MonsterData } from "@/data/store/MonsterData";
   import { ref } from "vue";
   import MonsterPicker from "@/components/MonsterPicker.vue";
+  import MonsterImage from "@/components/MonsterImage.vue";
 
   let monsterDataStore = MonsterDataStore();
   let monster = ref<MonsterData>(monsterDataStore.find('rotten-flesh'));
@@ -12,24 +13,14 @@
   }
 </script>
 
-<style scoped>
-.testt {
-  background-color: red;
-  width: 600px;
-  height: 600px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 100px;
-}
-</style>
-
 <template>
   <BaseButtonMenu>
     <MonsterPicker @pick-monster="addMonster"/>
   </BaseButtonMenu>
   <div class="grid grid-flow-col auto-cols-max" gap-4>
-    <div class="max-w-xs bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800">
-      <img class="w-48 rounded-full" :src="monster.images.big" />
-    </div>
+    <MonsterImage :monster="monster" imgClass="w-48 rounded-full" class="max-w-xs bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800"/>
   </div>
 </template>
+
+<style scoped>
+</style>
