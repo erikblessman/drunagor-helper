@@ -1,13 +1,14 @@
 <script setup lang="ts">
-  import { MonsterDataStore } from "@/data/store/MonsterDataStore";
-  import type { MonsterData } from "@/data/store/MonsterData";
+  import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
   import { ref } from "vue";
   import MonsterPicker from "@/components/MonsterPicker.vue";
   import MonsterImage from "@/components/MonsterImage.vue";
 
-  let monsters = ref<MonsterData[]>([]);
+  let monsters = ref<ActiveMonsterData[]>([]);
 
-  function addMonster(newMonster: MonsterData) {
+  function addMonster(monster: MonsterData) {
+    let newMonster: ActiveMonsterData = monster as ActiveMonsterData;
+    newMonster.conditions = [];
     monsters.value.push(newMonster);
   }
 
@@ -21,13 +22,27 @@
     <MonsterPicker @pick-monster="addMonster"/>
   </BaseButtonMenu>
   <div class="grid grid-flow-col auto-cols-max" gap-4>
-    <template v-for="(monster, index) in monsters" :key="index">
-      <MonsterImage
-      :monster="monster"
-      @dblclick="removeMonster(index)"
-      imgClass="w-48 rounded-full"
-      class="max-w-xs bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800"/>
-    </template>
+    
+    <BaseList id="campaign-add-heroes">
+      <template v-for="(monster, index) in monsters" :key="index">
+        <BaseListItem>
+          <div class="grid grid-flow-col auto-cols-max">
+            <MonsterImage
+              :monster="monster"
+              @dblclick="removeMonster(index)"
+              imgClass="w-24 rounded-full"
+              class="w-24 bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800"/>
+            <div>
+              <div class="grid grid-flow-col">
+                <div v-for="(condition, index) in monster.conditions" :key="index">
+                  <img :src="condition.image" class="w-12" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </BaseListItem>
+      </template>
+    </BaseList>
   </div>
 </template>
 

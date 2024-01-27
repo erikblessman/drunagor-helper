@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="zoom">
         <img :src="currentImage" @click="swapImage" :class="imgClass" alt="Monster Image" />
     </div>
 </template>
@@ -28,5 +28,7 @@ function swapImage() {
 </script>
 
 <style scoped>
-/* Add any custom styles here */
+.zoom:hover {
+  transform: scale(2.0);
+}
 </style>

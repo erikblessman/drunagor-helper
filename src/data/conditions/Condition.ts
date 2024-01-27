@@ -3,7 +3,7 @@ import BleedImageUrl from "@/assets/tokens/token-bleed.png";
 import PoisonImageUrl from "@/assets/tokens/token-poison.png";
 import BurnImageUrl from "@/assets/tokens/token-burn.png";
 import StunImageUrl from "@/assets/tokens/token-stun.png";
-import KnockDownImageUrl from "@/assets/tokens/token-knock-down.png";
+import KnockDownImageUrl from "@/assets/tokens/token-knocked-down.png";
 import SlowImageUrl from "@/assets/tokens/token-slow.png";
 import RangersMarkImgUrl from "@/assets/tokens/token-rangers-mark.png";
 
