@@ -28,7 +28,7 @@ function swapImage() {
 </script>
 
 <style scoped>
-.zoom:hover {
+/* .zoom:hover {
   transform: scale(2.0);
-}
+} */
 </style>

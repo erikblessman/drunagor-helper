@@ -9,8 +9,9 @@ import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { MonsterData } from "@/data/store/MonsterData";
 import {
-  PlusIcon
-} from "@heroicons/vue/24/solid";
+  PlusIcon,
+  QuestionMarkCircleIcon
+} from "@heroicons/vue/24/outline";
 
 const toast = useToast();
 
@@ -31,6 +32,15 @@ const emit = defineEmits(["pick-monster"]);
 function pickMonster(monster: MonsterData) {
   emit("pick-monster", monster);
   closeModal();
+}
+
+function randomMonster(color: string) {
+  let randomMonster = _.sample(monsters.filter((m) => m.color === color));
+  if (randomMonster) {
+    pickMonster(randomMonster);
+  } else {
+    toast.error("No monsters of that color");
+  }
 }
 </script>
 
@@ -57,6 +67,18 @@ function pickMonster(monster: MonsterData) {
     </template>
     <template #default>
       <BaseList id="monster-pick-list">
+        <BaseListItem @click="randomMonster('white')">
+          <QuestionMarkCircleIcon class="w-12 fill-white stroke-gray-500" />
+          Random White
+        </BaseListItem>
+        <BaseListItem @click="randomMonster('gray')">
+          <QuestionMarkCircleIcon class="w-12 fill-gray-500 stroke-black" />
+          Random Gray
+        </BaseListItem>
+        <BaseListItem @click="randomMonster('black')">
+          <QuestionMarkCircleIcon class="w-12 fill-black stroke-gray-500" />
+          Random Black
+        </BaseListItem>
         <template v-for="monster in monsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
