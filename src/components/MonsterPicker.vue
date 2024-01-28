@@ -8,6 +8,9 @@ import * as _ from "lodash-es";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { MonsterData } from "@/data/store/MonsterData";
+import {
+  PlusIcon
+} from "@heroicons/vue/24/solid";
 
 const toast = useToast();
 
@@ -32,17 +35,15 @@ function pickMonster(monster: MonsterData) {
 </script>
 
 <template>
-  <button
+  
+  <PlusIcon
     id="campaign-add-hero"
-    class="px-3 py-3 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg"
-    @click="openModal"
-  >
-    Add Monster
-  </button>
+    class="w-6 bg-neutral text-green-400 rounded-lg"
+    @click="openModal" />
   <BaseModal :is-open="isOpen" @close-modal="closeModal">
     <template #header>
       <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">Add hero</div>
+        <div class="w-full font-medium place-self-center">Add Monster</div>
         <div>
           <button
             id="close-modal"

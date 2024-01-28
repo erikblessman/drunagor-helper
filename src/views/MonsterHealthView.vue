@@ -3,12 +3,13 @@
   import { ref } from "vue";
   import MonsterPicker from "@/components/MonsterPicker.vue";
   import MonsterImage from "@/components/MonsterImage.vue";
+import { Bleeding, Poison, Slow, Stun } from "@/data/conditions/Condition";
 
   let monsters = ref<ActiveMonsterData[]>([]);
 
   function addMonster(monster: MonsterData) {
     let newMonster: ActiveMonsterData = monster as ActiveMonsterData;
-    newMonster.conditions = [];
+    newMonster.conditions = [Bleeding, Poison, Slow, Stun];
     monsters.value.push(newMonster);
   }
 
