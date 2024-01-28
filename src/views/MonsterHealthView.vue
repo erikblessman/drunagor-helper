@@ -16,6 +16,12 @@
   function removeMonster(index: number) {
     monsters.value.splice(index, 1);
   }
+
+  function onSwipeItem(item: number) {
+		return function () {
+			console.log(item);
+		};
+	}
 </script>
 
 <template>
@@ -33,11 +39,12 @@
               @dblclick="removeMonster(index)"
               imgClass="w-24 rounded-full"
               class="w-24 bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800"
-              v-b-tooltip.hover :title="monster.name"/>
+              v-b-tooltip.hover :title="monster.name"
+              v-touch:swipe.left="onSwipeItem(index)"/>
             <div>
               <div class="grid grid-flow-col">
                 <div v-for="(condition, index) in monster.conditions" :key="index">
-                  <img :src="condition.image" class="w-12" v-touch:swipe.left="removeMonster(index)"/>
+                  <img :src="condition.image" class="w-12"/>
                 </div>
               </div>
             </div>
