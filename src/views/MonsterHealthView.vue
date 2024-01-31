@@ -4,24 +4,64 @@
   import MonsterPicker from "@/components/MonsterPicker.vue";
   import MonsterImage from "@/components/MonsterImage.vue";
   import { Bleeding, Poison, Slow, Stun } from "@/data/conditions/Condition";
+  import {
+    HeartIcon,
+    TrashIcon,
+  } from "@heroicons/vue/24/solid";
 
   let monsters = ref<ActiveMonsterData[]>([]);
 
+  const availableRingColors : string[] = [
+    "Yellow", "Navy", "HotPink", "Green", "FireBrick","Black", 
+    "DarkOrange", "Snow", "Aquamarine", "RoyalBlue", "Red", "SaddleBrown", 
+  ];
+
   function addMonster(monster: MonsterData) {
-    let newMonster: ActiveMonsterData = monster as ActiveMonsterData;
+    let newMonster: ActiveMonsterData = {...monster} as ActiveMonsterData;
     newMonster.conditions = [Bleeding, Poison, Slow, Stun];
+    newMonster.hp = 10;
+    if (availableRingColors.length === 0) {
+      newMonster.baseColor = "Black";
+    } else {
+      newMonster.baseColor = availableRingColors.shift() as string;
+    }
+
     monsters.value.push(newMonster);
   }
 
   function removeMonster(index: number) {
+    availableRingColors.unshift(monsters.value[index].baseColor);
     monsters.value.splice(index, 1);
   }
 
-  function onSwipeItem(item: number) {
+  function onMonsterSwipeLeft(index: number) {
 		return function () {
-			console.log(item);
+			removeMonster(index);
 		};
 	}
+
+  function incrementHp(index: number) {
+    monsters.value[index].hp++;
+  }
+
+  function decrementHp(index: number) {
+    monsters.value[index].hp--;
+    if (monsters.value[index].hp <= 0 && confirm("Remove monster?")) {
+      removeMonster(index);
+    }
+  }
+
+  function onHpSwipeRight(index: number) {
+    return function () {
+      incrementHp(index);
+    };
+  }
+
+function onHpSwipeLeft(index: number) {
+  return function () {
+    decrementHp(index);
+  };
+}
 </script>
 
 <template>
@@ -38,14 +78,26 @@
               :monster="monster"
               @dblclick="removeMonster(index)"
               imgClass="w-24 rounded-full"
-              class="w-24 bg-white border-fuchsia-500 border-8 rounded-full shadow dark:bg-gray-800"
-              v-b-tooltip.hover :title="monster.name"
-              v-touch:swipe.left="onSwipeItem(index)"/>
+              :style="'border-color:' + monster.baseColor + ';'"
+              :class="'w-24 bg-white border-8 rounded-full shadow dark:bg-gray-800'"
+              v-touch:swipe.left="onMonsterSwipeLeft(index)"/>
             <div>
+              <div class="font-semibold text-lg">
+                {{ monster.name }} ({{ monster.color }})
+              </div>
               <div class="grid grid-flow-col">
+                <div class="grid"
+                v-touch:swipe.right="onHpSwipeRight(index)"
+                v-touch:swipe.left="onHpSwipeLeft(index)">
+                  <HeartIcon class="fill-red-500 w-12 col-start-1 row-start-1 self-center" />
+                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red">
+                    {{monster.hp}}
+                  </div>
+                </div>
                 <div v-for="(condition, index) in monster.conditions" :key="index">
                   <img :src="condition.image" class="w-12"/>
                 </div>
+                <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)"/>
               </div>
             </div>
           </div>

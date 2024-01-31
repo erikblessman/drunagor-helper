@@ -42,6 +42,7 @@ function randomMonster(color: string) {
     toast.error("No monsters of that color");
   }
 }
+
 </script>
 
 <template>

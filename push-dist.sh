@@ -1,0 +1,1 @@
+npm run build-only && git add dist && git commit -m 'dist push' && git subtree push --prefix dist origin gh-pages
