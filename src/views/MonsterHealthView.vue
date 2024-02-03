@@ -7,6 +7,7 @@
   import {
     HeartIcon,
     TrashIcon,
+    FlagIcon, // TODO: Add ability go add/remove conditions
   } from "@heroicons/vue/24/solid";
 
   let monsters = ref<ActiveMonsterData[]>([]);
@@ -18,7 +19,7 @@
 
   function addMonster(monster: MonsterData) {
     let newMonster: ActiveMonsterData = {...monster} as ActiveMonsterData;
-    newMonster.conditions = [Bleeding, Poison, Slow, Stun];
+    newMonster.conditions = [Poison, Bleeding, Slow, Stun];
     newMonster.hp = 10;
     if (availableRingColors.length === 0) {
       newMonster.baseColor = "Black";
@@ -85,12 +86,15 @@ function onHpSwipeLeft(index: number) {
               <div class="font-semibold text-lg">
                 {{ monster.name }} ({{ monster.color }})
               </div>
-              <div class="grid grid-flow-col">
-                <div class="grid"
+              <div class="grid grid-flow-col auto-cols-max">
+                <div class="grid w-12" style="border 1px dashed red;"
                 v-touch:swipe.right="onHpSwipeRight(index)"
                 v-touch:swipe.left="onHpSwipeLeft(index)">
-                  <HeartIcon class="fill-red-500 w-12 col-start-1 row-start-1 self-center" />
-                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red">
+                  <div class="col-start-1 row-start-1 justify-center border-dashed border-red">
+                    <HeartIcon class="fill-red-500 w-12 self-center" />
+                  </div>
+                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center"
+                  style="border 1px dashed blue;">
                     {{monster.hp}}
                   </div>
                 </div>
@@ -98,6 +102,7 @@ function onHpSwipeLeft(index: number) {
                   <img :src="condition.image" class="w-12"/>
                 </div>
                 <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)"/>
+                <div>&nbsp;</div>
               </div>
             </div>
           </div>
