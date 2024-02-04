@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-  FlagIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "@heroicons/vue/24/solid";
 import type { ICondition } from "@/data/conditions/Condition";
 import { Conditions } from "@/data/conditions/Condition";
@@ -37,7 +38,8 @@ function toggleCondition(condition: ICondition) {
     :class="{'opacity-25' : !isSelected(condition)}"
     @click="toggleCondition(condition)"/>
   </div>
-  <FlagIcon class="w-12 fill-wite" @click="isOpen = !isOpen" />
+  <ChevronRightIcon v-if="!isOpen" class="w-12 fill-wite" @click="isOpen = true" />
+  <ChevronLeftIcon v-if="isOpen" class="w-12 fill-wite" @click="isOpen = false" />
 </template>
 
 <style scoped></style>

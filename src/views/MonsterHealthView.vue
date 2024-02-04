@@ -7,7 +7,6 @@
   import {
     HeartIcon,
     TrashIcon,
-    FlagIcon, // TODO: Add ability go add/remove conditions
   } from "@heroicons/vue/24/solid";
 
   let monsters = ref<ActiveMonsterData[]>([]);
@@ -31,15 +30,12 @@
   }
 
   function removeMonster(index: number) {
+    if (!confirm("Remove " + monsters.value[index].name + "?")) {
+      return;
+    }
     availableRingColors.unshift(monsters.value[index].baseColor);
     monsters.value.splice(index, 1);
   }
-
-  function onMonsterSwipeLeft(index: number) {
-		return function () {
-			removeMonster(index);
-		};
-	}
 
   function incrementHp(index: number) {
     monsters.value[index].hp++;
@@ -47,7 +43,7 @@
 
   function decrementHp(index: number) {
     monsters.value[index].hp--;
-    if (monsters.value[index].hp <= 0 && confirm("Remove monster?")) {
+    if (monsters.value[index].hp <= 0) {
       removeMonster(index);
     }
   }
@@ -74,22 +70,21 @@ function onHpSwipeLeft(index: number) {
     <BaseList id="monster-health">
       <template v-for="(monster, index) in monsters" :key="index">
         <BaseListItem>
-          <div class="grid grid-flow-col auto-cols-max">
+          <div class="grid grid-flow-col auto-cols-max"
+                v-touch:swipe.right="onHpSwipeRight(index)"
+                v-touch:swipe.left="onHpSwipeLeft(index)">
             <MonsterImage
               :monster="monster"
               @dblclick="removeMonster(index)"
               imgClass="w-24 rounded-full"
               :style="'border-color:' + monster.baseColor + ';'"
-              :class="'w-24 bg-white border-8 rounded-full shadow dark:bg-gray-800'"
-              v-touch:swipe.left="onMonsterSwipeLeft(index)"/>
+              :class="'w-24 bg-white border-8 rounded-full shadow dark:bg-gray-800'"/>
             <div>
               <div class="font-semibold text-lg">
                 {{ monster.name }} ({{ monster.color }})
               </div>
               <div class="grid grid-flow-col auto-cols-max">
-                <div class="grid w-12" style="border 1px dashed red;"
-                v-touch:swipe.right="onHpSwipeRight(index)"
-                v-touch:swipe.left="onHpSwipeLeft(index)">
+                <div class="grid w-12" style="border 1px dashed red;">
                   <div class="col-start-1 row-start-1 justify-center border-dashed border-red">
                     <HeartIcon class="fill-red-500 w-12 self-center" />
                   </div>
