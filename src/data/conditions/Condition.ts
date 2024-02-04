@@ -115,3 +115,5 @@ export const RangersMark : RedundantCondition = new Condition({
     image: RangersMarkImgUrl,
     apply: function (monster: ActiveMonsterData): void {}
 });
+
+export const Conditions : ICondition[] = [Bleeding, Poison, Burning, Stun, KnockDown, Slow, RangersMark];

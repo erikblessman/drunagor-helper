@@ -2,8 +2,8 @@
   import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
   import { ref } from "vue";
   import MonsterPicker from "@/components/MonsterPicker.vue";
+  import Conditions from "@/components/ConditionPicker.vue";
   import MonsterImage from "@/components/MonsterImage.vue";
-  import { Bleeding, Poison, Slow, Stun } from "@/data/conditions/Condition";
   import {
     HeartIcon,
     TrashIcon,
@@ -19,7 +19,7 @@
 
   function addMonster(monster: MonsterData) {
     let newMonster: ActiveMonsterData = {...monster} as ActiveMonsterData;
-    newMonster.conditions = [Poison, Bleeding, Slow, Stun];
+    newMonster.conditions = [];
     newMonster.hp = 10;
     if (availableRingColors.length === 0) {
       newMonster.baseColor = "Black";
@@ -98,9 +98,7 @@ function onHpSwipeLeft(index: number) {
                     {{monster.hp}}
                   </div>
                 </div>
-                <div v-for="(condition, index) in monster.conditions" :key="index">
-                  <img :src="condition.image" class="w-12"/>
-                </div>
+                <Conditions :conditions="monster.conditions"/>
                 <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)"/>
                 <div>&nbsp;</div>
               </div>
