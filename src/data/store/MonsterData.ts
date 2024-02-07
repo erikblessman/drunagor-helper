@@ -17,7 +17,7 @@ export interface MonsterData {
 
 export interface ActiveMonsterData extends MonsterData {
   hp: number;
-  maxHp: number;
   conditions: ICondition[];
+  maxHp: number;
   baseColor: string;
 }

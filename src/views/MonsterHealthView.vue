@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
-  import { ref } from "vue";
   import MonsterPicker from "@/components/MonsterPicker.vue";
   import Conditions from "@/components/ConditionPicker.vue";
   import MonsterImage from "@/components/MonsterImage.vue";
@@ -8,8 +7,10 @@
     HeartIcon,
     TrashIcon,
   } from "@heroicons/vue/24/solid";
+  import { MonsterStore } from "@/store/MonsterStore";
 
-  let monsters = ref<ActiveMonsterData[]>([]);
+  const store = MonsterStore();
+  let monsters = store.activeMonsterData;
 
   const availableRingColors : string[] = [
     "Yellow", "Navy", "HotPink", "Green", "FireBrick","Black", 
@@ -25,25 +26,25 @@
     } else {
       newMonster.baseColor = availableRingColors.shift() as string;
     }
-
-    monsters.value.push(newMonster);
+    store.addMonster(newMonster);
   }
 
   function removeMonster(index: number) {
-    if (!confirm("Remove " + monsters.value[index].name + "?")) {
+    let monster = monsters[index];
+    if (!confirm("Remove " + monster.name + "?")) {
       return;
     }
-    availableRingColors.unshift(monsters.value[index].baseColor);
-    monsters.value.splice(index, 1);
+    availableRingColors.unshift(monster.baseColor);
+    store.removeMonster(monster);
   }
 
   function incrementHp(index: number) {
-    monsters.value[index].hp++;
+    monsters[index].hp++;
   }
 
   function decrementHp(index: number) {
-    monsters.value[index].hp--;
-    if (monsters.value[index].hp <= 0) {
+    monsters[index].hp--;
+    if (monsters[index].hp <= 0) {
       removeMonster(index);
     }
   }
