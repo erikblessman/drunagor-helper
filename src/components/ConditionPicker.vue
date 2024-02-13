@@ -9,22 +9,31 @@ import { Conditions } from "@/data/conditions/Condition";
 
 const isOpen = ref(false);
 
-const emit = defineEmits(["pick-monster"]);
+const emit = defineEmits(["add-condition", "remove-condition",]);
 
 const props = defineProps<{
   conditions: ICondition[];
 }>();
 
+let conditions = ref(props.conditions);
+
+function getIndex(condition: ICondition): number {
+  return conditions.value.map(c => c.name).indexOf(condition.name);
+}
+
 function isSelected(condition: ICondition) {
-  return props.conditions.indexOf(condition) !== -1;
+  let index : number = getIndex(condition);
+  return index !== -1;
 }
 
 function toggleCondition(condition: ICondition) {
-  const index = props.conditions.indexOf(condition);
+  const index = getIndex(condition);
   if (index == -1) {
-    props.conditions.push(condition);
+    conditions.value.push(condition);
+    emit("add-condition", condition);
   } else {
-    props.conditions.splice(index, 1);
+    conditions.value.splice(index, 1);
+    emit("remove-condition", condition);
   }
 }
 
