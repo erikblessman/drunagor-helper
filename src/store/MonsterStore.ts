@@ -1,7 +1,7 @@
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import { useStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
-import type { IMonster } from "@/data/monsters";
+import type { IMonster } from "@/data/monsters/Monster";
 import type { ICondition } from "@/data/conditions/Condition";
 
 export const MonsterStore = defineStore("monsters", () => {

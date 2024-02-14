@@ -6,59 +6,67 @@ import MonsterImage from "@/components/MonsterImage.vue";
 import {
   HeartIcon,
   TrashIcon,
+  ArrowPathIcon,
 } from "@heroicons/vue/24/solid";
 import { MonsterStore } from "@/store/MonsterStore";
 import type { ICondition } from "@/data/conditions/Condition";
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
 
-const store = MonsterStore();
-let monsters = ref(store.activeMonsterData);
+const { activeMonsterData } = storeToRefs(MonsterStore());
+const { getMonsterMaxHp, setMonsterHp, addCondition, removeCondition, clearActiveMonsters } = MonsterStore();
 
 const availableRingColors: string[] = [
   "Yellow", "Navy", "HotPink", "Green", "FireBrick", "Black",
   "DarkOrange", "Snow", "Aquamarine", "RoyalBlue", "Red", "SaddleBrown",
 ];
 
+function nextAvailableColor() {
+  let takenColors = activeMonsterData.value.map(m => m.baseColor);
+  for (let color of availableRingColors) {
+    if (!takenColors.includes(color)) {
+      return color;
+    }
+  }
+  return "Black";
+}
+
 function addMonster(monster: MonsterData) {
   let newMonster: ActiveMonsterData = { ...monster } as ActiveMonsterData;
   newMonster.conditions = [];
-  newMonster.hp = store.getMonsterMaxHp(newMonster);
-  if (availableRingColors.length === 0) {
-    newMonster.baseColor = "Black";
-  } else {
-    newMonster.baseColor = availableRingColors.shift() as string;
-  }
-  store.addMonster(newMonster);
+  newMonster.hp = getMonsterMaxHp(newMonster);
+  newMonster.baseColor = nextAvailableColor();
+  activeMonsterData.value.push(newMonster);
+  //store.value.addMonster(newMonster);
 }
 
 function removeMonster(index: number) {
-  let monster = monsters.value[index];
+  let monster = activeMonsterData.value[index];
   if (!confirm("Remove " + monster.name + "?")) {
     return;
   }
-  availableRingColors.unshift(monster.baseColor);
-  store.removeMonster(index);
+  activeMonsterData.value.splice(index, 1);
+  //store.value.removeMonster(index);
 }
 
 function incrementHp(index: number) {
-  monsters.value[index].hp++;
-  store.setMonsterHp(index, monsters.value[index].hp);
+  activeMonsterData.value[index].hp++;
+  setMonsterHp(index, activeMonsterData.value[index].hp);
 }
 
 function decrementHp(index: number) {
-  monsters.value[index].hp--;
-  store.setMonsterHp(index, monsters.value[index].hp);
-  if (monsters.value[index].hp <= 0) {
+  activeMonsterData.value[index].hp--;
+  setMonsterHp(index, activeMonsterData.value[index].hp);
+  if (activeMonsterData.value[index].hp <= 0) {
     removeMonster(index);
   }
 }
 
-function addCondition(condition: ICondition, index: number) {
-  store.addCondition(index, condition);
+function addConditionHandler(condition: ICondition, index: number) {
+  addCondition(index, condition);
 }
 
-function removeCondition(condition: ICondition, index: number) {
-  store.removeCondition(index, condition);
+function removeConditionHandler(condition: ICondition, index: number) {
+  removeCondition(index, condition);
 }
 
 function onHpSwipeRight(index: number) {
@@ -72,16 +80,21 @@ function onHpSwipeLeft(index: number) {
     decrementHp(index);
   };
 }
+
+function clearActiveMonstersHandler() {
+  if (!confirm("Clear all active monsters?")) {
+    return;
+  }
+  clearActiveMonsters();
+}
 </script>
 
 <template>
-  <BaseButtonMenu>
-    <MonsterPicker @pick-monster="addMonster" />
-  </BaseButtonMenu>
+  <MonsterPicker @pick-monster="addMonster" />
+  <ArrowPathIcon class="w-12 fill-gray-600" @click="clearActiveMonstersHandler" />
   <div class="grid grid-flow-col auto-cols-max" gap-4>
-
     <BaseList id="monster-health">
-      <template v-for="(monster, index) in monsters" :key="index">
+      <template v-for="(monster, index) in activeMonsterData" :key="index">
         <BaseListItem>
           <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(index)"
             v-touch:swipe.left="onHpSwipeLeft(index)">
@@ -93,17 +106,17 @@ function onHpSwipeLeft(index: number) {
                 {{ monster.name }} ({{ monster.color }})
               </div>
               <div class="grid grid-flow-col auto-cols-max">
-                <div class="grid w-12" style="border 1px dashed red;">
-                  <div class="col-start-1 row-start-1 justify-center border-dashed border-red">
+                <div class="grid w-12">
+                  <div class="col-start-1 row-start-1 justify-center">
                     <HeartIcon class="fill-red-500 w-12 self-center" />
                   </div>
-                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center"
-                    style="border 1px dashed blue;">
+                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
                     {{ monster.hp }}
                   </div>
                 </div>
-                <Conditions :conditions="monster.conditions" @add-condition="addCondition($event, index)"
-                  @remove-condition="removeCondition($event, index)" />
+                <Conditions :conditions="monster.conditions"
+                  @add-condition="addConditionHandler($event, index)"
+                  @remove-condition="removeConditionHandler($event, index)" />
                 <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)" />
               </div>
             </div>
