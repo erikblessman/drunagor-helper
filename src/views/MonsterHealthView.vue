@@ -61,14 +61,6 @@ function decrementHp(index: number) {
   }
 }
 
-function addConditionHandler(condition: ICondition, index: number) {
-  addCondition(index, condition);
-}
-
-function removeConditionHandler(condition: ICondition, index: number) {
-  removeCondition(index, condition);
-}
-
 function onHpSwipeRight(index: number) {
   return function () {
     incrementHp(index);
@@ -115,8 +107,8 @@ function clearActiveMonstersHandler() {
                   </div>
                 </div>
                 <Conditions :conditions="monster.conditions"
-                  @add-condition="addConditionHandler($event, index)"
-                  @remove-condition="removeConditionHandler($event, index)" />
+                  @add-condition="addCondition(index, $event)"
+                  @remove-condition="removeCondition(index, $event)" />
                 <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)" />
               </div>
             </div>
