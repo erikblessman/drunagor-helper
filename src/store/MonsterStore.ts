@@ -6,6 +6,8 @@ import type { ICondition } from "@/data/conditions/Condition";
 export const MonsterStore = defineStore("monsters", () => {
     const activeMonsterData = useStorage("ActiveMonsters", [] as ActiveMonsterData[]);
     const monsterMaxHp = useStorage("MonsterMaxHp", {} as Record<string, number>);
+    const autoConfirmDelete = useStorage("AutoConfirmDelete", false);
+    const useDefaultHp = useStorage("UseDefaultHp", true);
 
     /// activeMonsterData management --------------------------------------------------------------
 
@@ -43,14 +45,14 @@ export const MonsterStore = defineStore("monsters", () => {
     /// @remarks - Prompts the user for confirmation
     function removeMonster(index: number) {
         let monster = activeMonsterData.value[index];
-        if (!confirm("Remove " + monster.name + " (" + monster.baseColor + ")?")) {
+        if (!autoConfirmDelete.value && !confirm("Remove " + monster.name + " (" + monster.baseColor + ")?")) {
           return;
         }
         activeMonsterData.value.splice(index, 1);
     }
 
     function clearActiveMonsters(): void {
-        if (!confirm("Clear all active monsters?")) {
+        if (!autoConfirmDelete.value && !confirm("Clear all active monsters?")) {
           return;
         }
         activeMonsterData.value = [];
@@ -129,13 +131,14 @@ export const MonsterStore = defineStore("monsters", () => {
     /// If the user enters a new value, it is saved as the default for that monster name.
     /// If the user enters NO value, the default for that monster name is removed.
     function getMonsterMaxHp(monster: ActiveMonsterData): number {
-        console.log("getting max hp");
         let hpForMonsterName : number | null = _getDefaultHpByName(monster.name);
         let hpForMonsterColor : number | null = _getDefaultHpByColor(monster.color);
         let defaultHp : number = hpForMonsterName ?? hpForMonsterColor ?? 20;
+        if (useDefaultHp.value) {
+            return defaultHp;
+        }
         let promptHp : number = parseInt(prompt(`Enter max HP for ${monster.name}`, defaultHp.toString()));
 
-        console.log({promptHp, hpForMonsterName, hpForMonsterColor});
         if (promptHp) {
             if (promptHp !== hpForMonsterName) {
                 _setDefaultHpByName(monster.name, promptHp);
@@ -173,5 +176,7 @@ export const MonsterStore = defineStore("monsters", () => {
         clearActiveMonsters,
         incrementHp,
         decrementHp,
+        autoConfirmDelete,
+        useDefaultHp,
     };
 });

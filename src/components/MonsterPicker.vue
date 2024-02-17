@@ -9,7 +9,6 @@ import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { MonsterData } from "@/data/store/MonsterData";
 import {
-  PlusIcon,
   QuestionMarkCircleIcon
 } from "@heroicons/vue/24/outline";
 
@@ -23,6 +22,8 @@ function openModal() {
 function closeModal() {
   isOpen.value = false;
 }
+
+defineExpose({ openModal });
 
 const monsterStore = MonsterDataStore();
 const monsters = monsterStore.findAllEnabled();
@@ -46,11 +47,6 @@ function randomMonster(color: string) {
 </script>
 
 <template>
-  
-  <PlusIcon
-    id="campaign-add-hero"
-    class="w-6 bg-neutral text-green-400 rounded-lg"
-    @click="openModal" />
   <BaseModal :is-open="isOpen" @close-modal="closeModal">
     <template #header>
       <div class="grid grid-cols-2">

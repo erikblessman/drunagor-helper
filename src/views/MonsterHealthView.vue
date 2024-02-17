@@ -11,8 +11,16 @@ import {
 import { MonsterStore } from "@/store/MonsterStore";
 import type { ICondition } from "@/data/conditions/Condition";
 import { storeToRefs } from "pinia";
+import { ref } from "vue";
+import {
+  PlusIcon,
+  Cog6ToothIcon,
+} from "@heroicons/vue/24/outline";
 
-const { activeMonsterData } = storeToRefs(MonsterStore());
+const { activeMonsterData,
+  autoConfirmDelete,
+  useDefaultHp,
+} = storeToRefs(MonsterStore());
 const {
   addMonster,
   removeMonster,
@@ -22,6 +30,7 @@ const {
   incrementHp,
   decrementHp,
 } = MonsterStore();
+const monsterPickerRef = ref(null);
 
 function onHpSwipeRight(index: number) {
   return function () {
@@ -34,11 +43,36 @@ function onHpSwipeLeft(index: number) {
     decrementHp(index);
   };
 }
+
+function openMonsterPicker() {
+  monsterPickerRef.value.openModal();
+}
 </script>
 
 <template>
-  <MonsterPicker @pick-monster="addMonster" />
-  <ArrowPathIcon class="w-6 fill-gray-600" @click="clearActiveMonsters" />
+  <div class="flex pb-4 w-full">
+    <div class="px-2 flex" @click="openMonsterPicker">
+      <PlusIcon class="w-6 bg-neutral text-green-400 rounded-lg" />
+    </div>
+    <div class="px-2 flex" @click="clearActiveMonsters">
+      <ArrowPathIcon class="w-6 bg-neutral text-red-400 rounded-lg" />
+    </div>
+    <div class="px-2">
+      <Button class="bg-neutral rounded-lg px-2 py-1"
+      :class="autoConfirmDelete ? 'text-green-400' : 'text-red-400'"
+      @click="autoConfirmDelete=!autoConfirmDelete">
+        Auto Confirm: {{ autoConfirmDelete ? "ON" : "OFF" }}
+    </Button>
+    </div>
+    <div class="px-2">
+      <Button class="bg-neutral rounded-lg px-2 py-1"
+      :class="useDefaultHp ? 'text-green-400' : 'text-red-400'"
+      @click="useDefaultHp=!useDefaultHp">
+        Use Default HP: {{ useDefaultHp ? "ON" : "OFF" }}
+    </Button>
+    </div>
+  </div>
+  <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
   <div class="grid grid-flow-col auto-cols-max" gap-4>
     <BaseList id="monster-health">
       <template v-for="(monster, index) in activeMonsterData" :key="index">
