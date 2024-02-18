@@ -1,11 +1,13 @@
 import type { ActiveMonsterData } from "../store/MonsterData";
 import BleedImageUrl from "@/assets/tokens/token-bleed.png";
-import PoisonImageUrl from "@/assets/tokens/token-poison.png";
 import BurnImageUrl from "@/assets/tokens/token-burn.png";
-import StunImageUrl from "@/assets/tokens/token-stun.png";
 import KnockDownImageUrl from "@/assets/tokens/token-knocked-down.png";
-import SlowImageUrl from "@/assets/tokens/token-slow.png";
+import IntimidateImageUrl from "@/assets/tokens/token-intimidate.png";
+import PoisonImageUrl from "@/assets/tokens/token-poison.png";
 import RangersMarkImgUrl from "@/assets/tokens/token-rangers-mark.png";
+import SlowImageUrl from "@/assets/tokens/token-slow.png";
+import StealthImageUrl from "@/assets/tokens/token-stealth.png";
+import StunImageUrl from "@/assets/tokens/token-stun.png";
 
 export interface ICondition {
     name: string;
@@ -116,4 +118,16 @@ export const RangersMark : RedundantCondition = new Condition({
     apply: function (monster: ActiveMonsterData): void {}
 });
 
-export const Conditions : ICondition[] = [Bleeding, Poison, Burning, Stun, KnockDown, Slow, RangersMark];
+export const Intimidate : RedundantCondition = new Condition({
+    name: "Intimidate",
+    image: IntimidateImageUrl,
+    apply: function (monster: ActiveMonsterData): void {}
+});
+
+export const Stealth : RedundantCondition = new Condition({
+    name: "Stealth",
+    image: StealthImageUrl,
+    apply: function (monster: ActiveMonsterData): void {}
+});
+
+export const Conditions : ICondition[] = [Bleeding, Burning, KnockDown, Poison, RangersMark, Slow, Stun,];

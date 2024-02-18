@@ -1,4 +1,5 @@
 import ImageUrl from "@/assets/monster/big/CorruptedFarmerBig.webp";
+import { Intimidate } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -15,4 +16,5 @@ export class CorruptedFarmer implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  conditionImmunities = [ Intimidate, ];
 }

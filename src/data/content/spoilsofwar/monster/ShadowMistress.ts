@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/ShadowMistressBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/ShadowMistressMiniature.webp";
+import { Stun } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +17,5 @@ export class ShadowMistress implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  conditionImmunities = [ Stun, ];
 }

@@ -14,6 +14,7 @@ export interface MonsterData {
     miniature: string;
   };
   color: MonsterColor;
+  conditionImmunities: ICondition[];
 }
 
 export interface ActiveMonsterData extends MonsterData {

@@ -45,7 +45,6 @@ export const MonsterStore = defineStore("monsters", () => {
         newMonster.hp = getMonsterMaxHp(newMonster);
         newMonster.baseColor = _nextAvailableColor(monster);
         activeMonsterData.value.push(newMonster);
-        console.log('monster added', newMonster);
     }
 
     /// public function to remove a monster from the active monsters list

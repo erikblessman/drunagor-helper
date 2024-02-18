@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/ShadowPainBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/ShadowPainMiniature.webp";
+import { Poison } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +17,5 @@ export class ShadowPain implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  conditionImmunities = [ Poison, ];
 }

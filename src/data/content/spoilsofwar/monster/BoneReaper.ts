@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/BoneReaperBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/BoneReaperMiniature.webp";
+import { Intimidate, Poison } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +17,5 @@ export class BoneReaper implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  conditionImmunities = [ Intimidate, Poison, ];
 }

@@ -1,4 +1,5 @@
 import ImageUrl from "@/assets/monster/big/HellishFlayerBig.webp";
+import { Burning, Intimidate } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -15,4 +16,5 @@ export class HellishFlayer implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  conditionImmunities = [ Intimidate, Burning, ];
 }

@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/ScoutOfDarknessBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/ScoutOfDarknessMiniature.webp";
+import { Stun } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +17,5 @@ export class ScoutOfDarkness implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  conditionImmunities = [ Stun, ];
 }

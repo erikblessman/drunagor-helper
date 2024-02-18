@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/ShadowVampireBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/ShadowVampireMiniature.webp";
+import { KnockDown, Stealth } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +17,5 @@ export class ShadowVampire implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  conditionImmunities = [ KnockDown, Stealth, ];
 }

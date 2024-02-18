@@ -1,5 +1,7 @@
 import ImageUrl from "@/assets/monster/big/SkeletonArcherBig.webp";
 import MiniatureUrl from "@/assets/monster/miniature/SkeletonArcherMiniature.webp";
+import type { ICondition } from "@/data/conditions/Condition";
+import { Bleeding } from "@/data/conditions/Condition";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
@@ -16,4 +18,5 @@ export class SkeletonArcher implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  conditionImmunities = [Bleeding];
 }

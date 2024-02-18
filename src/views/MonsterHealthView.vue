@@ -96,7 +96,7 @@ function openMonsterPicker() {
                     {{ monster.hp }}
                   </div>
                 </div>
-                <Conditions :conditions="monster.conditions"
+                <Conditions :conditions="monster.conditions" :monster="monster"
                   @add-condition="addCondition(index, $event)"
                   @remove-condition="removeCondition(index, $event)" />
                 <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)" />
