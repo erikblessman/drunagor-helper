@@ -2,6 +2,7 @@ import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import { useStorage } from "@vueuse/core";
 import { defineStore } from "pinia";
 import type { ICondition } from "@/data/conditions/Condition";
+import type { MonsterData } from "@/data/store/MonsterData";
 
 export const MonsterStore = defineStore("monsters", () => {
     const activeMonsterData = useStorage("ActiveMonsters", [] as ActiveMonsterData[]);
@@ -17,13 +18,19 @@ export const MonsterStore = defineStore("monsters", () => {
       "DarkOrange", "Snow", "Aquamarine", "RoyalBlue", "Red", "SaddleBrown",
     ];
 
+    /// private list of ring colors available for large monster miniatures
+    const _availableRingColorsLarge: string[] = [
+      "Yellow", "Navy", "HotPink", "Green",
+    ];
+
     /// private function to get the next available ring color
-    function _nextAvailableColor() {
-        let takenColors = activeMonsterData.value.map(m => m.baseColor);
-        for (let color of _availableRingColors) {
-        if (!takenColors.includes(color)) {
-            return color;
-        }
+    function _nextAvailableColor(monster: MonsterData) {
+        let takenColors = activeMonsterData.value.filter(m => m.size == monster.size).map(m => m.baseColor);
+        let availableColors = monster.size == "large" ? _availableRingColorsLarge : _availableRingColors;
+        for (let color of availableColors) {
+            if (!takenColors.includes(color)) {
+                return color;
+            }
         }
         return "Black";
     }
@@ -36,8 +43,9 @@ export const MonsterStore = defineStore("monsters", () => {
         let newMonster: ActiveMonsterData = { ...monster } as ActiveMonsterData;
         newMonster.conditions = [];
         newMonster.hp = getMonsterMaxHp(newMonster);
-        newMonster.baseColor = _nextAvailableColor();
+        newMonster.baseColor = _nextAvailableColor(monster);
         activeMonsterData.value.push(newMonster);
+        console.log('monster added', newMonster);
     }
 
     /// public function to remove a monster from the active monsters list

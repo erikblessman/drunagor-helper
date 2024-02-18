@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
 import MonsterPicker from "@/components/MonsterPicker.vue";
 import Conditions from "@/components/ConditionPicker.vue";
 import MonsterImage from "@/components/MonsterImage.vue";
@@ -9,12 +8,10 @@ import {
   ArrowPathIcon,
 } from "@heroicons/vue/24/solid";
 import { MonsterStore } from "@/store/MonsterStore";
-import type { ICondition } from "@/data/conditions/Condition";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import {
   PlusIcon,
-  Cog6ToothIcon,
 } from "@heroicons/vue/24/outline";
 
 const { activeMonsterData,
@@ -45,6 +42,9 @@ function onHpSwipeLeft(index: number) {
 }
 
 function openMonsterPicker() {
+  if (monsterPickerRef.value === null) {
+    throw new Error("monsterPickerRef is null");
+  }
   monsterPickerRef.value.openModal();
 }
 </script>
@@ -79,9 +79,10 @@ function openMonsterPicker() {
         <BaseListItem>
           <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(index)"
             v-touch:swipe.left="onHpSwipeLeft(index)">
-            <MonsterImage :monster="monster" @dblclick="removeMonster(index)" imgClass="w-24 rounded-full"
+            <MonsterImage :monster="monster" @dblclick="removeMonster(index)" imgClass="rounded-full"
               :style="'border-color:' + monster.baseColor + ';'"
-              :class="'w-24 bg-white border-8 rounded-full shadow dark:bg-gray-800'" />
+              class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+              :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
             <div>
               <div class="font-semibold text-lg">
                 {{ monster.name }} ({{ monster.color }})

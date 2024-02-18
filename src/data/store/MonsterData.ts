@@ -8,6 +8,7 @@ export interface MonsterData {
   content: ContentId;
   name: string;
   variants: VariantId[];
+  size: "small" | "large" | undefined;
   images: {
     big: string;
     miniature: string;
