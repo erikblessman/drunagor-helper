@@ -5,6 +5,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/white-rookie-walking-horror-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-walking-horror-alternate.jpg";
 
 export class WalkingHorror implements MonsterData {
   id = "walking-horror";
@@ -14,6 +16,7 @@ export class WalkingHorror implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "white";
   size = "small";

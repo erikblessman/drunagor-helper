@@ -13,6 +13,7 @@ export class LadyClaw implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: "",
+    cards: [],
   };
   color: MonsterColor = "gray";
   size = "small";

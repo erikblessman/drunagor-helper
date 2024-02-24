@@ -4,6 +4,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-corrupted-worm-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-corrupted-worm-alternate.jpg";
 
 export class CorruptedWorm implements MonsterData {
   id = "corrupted-worm";
@@ -13,6 +15,7 @@ export class CorruptedWorm implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: "",
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "gray";
   size = "small";

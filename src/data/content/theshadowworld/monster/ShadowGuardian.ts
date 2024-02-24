@@ -14,6 +14,7 @@ export class ShadowGuardian implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
+    cards: [],
   };
   color: MonsterColor = "gray";
   size = "small";

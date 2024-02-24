@@ -1,6 +1,6 @@
 <template>
     <div class="zoom">
-        <img :src="currentImage" @click="swapImage" :class="imgClass" alt="Monster Image" />
+        <img :src="currentImage" :class="imgClass" alt="Monster Image" />
     </div>
 </template>
 

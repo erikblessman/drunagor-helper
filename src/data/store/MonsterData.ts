@@ -12,6 +12,7 @@ export interface MonsterData {
   images: {
     big: string;
     miniature: string;
+    cards: string[] | undefined;
   };
   color: MonsterColor;
   conditionImmunities: ICondition[];

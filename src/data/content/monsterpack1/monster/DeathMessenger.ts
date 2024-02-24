@@ -5,6 +5,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-death-messenger-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-death-messenger-alternate.jpg";
 
 export class DeathMessenger implements MonsterData {
   id = "death-messenger";
@@ -14,6 +16,7 @@ export class DeathMessenger implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "gray";
   size = "small";

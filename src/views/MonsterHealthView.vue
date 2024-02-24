@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MonsterPicker from "@/components/MonsterPicker.vue";
+import BaseModal from "@/components/BaseModal.vue";
 import Conditions from "@/components/ConditionPicker.vue";
 import MonsterImage from "@/components/MonsterImage.vue";
 import {
@@ -9,10 +10,11 @@ import {
 } from "@heroicons/vue/24/solid";
 import { MonsterStore } from "@/store/MonsterStore";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
   PlusIcon,
 } from "@heroicons/vue/24/outline";
+import type { ActiveMonsterData } from "@/data/store/MonsterData";
 
 const { activeMonsterData,
   autoConfirmDelete,
@@ -47,6 +49,42 @@ function openMonsterPicker() {
   }
   monsterPickerRef.value.openModal();
 }
+
+// Details Modal
+const detailsOpen = ref(false);
+const detailsMonster = ref(null);
+const detailsMonsterCardIndex = ref(0);
+const detailsMonsterCardUrl = computed(() => {
+  let cards = detailsMonster?.value?.images?.cards;
+  if (!cards || cards.length === 0) {
+    return null;
+  }
+  return detailsMonster.value.images.cards[detailsMonsterCardIndex.value];
+});
+function openDetails(monster: ActiveMonsterData) {
+  detailsMonster.value = monster;
+  detailsOpen.value = true;
+}
+function closeDetails() {
+  detailsOpen.value = false;
+}
+function adjustMonsterCardIndex(modifier: number) {
+  // TODO: Track the index in the ActiveMonsterData to avoid
+  //       the index being used for ALL active monsters
+  let index = detailsMonsterCardIndex.value + modifier;
+  if (index < 0) {
+    index = detailsMonster.value.images.cards.length - 1;
+  } else if (index >= detailsMonster.value.images.cards.length) {
+    index = 0;
+  }
+  detailsMonsterCardIndex.value = index;
+}
+function swipeCardRight() {
+  adjustMonsterCardIndex(1);
+}
+function swipeCardLeft() {
+  adjustMonsterCardIndex(-1);
+}
 </script>
 
 <template>
@@ -66,10 +104,10 @@ function openMonsterPicker() {
     </div>
     <div class="px-2">
       <Button class="bg-neutral rounded-lg px-2 py-1"
-      :class="useDefaultHp ? 'text-green-400' : 'text-red-400'"
-      @click="useDefaultHp=!useDefaultHp">
-        Use Default HP: {{ useDefaultHp ? "ON" : "OFF" }}
-    </Button>
+        :class="useDefaultHp ? 'text-green-400' : 'text-red-400'"
+        @click="useDefaultHp=!useDefaultHp">
+          Use Default HP: {{ useDefaultHp ? "ON" : "OFF" }}
+      </Button>
     </div>
   </div>
   <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
@@ -79,7 +117,7 @@ function openMonsterPicker() {
         <BaseListItem>
           <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(index)"
             v-touch:swipe.left="onHpSwipeLeft(index)">
-            <MonsterImage :monster="monster" @dblclick="removeMonster(index)" imgClass="rounded-full"
+            <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
               :style="'border-color:' + monster.baseColor + ';'"
               class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
               :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
@@ -107,6 +145,29 @@ function openMonsterPicker() {
       </template>
     </BaseList>
   </div>
+  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails">
+    <template #header>
+      <div class="grid grid-cols-2">
+        <div class="font-medium">{{ detailsMonster.name }} Details</div>
+        <div>
+          <button
+            id="close-modal"
+            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
+            @click="closeDetails"
+          >
+            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
+          </button>
+        </div>
+      </div>
+    </template>
+    <template #default>
+      <div class="container mx-auto border-2 border-white place-self-center">
+        <img :src="detailsMonsterCardUrl" class="rounded-sm w-96 shadow dark:bg-gray-800"
+        v-touch:swipe.right="swipeCardRight" 
+        v-touch:swipe.left="swipeCardLeft" />
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 <style scoped></style>

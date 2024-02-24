@@ -5,6 +5,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-bone-reaper-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-bone-reaper-alternate.jpg";
 
 export class BoneReaper implements MonsterData {
   id = "bone-reaper";
@@ -14,6 +16,7 @@ export class BoneReaper implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "gray";
   size = "small";

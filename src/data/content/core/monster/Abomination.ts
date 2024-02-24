@@ -5,6 +5,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/black-rookie-abomination-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/black-rookie-abomination-alternate.jpg";
 
 export class Abomination implements MonsterData {
   id = "abomination";
@@ -14,6 +16,7 @@ export class Abomination implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "black";
   size = "large";

@@ -4,6 +4,8 @@ import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
+import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-hellish-flayer-standard.jpg";
+import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-hellish-flayer-alternate.jpg";
 
 export class HellishFlayer implements MonsterData {
   id = "hellish-flayer";
@@ -13,6 +15,7 @@ export class HellishFlayer implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: "",
+    cards: [RookieStandardUrl,RookieAlternateUrl],
   };
   color: MonsterColor = "gray";
   size = "small";
