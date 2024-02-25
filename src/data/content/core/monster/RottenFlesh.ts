@@ -7,6 +7,8 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-alternate.jpg";
+import RookieSideaUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-sidea.jpg";
+import RookieSidebUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-sideb.jpg";
 
 export class RottenFlesh implements MonsterData {
   id = "rotten-flesh";
@@ -16,7 +18,7 @@ export class RottenFlesh implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
-    cards: [RookieStandardUrl,RookieAlternateUrl],
+    cards: [RookieStandardUrl,RookieAlternateUrl,RookieSideaUrl,RookieSidebUrl,],
   };
   color: MonsterColor = "gray";
   size = "small";

@@ -168,7 +168,6 @@ export const MonsterStore = defineStore("monsters", () => {
     /// @remarks - Removes the monster if the hp is 0 or less
     function decrementHp(index: number) {
         activeMonsterData.value[index].hp--;
-        setMonsterHp(index, activeMonsterData.value[index].hp);
         if (activeMonsterData.value[index].hp <= 0) {
             removeMonster(index);
         }

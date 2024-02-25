@@ -6,6 +6,8 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/black-rookie-shadow-knight-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/black-rookie-shadow-knight-alternate.jpg";
+import RookieSidaAUrl from "@/assets/monster/cards/black-rookie-shadow-knight-sidea.jpg";
+import RookieSideBUrl from "@/assets/monster/cards/black-rookie-shadow-knight-sideb.jpg";
 
 export class ShadowKnight implements MonsterData {
   id = "shadow-knight";
@@ -15,7 +17,7 @@ export class ShadowKnight implements MonsterData {
   images = {
     big: ImageUrl,
     miniature: MiniatureUrl,
-    cards: [RookieStandardUrl,RookieAlternateUrl],
+    cards: [RookieStandardUrl,RookieAlternateUrl,RookieSidaAUrl,RookieSideBUrl,],
   };
   color: MonsterColor = "black";
   size = "large";
