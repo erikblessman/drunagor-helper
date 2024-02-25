@@ -11,6 +11,7 @@ import {
 import { MonsterStore } from "@/store/MonsterStore";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
+import { XMarkIcon } from "@heroicons/vue/24/solid";
 import {
   PlusIcon,
 } from "@heroicons/vue/24/outline";
@@ -59,7 +60,10 @@ const detailsMonsterCardUrl = computed(() => {
   if (!cards || cards.length === 0) {
     return null;
   }
-  return detailsMonster.value.images.cards[detailsMonsterCardIndex.value];
+  return cards[detailsMonsterCardIndex.value];
+});
+const detailsMonsterMinatureUrl = computed(() => {
+  return detailsMonster?.value?.images?.miniature;
 });
 function openDetails(monster: ActiveMonsterData) {
   detailsMonster.value = monster;
@@ -145,10 +149,10 @@ function swipeCardLeft() {
       </template>
     </BaseList>
   </div>
-  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails">
+  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" >
     <template #header>
       <div class="grid grid-cols-2">
-        <div class="font-medium">{{ detailsMonster.name }} Details</div>
+        <div class="font-medium">{{ detailsMonster.name }} ({{ detailsMonster.baseColor }})</div>
         <div>
           <button
             id="close-modal"
@@ -161,10 +165,13 @@ function swipeCardLeft() {
       </div>
     </template>
     <template #default>
-      <div class="container mx-auto border-2 border-white place-self-center">
-        <img :src="detailsMonsterCardUrl" class="rounded-sm w-96 shadow dark:bg-gray-800"
-        v-touch:swipe.right="swipeCardRight" 
-        v-touch:swipe.left="swipeCardLeft" />
+      <div class="container" @click="closeDetails">
+          <div class="border-8" :style="'border-color:' + detailsMonster.baseColor + ';'">
+          <img :src="detailsMonsterCardUrl" class="rounded-sm shadow dark:bg-gray-800 w-full"
+          v-touch:swipe.right="swipeCardRight" 
+          v-touch:swipe.left="swipeCardLeft" />
+        </div>
+        <img :src="detailsMonsterMinatureUrl" class="rounded-sm shadow dark:bg-gray-800 w-full" />
       </div>
     </template>
   </BaseModal>

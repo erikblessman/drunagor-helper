@@ -26,7 +26,15 @@ function closeModal() {
 defineExpose({ openModal });
 
 const monsterStore = MonsterDataStore();
-const monsters = monsterStore.findAllEnabled();
+const monsters = monsterStore.findAllEnabled().sort((a, b) => {
+  if (a.name < b.name) {
+    return -1;
+  } else if (a.name > b.name) {
+    return 1;
+  } else {
+    return 0;
+  }
+});
 
 const emit = defineEmits(["pick-monster"]);
 
@@ -76,7 +84,7 @@ function randomMonster(color: string) {
           <QuestionMarkCircleIcon class="w-12 fill-black stroke-gray-500" />
           Random Black
         </BaseListItem>
-        <template v-for="monster in monsters.sort((a,b) => {return a.name < b.name;})" :key="monster.id">
+        <template v-for="monster in monsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
