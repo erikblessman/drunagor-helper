@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-corrupted-worm-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-corrupted-worm-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class CorruptedWorm implements MonsterData {
   id = "corrupted-worm";
@@ -19,5 +20,6 @@ export class CorruptedWorm implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.TOP_GREEN;
   conditionImmunities = [ KnockDown, Stealth, ];
 }

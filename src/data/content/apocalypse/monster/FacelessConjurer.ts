@@ -5,6 +5,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-faceless-conjurer-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-faceless-conjurer-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class FacelessConjurer implements MonsterData {
   id = "faceless-conjurer";
@@ -18,4 +19,5 @@ export class FacelessConjurer implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "large";
+  initiative = InitiativePlaces.BOTTOM_ORANGE;
 }

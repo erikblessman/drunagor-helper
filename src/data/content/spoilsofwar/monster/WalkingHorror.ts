@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-walking-horror-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-walking-horror-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class WalkingHorror implements MonsterData {
   id = "walking-horror";
@@ -20,5 +21,6 @@ export class WalkingHorror implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_RED;
   conditionImmunities = [ KnockDown, ];
 }

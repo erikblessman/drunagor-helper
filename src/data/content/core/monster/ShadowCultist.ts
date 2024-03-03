@@ -9,6 +9,7 @@ import RookieStandardUrl from "@/assets/monster/cards/white-rookie-shadow-cultis
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-shadow-cultist-alternate.jpg";
 import RookieSideAUrl from "@/assets/monster/cards/white-rookie-shadow-cultist-sidea.jpg";
 import RookieSideBUrl from "@/assets/monster/cards/white-rookie-shadow-cultist-sideb.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class ShadowCultist implements MonsterData {
   id = "shadow-cultist";
@@ -22,5 +23,6 @@ export class ShadowCultist implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.TOP_RED;
   conditionImmunities = [ Poison, ];
 }

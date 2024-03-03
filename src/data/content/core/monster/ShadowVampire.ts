@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-shadow-vampire-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-shadow-vampire-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class ShadowVampire implements MonsterData {
   id = "shadow-vampire";
@@ -20,5 +21,6 @@ export class ShadowVampire implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.TOP_GREEN;
   conditionImmunities = [ KnockDown, Stealth, ];
 }

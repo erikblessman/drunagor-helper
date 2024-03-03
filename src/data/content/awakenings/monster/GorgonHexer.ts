@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-gorgon-hexer-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-gorgon-hexer-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class GorgonHexer implements MonsterData {
   id = "gorgon-hexer";
@@ -19,5 +20,6 @@ export class GorgonHexer implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_BLUE;
   conditionImmunities = [ Intimidate, KnockDown, ];
 }

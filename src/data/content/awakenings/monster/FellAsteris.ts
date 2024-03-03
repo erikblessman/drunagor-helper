@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-fell-asteris-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-fell-asteris-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class FellAsteris implements MonsterData {
   id = "fell-asteris";
@@ -19,5 +20,6 @@ export class FellAsteris implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.TOP_GREEN;
   conditionImmunities = [Intimidate, Stun, ];
 }

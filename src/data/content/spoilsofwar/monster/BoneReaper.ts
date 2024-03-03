@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-bone-reaper-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-bone-reaper-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class BoneReaper implements MonsterData {
   id = "bone-reaper";
@@ -20,5 +21,6 @@ export class BoneReaper implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_BLACK;
   conditionImmunities = [ Intimidate, Poison, ];
 }

@@ -5,6 +5,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-gremlin-horde-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-gremlin-horde-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class GremlinHorde implements MonsterData {
   id = "gremlin-horde";
@@ -18,4 +19,5 @@ export class GremlinHorde implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "large";
+  initiative = InitiativePlaces.BOTTOM_RED;
 }

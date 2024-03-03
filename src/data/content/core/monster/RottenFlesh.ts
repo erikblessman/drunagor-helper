@@ -9,6 +9,7 @@ import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-s
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-alternate.jpg";
 import RookieSideaUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-sidea.jpg";
 import RookieSidebUrl from "@/assets/monster/cards/gray-rookie-rotten-flesh-sideb.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class RottenFlesh implements MonsterData {
   id = "rotten-flesh";
@@ -22,5 +23,6 @@ export class RottenFlesh implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_RED;
   conditionImmunities = [ Stun, ];
 }

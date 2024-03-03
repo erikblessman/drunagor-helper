@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-shadow-witch-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-shadow-witch-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class ShadowWitch implements MonsterData {
   id = "shadow-witch";
@@ -19,5 +20,6 @@ export class ShadowWitch implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.TOP_BLUE;
   conditionImmunities = [ Intimidate, ];
 }

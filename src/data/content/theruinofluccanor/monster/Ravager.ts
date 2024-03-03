@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-ravager-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-ravager-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class Ravager implements MonsterData {
   id = "ravager";
@@ -19,5 +20,6 @@ export class Ravager implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.TOP_BLUE;
   conditionImmunities = [ Burning, ];
 }

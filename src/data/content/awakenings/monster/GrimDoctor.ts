@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-grim-doctor-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-grim-doctor-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class GrimDoctor implements MonsterData {
   id = "grim-doctor";
@@ -19,5 +20,6 @@ export class GrimDoctor implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.TOP_BLUE;
   conditionImmunities = [ Stealth, ];
 }

@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-corrupted-farmer-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-corrupted-farmer-alternate.jpg";
+import InitiativePlaces from "../../../InitiativePlaces";
 
 export class CorruptedFarmer implements MonsterData {
   id = "corrupted-farmer";
@@ -19,5 +20,6 @@ export class CorruptedFarmer implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_GREEN;
   conditionImmunities = [ Intimidate, ];
 }

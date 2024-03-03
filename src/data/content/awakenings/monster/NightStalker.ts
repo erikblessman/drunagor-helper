@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-night-stalker-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-night-stalker-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class NightStalker implements MonsterData {
   id = "night-stalker";
@@ -19,5 +20,6 @@ export class NightStalker implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.TOP_RED;
   conditionImmunities = [ Bleeding, Slow, Stealth, ];
 }

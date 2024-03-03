@@ -9,6 +9,7 @@ export interface MonsterData {
   name: string;
   variants: VariantId[];
   size: "small" | "large" | undefined;
+  initiative: string | undefined;
   images: {
     big: string;
     miniature: string;

@@ -8,6 +8,7 @@ import RookieStandardUrl from "@/assets/monster/cards/black-rookie-shadow-knight
 import RookieAlternateUrl from "@/assets/monster/cards/black-rookie-shadow-knight-alternate.jpg";
 import RookieSidaAUrl from "@/assets/monster/cards/black-rookie-shadow-knight-sidea.jpg";
 import RookieSideBUrl from "@/assets/monster/cards/black-rookie-shadow-knight-sideb.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class ShadowKnight implements MonsterData {
   id = "shadow-knight";
@@ -21,4 +22,5 @@ export class ShadowKnight implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
+  initiative = InitiativePlaces.TOP_BLACK;
 }

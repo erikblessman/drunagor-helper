@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-nagian-hunter-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-nagian-hunter-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class NagianHunter implements MonsterData {
   id = "nagian-hunter";
@@ -19,5 +20,6 @@ export class NagianHunter implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.TOP_ORANGE;
   conditionImmunities = [ Stun, ];
 }

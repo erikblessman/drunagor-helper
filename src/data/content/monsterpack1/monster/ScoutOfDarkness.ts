@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/white-rookie-scout-of-darkness-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/white-rookie-scout-of-darkness-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class ScoutOfDarkness implements MonsterData {
   id = "scout-of-darkness";
@@ -20,5 +21,6 @@ export class ScoutOfDarkness implements MonsterData {
   };
   color: MonsterColor = "white";
   size = "small";
+  initiative = InitiativePlaces.BOTTOM_ORANGE;
   conditionImmunities = [ Stun, ];
 }

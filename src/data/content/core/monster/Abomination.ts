@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/black-rookie-abomination-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/black-rookie-abomination-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class Abomination implements MonsterData {
   id = "abomination";
@@ -20,5 +21,6 @@ export class Abomination implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
+  initiative = InitiativePlaces.BOTTOM_BLACK;
   conditionImmunities = [Burning, ];
 }

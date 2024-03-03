@@ -21,6 +21,17 @@ const { activeMonsterData,
   autoConfirmDelete,
   useDefaultHp,
 } = storeToRefs(MonsterStore());
+const orderedMonsters = computed(() => {
+  return activeMonsterData.value.sort((a, b) => {
+    if (a.initiative < b.initiative) {
+      return -1;
+    }
+    if (a.initiative > b.initiative) {
+      return 1;
+    }
+    return 0;
+  });
+});
 const {
   addMonster,
   removeMonster,
@@ -117,7 +128,7 @@ function swipeCardLeft() {
   <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
   <div class="grid grid-flow-col auto-cols-max" gap-4>
     <BaseList id="monster-health">
-      <template v-for="(monster, index) in activeMonsterData" :key="index">
+      <template v-for="(monster, index) in orderedMonsters" :key="index">
         <BaseListItem>
           <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(index)"
             v-touch:swipe.left="onHpSwipeLeft(index)">

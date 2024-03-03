@@ -7,6 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/gray-rookie-death-messenger-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/gray-rookie-death-messenger-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class DeathMessenger implements MonsterData {
   id = "death-messenger";
@@ -20,5 +21,6 @@ export class DeathMessenger implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
+  initiative = InitiativePlaces.TOP_RED;
   conditionImmunities = [Bleeding, Slow, ];
 }

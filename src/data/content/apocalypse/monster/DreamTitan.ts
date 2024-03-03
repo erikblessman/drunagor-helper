@@ -6,6 +6,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 import RookieStandardUrl from "@/assets/monster/cards/black-rookie-dream-titan-standard.jpg";
 import RookieAlternateUrl from "@/assets/monster/cards/black-rookie-dream-titan-alternate.jpg";
+import InitiativePlaces from "@/data/InitiativePlaces";
 
 export class DreamTitan implements MonsterData {
   id = "dream-titan";
@@ -19,5 +20,6 @@ export class DreamTitan implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
+  initiative = InitiativePlaces.TOP_BLACK;
   conditionImmunities = [Intimidate, Stealth];
 }
