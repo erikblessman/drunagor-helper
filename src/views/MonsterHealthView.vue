@@ -149,6 +149,11 @@ function swipeCardLeft() {
   <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
   <div container>
     <!-------------------- DEFENDER --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        DEFENDER
+      </div>
+    </div>
     <!-------------------- TOP ORANGE --------------------------->
     <div class="grid grid-cols-12 divide-y" id="initiative-container">
       <div><img :src="TopOrangeImgUrl" /></div>
@@ -222,6 +227,11 @@ function swipeCardLeft() {
       </div>
     </div>
     <!-------------------- LEADER --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        LEADER
+      </div>
+    </div>
     <!-------------------- TOP BLUE --------------------------->
     <div class="grid grid-cols-12 divide-y" id="initiative-container">
       <div><img :src="TopBlueImgUrl" /></div>
@@ -295,6 +305,11 @@ function swipeCardLeft() {
       </div>
     </div>
     <!-------------------- CONTROLLER --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        CONTROLLER
+      </div>
+    </div>
     <!-------------------- TOP GRAY --------------------------->
     <div class="grid grid-cols-12 divide-y" id="initiative-container">
       <div><img :src="TopGrayImgUrl" /></div>
@@ -368,6 +383,11 @@ function swipeCardLeft() {
       </div>
     </div>
     <!-------------------- SUPPORT --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        SUPPORT
+      </div>
+    </div>
     <!-------------------- BOTTOM GREEN --------------------------->
     <div class="grid grid-cols-12 divide-y" id="initiative-container">
       <div><img :src="BottomGreenImgUrl" /></div>
@@ -441,6 +461,11 @@ function swipeCardLeft() {
       </div>
     </div>
     <!-------------------- STRIKER --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        STRIKER
+      </div>
+    </div>
     <!-------------------- BOTTOM RED --------------------------->
     <div class="grid grid-cols-12 divide-y" id="initiative-container">
       <div><img :src="BottomRedImgUrl" /></div>
@@ -514,6 +539,11 @@ function swipeCardLeft() {
       </div>
     </div>
     <!-------------------- RUNE --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+        RUNE
+      </div>
+    </div>
   </div>
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" >
     <template #header>
