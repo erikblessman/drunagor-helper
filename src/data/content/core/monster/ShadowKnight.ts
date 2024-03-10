@@ -22,5 +22,5 @@ export class ShadowKnight implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
-  initiative = InitiativePlaces.TOP_BLACK;
+  initiative = InitiativePlaces.TOP_GRAY;
 }

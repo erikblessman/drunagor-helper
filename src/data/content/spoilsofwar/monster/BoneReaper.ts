@@ -21,6 +21,6 @@ export class BoneReaper implements MonsterData {
   };
   color: MonsterColor = "gray";
   size = "small";
-  initiative = InitiativePlaces.BOTTOM_BLACK;
+  initiative = InitiativePlaces.BOTTOM_GRAY;
   conditionImmunities = [ Intimidate, Poison, ];
 }

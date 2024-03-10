@@ -20,6 +20,6 @@ export class DreamTitan implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
-  initiative = InitiativePlaces.TOP_BLACK;
+  initiative = InitiativePlaces.TOP_GRAY;
   conditionImmunities = [Intimidate, Stealth];
 }

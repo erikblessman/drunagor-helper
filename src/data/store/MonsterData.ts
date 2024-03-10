@@ -9,7 +9,7 @@ export interface MonsterData {
   name: string;
   variants: VariantId[];
   size: "small" | "large" | undefined;
-  initiative: string | undefined;
+  initiative: number | undefined;
   images: {
     big: string;
     miniature: string;
@@ -24,4 +24,5 @@ export interface ActiveMonsterData extends MonsterData {
   conditions: ICondition[];
   maxHp: number;
   baseColor: string;
+  msTimestamp: number;
 }

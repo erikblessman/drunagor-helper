@@ -6,14 +6,14 @@ export default class InitiativePlaces {
     static readonly TOP_BLUE: number = 4;
     static readonly TOP_RED: number = 5;
     static readonly CONTROLLER: number = 6;
-    static readonly TOP_BLACK: number = 7;
+    static readonly TOP_GRAY: number = 7;
     static readonly BOTTOM_ORANGE: number = 8;
     static readonly SUPPORT: number = 9;
     static readonly BOTTOM_GREEN: number = 10;
     static readonly BOTTOM_BLUE: number = 11;
     static readonly STRIKER: number = 12;
     static readonly BOTTOM_RED: number = 13;
-    static readonly BOTTOM_BLACK: number = 14;
+    static readonly BOTTOM_GRAY: number = 14;
     static readonly RUNE: number = 15;
 }
 

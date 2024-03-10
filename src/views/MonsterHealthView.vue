@@ -1,32 +1,53 @@
 <script setup lang="ts">
-import MonsterPicker from "@/components/MonsterPicker.vue";
-import BaseModal from "@/components/BaseModal.vue";
-import Conditions from "@/components/ConditionPicker.vue";
-import MonsterImage from "@/components/MonsterImage.vue";
 import {
   HeartIcon,
   TrashIcon,
   ArrowPathIcon,
 } from "@heroicons/vue/24/solid";
-import { MonsterStore } from "@/store/MonsterStore";
 import { storeToRefs } from "pinia";
 import { computed, ref } from "vue";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import {
   PlusIcon,
 } from "@heroicons/vue/24/outline";
+
+import MonsterPicker from "@/components/MonsterPicker.vue";
+import BaseModal from "@/components/BaseModal.vue";
+import Conditions from "@/components/ConditionPicker.vue";
+import MonsterImage from "@/components/MonsterImage.vue";
+import { MonsterStore } from "@/store/MonsterStore";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
+import InitiativePlaces from "@/data/InitiativePlaces";
+import TopOrangeImgUrl from "@/assets/initiative/top-orange.png";
+import TopGreenImgUrl from "@/assets/initiative/top-green.png";
+import TopBlueImgUrl from "@/assets/initiative/top-blue.png";
+import TopRedImgUrl from "@/assets/initiative/top-red.png";
+import TopGrayImgUrl from "@/assets/initiative/top-gray.png";
+import BottomOrangeImgUrl from "@/assets/initiative/bottom-orange.png";
+import BottomGreenImgUrl from "@/assets/initiative/bottom-green.png";
+import BottomBlueImgUrl from "@/assets/initiative/bottom-blue.png";
+import BottomRedImgUrl from "@/assets/initiative/bottom-red.png";
+import BottomGrayImgUrl from "@/assets/initiative/bottom-gray.png";
 
 const { activeMonsterData,
   autoConfirmDelete,
   useDefaultHp,
 } = storeToRefs(MonsterStore());
+const monsterByInitiative = (initiative:number) => {
+  return activeMonsterData.value.filter((monster) => {
+    return monster.initiative === initiative;
+  });
+};
+const topBlueMonsters = computed(() => {
+  return monsterByInitiative(InitiativePlaces.TOP_BLUE);
+});
 const orderedMonsters = computed(() => {
   return activeMonsterData.value.sort((a, b) => {
-    if (a.initiative < b.initiative) {
+    const aa = a.initiative ?? InitiativePlaces.RUNE;
+    const bb = b.initiative ?? InitiativePlaces.RUNE;
+    if (aa < bb) {
       return -1;
-    }
-    if (a.initiative > b.initiative) {
+    } else if (aa > bb) {
       return 1;
     }
     return 0;
@@ -43,15 +64,15 @@ const {
 } = MonsterStore();
 const monsterPickerRef = ref(null);
 
-function onHpSwipeRight(index: number) {
+function onHpSwipeRight(monster: ActiveMonsterData) {
   return function () {
-    incrementHp(index);
+    incrementHp(monster);
   };
 }
 
-function onHpSwipeLeft(index: number) {
+function onHpSwipeLeft(monster: ActiveMonsterData) {
   return function () {
-    decrementHp(index);
+    decrementHp(monster);
   };
 }
 
@@ -126,39 +147,373 @@ function swipeCardLeft() {
     </div>
   </div>
   <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
-  <div class="grid grid-flow-col auto-cols-max" gap-4>
-    <BaseList id="monster-health">
-      <template v-for="(monster, index) in orderedMonsters" :key="index">
-        <BaseListItem>
-          <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(index)"
-            v-touch:swipe.left="onHpSwipeLeft(index)">
-            <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
-              :style="'border-color:' + monster.baseColor + ';'"
-              class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
-              :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
-            <div>
-              <div class="font-semibold text-lg">
-                {{ monster.name }} ({{ monster.color }})
-              </div>
-              <div class="grid grid-flow-col auto-cols-max">
-                <div class="grid w-12">
-                  <div class="col-start-1 row-start-1 justify-center">
-                    <HeartIcon class="fill-red-500 w-12 self-center" />
-                  </div>
-                  <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
-                    {{ monster.hp }}
-                  </div>
+  <div container>
+    <!-------------------- DEFENDER --------------------------->
+    <!-------------------- TOP ORANGE --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="TopOrangeImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster, index) in monsterByInitiative(InitiativePlaces.TOP_ORANGE)" :key="index">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
                 </div>
-                <Conditions :conditions="monster.conditions" :monster="monster"
-                  @add-condition="addCondition(index, $event)"
-                  @remove-condition="removeCondition(index, $event)" />
-                <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(index)" />
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
               </div>
             </div>
-          </div>
-        </BaseListItem>
-      </template>
-    </BaseList>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- TOP GREEN --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="TopGreenImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.TOP_GREEN)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- LEADER --------------------------->
+    <!-------------------- TOP BLUE --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="TopBlueImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.TOP_BLUE)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- TOP RED --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="TopRedImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.TOP_RED)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- CONTROLLER --------------------------->
+    <!-------------------- TOP GRAY --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="TopGrayImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.TOP_GRAY)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- BOTTOM ORANGE --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="BottomOrangeImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.BOTTOM_ORANGE)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- SUPPORT --------------------------->
+    <!-------------------- BOTTOM GREEN --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="BottomGreenImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.BOTTOM_GREEN)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- BOTTOM BLUE --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="BottomBlueImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.BOTTOM_BLUE)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- STRIKER --------------------------->
+    <!-------------------- BOTTOM RED --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="BottomRedImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.BOTTOM_RED)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- BOTTOM GRAY --------------------------->
+    <div class="grid grid-cols-12 divide-y" id="initiative-container">
+      <div><img :src="BottomGrayImgUrl" /></div>
+      <div class="col-span-11">
+        <template v-for="(monster) in monsterByInitiative(InitiativePlaces.BOTTOM_GRAY)" :key="monster.msTimestamp">
+          <BaseListItem>
+            <div class="grid grid-flow-col auto-cols-max" v-touch:swipe.right="onHpSwipeRight(monster)"
+              v-touch:swipe.left="onHpSwipeLeft(monster)">
+              <MonsterImage :monster="monster" @click="openDetails(monster)" imgClass="rounded-full"
+                :style="'border-color:' + monster.baseColor + ';'"
+                class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+                :class="monster.size == 'large' ? 'w-32' : 'w-24'"/>
+              <div>
+                <div class="font-semibold text-lg">
+                  {{ monster.name }} ({{ monster.color }})
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                  <div class="grid w-12">
+                    <div class="col-start-1 row-start-1 justify-center">
+                      <HeartIcon class="fill-red-500 w-12 self-center" />
+                    </div>
+                    <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                      {{ monster.hp }}
+                    </div>
+                  </div>
+                  <Conditions :conditions="monster.conditions" :monster="monster"
+                    @add-condition="addCondition(monster, $event)"
+                    @remove-condition="removeCondition(monster, $event)" />
+                  <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+                </div>
+              </div>
+            </div>
+          </BaseListItem>
+        </template>
+      </div>
+    </div>
+    <!-------------------- RUNE --------------------------->
   </div>
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" >
     <template #header>
@@ -182,10 +537,11 @@ function swipeCardLeft() {
           v-touch:swipe.right="swipeCardRight" 
           v-touch:swipe.left="swipeCardLeft" />
         </div>
-        <img :src="detailsMonsterMinatureUrl" class="rounded-sm shadow dark:bg-gray-800 w-full" />
+        <img :src="detailsMonsterMinatureUrl" class="rounded-sm shadow dark:bg-gray-800 s-full" />
       </div>
     </template>
   </BaseModal>
 </template>
 
-<style scoped></style>
+<style scoped>
+</style>

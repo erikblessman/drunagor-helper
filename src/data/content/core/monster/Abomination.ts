@@ -21,6 +21,6 @@ export class Abomination implements MonsterData {
   };
   color: MonsterColor = "black";
   size = "large";
-  initiative = InitiativePlaces.BOTTOM_BLACK;
+  initiative = InitiativePlaces.BOTTOM_GRAY;
   conditionImmunities = [Burning, ];
 }

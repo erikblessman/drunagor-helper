@@ -35,29 +35,46 @@ export const MonsterStore = defineStore("monsters", () => {
         return "Black";
     }
     
+    /// private function to get the index of a monster in the active monsters list
+    /// @param monster: ActiveMonsterData - the monster to get the index of
+    /// @returns number - the index of the monster in the active monsters list
+    const _getMonsterIndex = (monster: ActiveMonsterData) : number => {
+        return activeMonsterData.value.findIndex((m) => m.msTimestamp === monster.msTimestamp);
+    }
+
+    /// private function to update a monster in the active monsters list
+    /// @param monster: ActiveMonsterData - the monster to update
+    const _updateMonster = (monster: ActiveMonsterData) : void => {
+        let index = _getMonsterIndex(monster);
+        activeMonsterData.value[index] = monster;
+    }
+
     /// public function to add a monster to the active monsters list
     /// @param monster: MonsterData - the monster to add
     /// @remarks - Returns the first ring color not already in use
     /// @todo - Make allowances for large monsters with limited ring colors
-    function addMonster(monster: MonsterData) {
-        let newMonster: ActiveMonsterData = { ...monster } as ActiveMonsterData;
+    function addMonster(monster: MonsterData) : void {
+        let newMonster: ActiveMonsterData = {
+            ...monster,
+        } as ActiveMonsterData;
         newMonster.conditions = [];
         newMonster.hp = getMonsterMaxHp(newMonster);
         newMonster.baseColor = _nextAvailableColor(monster);
+        newMonster.msTimestamp = Date.now();
         activeMonsterData.value.push(newMonster);
     }
 
     /// public function to remove a monster from the active monsters list
-    /// @param index: number - the index of the monster to remove
+    /// @param monster: ActiveMonsterData - the monster to remove
     /// @remarks - Prompts the user for confirmation
-    function removeMonster(index: number) {
-        let monster = activeMonsterData.value[index];
+    function removeMonster(monster: ActiveMonsterData) : void {
         if (!autoConfirmDelete.value && !confirm("Remove " + monster.name + " (" + monster.baseColor + ")?")) {
           return;
         }
-        activeMonsterData.value.splice(index, 1);
+        activeMonsterData.value.splice(_getMonsterIndex(monster), 1);
     }
 
+    /// public function to remove all monsters from the active monsters list
     function clearActiveMonsters(): void {
         if (!autoConfirmDelete.value && !confirm("Clear all active monsters?")) {
           return;
@@ -65,31 +82,36 @@ export const MonsterStore = defineStore("monsters", () => {
         activeMonsterData.value = [];
     }
 
+    /// public function to get active monsters by initiative --------------------------------------
+    function getActiveMonstersByInitiative(initiative:number): ActiveMonsterData[] {
+        return activeMonsterData.value.filter((a) => {
+            return a.initiative === initiative;
+        });
+    }
+
     /// functions for managing monster conditions -------------------------------------------------
 
     /// public function to add a condition to a monster
-    /// @param index: number - the index of the monster to add the condition to
+    /// @param monster: ActiveMonsterData - the monster to add the condition to
     /// @param condition: Condition - the condition to add
-    function addCondition(index: number, condition: ICondition) {
-        let monster = activeMonsterData.value[index];
+    function addCondition(monster: ActiveMonsterData, condition: ICondition) {
         if (!monster.conditions) {
             monster.conditions = [];
         }
         monster.conditions.push(condition);
-        activeMonsterData.value[index] = monster;
+        _updateMonster(monster);
     }
 
     /// public function to remove a condition from a monster
-    /// @param index: number - the index of the monster to remove the condition from
+    /// @param monster: ActiveMonsterData - the monster to remove the condition from
     /// @param condition: Condition - the condition to remove
-    function removeCondition(monsterIndex: number, condition: ICondition) {
-        let monster : ActiveMonsterData = activeMonsterData.value[monsterIndex];
+    function removeCondition(monster: ActiveMonsterData, condition: ICondition) {
         let conditionIndex : number = monster.conditions.map(c => c.name).indexOf(condition.name);
         if (conditionIndex === -1) {
             return;
         }
         monster.conditions.splice(conditionIndex, 1);
-        activeMonsterData.value[monsterIndex] = monster;
+        _updateMonster(monster);
     }
 
     /// functions for managing monster HP --------------------------------------------------------
@@ -158,18 +180,21 @@ export const MonsterStore = defineStore("monsters", () => {
     }
 
     /// public function to increment the current hp for the monster
-    /// @param index: number - the index of the monster to increment the hp for
-    function incrementHp(index: number) {
-        activeMonsterData.value[index].hp++;
+    /// @param monster: ActiveMonsterData - the monster to increment the hp for
+    function incrementHp(monster: ActiveMonsterData) {
+        monster.hp++;
+        _updateMonster(monster);
     }
   
     /// public function to decrement the current hp for the monster
-    /// @param index: number - the index of the monster to decrement the hp for
+    /// @param monster: ActiveMonsterData - the monster to decrement the hp for
     /// @remarks - Removes the monster if the hp is 0 or less
-    function decrementHp(index: number) {
-        activeMonsterData.value[index].hp--;
-        if (activeMonsterData.value[index].hp <= 0) {
-            removeMonster(index);
+    function decrementHp(monster: ActiveMonsterData) {
+        monster.hp--;
+        if (monster.hp <= 0) {
+            removeMonster(monster);
+        } else {
+            _updateMonster(monster);
         }
     }
 
@@ -184,5 +209,6 @@ export const MonsterStore = defineStore("monsters", () => {
         decrementHp,
         autoConfirmDelete,
         useDefaultHp,
+        getActiveMonstersByInitiative,
     };
 });
