@@ -30,6 +30,8 @@ import BottomBlueImgUrl from "@/assets/initiative/bottom-blue.png";
 import BottomRedImgUrl from "@/assets/initiative/bottom-red.png";
 import BottomGrayImgUrl from "@/assets/initiative/bottom-gray.png";
 
+import {InitiativeList, InitiativeTypes} from "@/data/InitiativePlaces";
+
 const { activeMonsterData,
   autoConfirmDelete,
   useDefaultHp,
@@ -149,81 +151,15 @@ function swipeCardLeft() {
   </div>
   <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
   <div container class="divide-y">
-    <!-------------------- DEFENDER --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        DEFENDER
+    <div v-for="(initInfo) in InitiativeList" :key="initInfo.index">
+      <div v-if="(initInfo.type != InitiativeTypes.MONSTER)" class="grid grid-cols-12 divide-y" id="initiative-container">
+        <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
+          {{ initInfo.text }}
+        </div>
       </div>
-    </div>
-    <!-------------------- TOP ORANGE --------------------------->
-    <MonsterInitiative :turnImgUrl="TopOrangeImgUrl" :monsters="monsterByInitiative(InitiativePlaces.TOP_ORANGE)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- TOP GREEN --------------------------->
-    <MonsterInitiative :turnImgUrl="TopGreenImgUrl" :monsters="monsterByInitiative(InitiativePlaces.TOP_GREEN)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- LEADER --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        LEADER
-      </div>
-    </div>
-    <!-------------------- TOP BLUE --------------------------->
-    <MonsterInitiative :turnImgUrl="TopBlueImgUrl" :monsters="monsterByInitiative(InitiativePlaces.TOP_BLUE)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- TOP RED --------------------------->
-    <MonsterInitiative :turnImgUrl="TopRedImgUrl" :monsters="monsterByInitiative(InitiativePlaces.TOP_RED)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- CONTROLLER --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        CONTROLLER
-      </div>
-    </div>
-    <!-------------------- TOP GRAY --------------------------->
-    <MonsterInitiative :turnImgUrl="TopGrayImgUrl" :monsters="monsterByInitiative(InitiativePlaces.TOP_GRAY)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- BOTTOM ORANGE --------------------------->
-    <MonsterInitiative :turnImgUrl="BottomOrangeImgUrl" :monsters="monsterByInitiative(InitiativePlaces.BOTTOM_ORANGE)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- SUPPORT --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        SUPPORT
-      </div>
-    </div>
-    <!-------------------- BOTTOM GREEN --------------------------->
-    <MonsterInitiative :turnImgUrl="BottomGreenImgUrl" :monsters="monsterByInitiative(InitiativePlaces.BOTTOM_GREEN)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- BOTTOM BLUE --------------------------->
-    <MonsterInitiative :turnImgUrl="BottomBlueImgUrl" :monsters="monsterByInitiative(InitiativePlaces.BOTTOM_BLUE)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- STRIKER --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        STRIKER
-      </div>
-    </div>
-    <!-------------------- BOTTOM RED --------------------------->
-    <MonsterInitiative :turnImgUrl="BottomRedImgUrl" :monsters="monsterByInitiative(InitiativePlaces.BOTTOM_RED)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- BOTTOM GRAY --------------------------->
-    <MonsterInitiative :turnImgUrl="BottomGrayImgUrl" :monsters="monsterByInitiative(InitiativePlaces.BOTTOM_GRAY)"
-      :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
-      :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
-    <!-------------------- RUNE --------------------------->
-    <div class="grid grid-cols-12 divide-y" id="initiative-container">
-      <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4">
-        RUNE
-      </div>
+      <MonsterInitiative v-if="(initInfo.type === InitiativeTypes.MONSTER)" :turnImgUrl="initInfo.imgUrl" :monsters="monsterByInitiative(initInfo.index)"
+        :onHpSwipeRight="onHpSwipeRight" :onHpSwipeLeft="onHpSwipeLeft" :openDetails="openDetails"
+        :addCondition="addCondition" :removeCondition="removeCondition" :removeMonster="removeMonster" />
     </div>
   </div>
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" >
