@@ -40,7 +40,6 @@ const emit = defineEmits(["pick-monster"]);
 
 function pickMonster(monster: MonsterData) {
   emit("pick-monster", monster);
-  closeModal();
 }
 
 function randomMonster(color: string) {
