@@ -100,12 +100,12 @@ export const RangersMark : RedundantCondition = new RedundantCondition({
 
 export const Intimidate : StackableCondition = new StackableCondition({
     name: "Intimidate",
-    image: [IntimidateImageUrl, Intimidate1ImageUrl, Intimidate2ImageUrl, Intimidate3ImageUrl, Intimidate4ImageUrl],
+    images: [IntimidateImageUrl, Intimidate1ImageUrl, Intimidate2ImageUrl, Intimidate3ImageUrl, Intimidate4ImageUrl],
 });
 
 export const Stealth : RedundantCondition = new RedundantCondition({
     name: "Stealth",
-    image: [StealthImageUrl, StealthImageUrl],
+    images: [StealthImageUrl, StealthImageUrl],
 });
 
-export const Conditions : ICondition[] = [Bleed, Burn, KnockDown, Poison, RangersMark, Slow, Stun,];
+export const Conditions : ICondition[] = [Bleed, Burn, KnockDown, Intimidate, Poison, RangersMark, Slow, Stealth, Stun,];
