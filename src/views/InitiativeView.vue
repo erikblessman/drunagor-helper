@@ -58,6 +58,10 @@ const openMonsterPicker = (): void => {
     }
     (monsterPickerRef.value as any).openModal();
 };
+const pickMonster = (monster: any): void => {
+    const activeMonster = addMonster(monster);
+    openDetails(activeMonster);
+}
 // #endregion
 
 // #region initiative list
@@ -139,7 +143,7 @@ function closeDetails() {
         </div>
     </div>
     <!-- Pop-Ups -->
-    <MonsterPicker @pick-monster="addMonster" ref="monsterPickerRef" />
+    <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
     <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker">
         <template #header>
             <div class="font-medium">Pick a Hero</div>

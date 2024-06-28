@@ -24,7 +24,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     const addHero = (dungeonRole: string, hero: HeroData) => {
         _heros.value[dungeonRole] = hero;
     };
-    const addMonster = (monster: any) => {
+    const addMonster = (monster: any): ActiveMonsterData => {
         const maxHp = _getDefaultHp(monster);
         let newMonster = {
             ...monster,
@@ -36,6 +36,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
             cardIndex: 0,
         };
         _initiativeList.value.push(newMonster);
+        return newMonster;
     };
     const clearInitiative = () => {
         if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
