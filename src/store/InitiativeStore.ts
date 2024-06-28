@@ -8,6 +8,7 @@ import { Conditions, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
+import { HeroPack1 } from "@/data/content/HeroPack1";
 // #endregion
 
 export const useInitiativeStore = defineStore("initiative", () => {
@@ -140,54 +141,85 @@ export const useInitiativeStore = defineStore("initiative", () => {
         }
         return "Black";
     };
-
+    const _hpProgressions = [
+        [6,9,12,15], // weak white
+        [9,12,15,18], // default white, weak gray
+        [12,16,20,24], // default gray, strong white, weak black
+        [15,20,25,30], // default black, strong gray
+        [18,24,30,36], // strong black
+    ];
+    const getProgressionIndex = (color:string): number => {
+        switch(color) {
+            case 'white': return 1;
+            case 'gray': return 2;
+            case 'black': return 3;
+            default: return NaN;
+        }
+    };
+    const getRankIndex = (rank: string): number => {
+        switch(rank) {
+            case 'rookie': return 0;
+            case 'fighter': return 1;
+            case 'veteran': return 2;
+            case 'champion': return 3;
+            default: return NaN;
+        }
+    };
     const _getDefaultHp = (monster: any): number => {
-        let hpForMonsterName: number | null = _getDefaultHpByName(monster.name);
-        let hpForMonsterColor: number | null = _getDefaultHpByColor(monster.color);
-        let defaultHp: number = hpForMonsterName ?? hpForMonsterColor ?? 20;
-        if (useDefaultHp.value) {
-            return defaultHp;
+        let difficultyModifier: number = 0;
+        if (monster.id == 'scenario-monster') {
+            const s = prompt(`Enter Max HP for ${monster.name}`) || '99';
+            return parseInt(s) || 99;
         }
-        let promptHp: number = parseInt(prompt(`Enter max HP for ${monster.name}`, defaultHp.toString()) || "");
-
-        if (promptHp) {
-            if (promptHp !== hpForMonsterName) {
-                _setDefaultHpByName(monster.name, promptHp);
+        switch(monster.id) {
+            case 'corrupted-worm':
+            case 'faceless-conjurer':
+            case 'night-stalker':
+                difficultyModifier = -1;
+                break;
+            case 'death-messenger':
+            case 'dream-titan':
+            case 'fell-astris':
+            case 'gorgon-hexer':
+            case 'hellspawn-brute':
+            case 'ravager':
+            case 'shadow-guardian':
+            case 'shadow-knight':
+            case 'shadow-vampire':
+            case 'skeleton-archer':
+            case 'skeleton-knight':
+                if (monster.variant == 'alternate') {
+                    difficultyModifier = -1;
+                }
+                break;
+            case 'gremlin-horde':
+                if (monster.variant == 'standard') {
+                    difficultyModifier = -1;
+                }
+                break;
+            case 'executioner':
+                difficultyModifier = 1;
+                break;
+        }
+        const progressionIndex = getProgressionIndex(monster.color) + difficultyModifier;
+        let maxHp : number | null = null;
+        if (progressionIndex >= 0) {
+            const rankIndex: number = getRankIndex(monster.rank);
+            if (rankIndex >= 0) {
+                maxHp = _hpProgressions[progressionIndex][rankIndex];
             }
-            return promptHp;
-        } else {
-            _unsetDefaultHpByName(monster.name);
         }
-        return hpForMonsterColor ?? 20;
-    };
-
-    const _getDefaultHpByColor = (color: string): number => {
-        switch (color) {
-            case "white":
-                return 9;
-            case "gray":
-                return 12;
-            case "black":
-                return 15;
-            default:
-                return 20;
+        const defaultHp: number = maxHp ?? 1;
+        if (!maxHp || !useDefaultHp.value) {
+            const p: string = `Enter max HP for ${monster.name}`;
+            const hpStr: string = prompt(p, defaultHp.toString()) ?? '1';
+            maxHp = parseInt(hpStr);
         }
-    };
-
-    const _getDefaultHpByName = (name: string): number => {
-        return _monsterMaxHp.value[name];
+        return maxHp ?? 1;
     };
 
     const _getMonsterIndex = (monster: any): number => {
         return _initiativeList.value.findIndex((m) => m.msTimestamp == monster.msTimestamp);
-    };
-
-    const _setDefaultHpByName = (name: string, hp: number): void => {
-        _monsterMaxHp.value[name] = hp;
-    };
-
-    const _unsetDefaultHpByName = (name: string): void => {
-        delete _monsterMaxHp.value[name];
     };
 
     // #endregion

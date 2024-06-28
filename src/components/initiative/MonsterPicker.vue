@@ -41,7 +41,7 @@ const monsters = monsterStore.findAllEnabled().sort((a, b) => {
 const emit = defineEmits(["pick-monster"]);
 
 function pickMonster(monster: MonsterData) {
-    emit("pick-monster", { ...monster, rank: rank.value });
+    emit("pick-monster", { ...monster, rank: rank.value, variant: 'standard' });
 }
 
 function randomMonster(color: string) {
