@@ -3,8 +3,10 @@
 import { storeToRefs } from "pinia";
 import {
     ArrowPathIcon,
+    HeartIcon,
     MinusIcon,
     PlusIcon,
+    TrashIcon,
     XMarkIcon,
 } from "@heroicons/vue/24/solid";
 import { ref, computed } from "vue";
@@ -20,12 +22,13 @@ import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
+import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { HeroData } from "@/data/repository/HeroData";
 // #endregion
 
 // #region store bindings
 const { autoConfirmDelete, useDefaultHp } = storeToRefs(useInitiativeStore());
-const { getInitiativeList, addMonster, clearInitiative, addHero, getHero, removeHero } =
+const { getInitiativeList, addHero, addMonster, clearInitiative, decrementHp, getHero, incrementHp, removeHero, removeMonster } =
     useInitiativeStore();
 const { heroes } = storeToRefs(HeroStore());
 console.log(`heroes length: ${heroes.value.length}`);
@@ -175,8 +178,25 @@ function closeDetails() {
             </div>
         </template>
         <template #default>
-            <div class="container" @click="closeDetails">
-                <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'">
+            <div class="container">
+                <div class="grid grid-flow-col auto-cols-max">
+                    <MinusIcon @click="decrementHp(detailsMonster)" class="w-12" />
+                    <div class="grid w-12">
+                        <div class="col-start-1 row-start-1 justify-center">
+                            <HeartIcon class="fill-red-500 w-12 self-center" />
+                        </div>
+                        <div
+                            class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                            {{ detailsMonster?.hp }}
+                        </div>
+                    </div>
+                    <PlusIcon @click="incrementHp(detailsMonster)" class="w-12" />
+                    <TrashIcon class="fill-gray-600 w-12" @click="() => { removeMonster(detailsMonster); closeDetails(); }" />
+                </div>
+                <div class="grid grid-flow-col auto-cols-max">
+                    <Conditions :monster="detailsMonster" />
+                </div>
+                <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'" @click="closeDetails">
                     <img :src="detailsMonsterCardUrl" class="rounded-sm shadow dark:bg-gray-800 w-full" />
                 </div>
                 <img :src="detailsMonster?.images?.miniature" class="rounded-sm shadow dark:bg-gray-800 w-full" />
