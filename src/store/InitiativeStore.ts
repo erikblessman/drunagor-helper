@@ -15,6 +15,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     // #region store variables
     const autoConfirmDelete = useStorage("initiative.AutoConfirmDelete", false);
     const useDefaultHp = useStorage("initiative.UseDefaultHp", true);
+    const turnIndex = useStorage("initiative.turnIndex", 0);
     const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
     const _heros = useStorage("initiative.Heros", {} as Record<string, HeroData>);
     const _monsterMaxHp = useStorage("initiative.MonsterMaxHp", {} as Record<string, number>);
@@ -229,6 +230,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
         // properties
         autoConfirmDelete,
         useDefaultHp,
+        turnIndex,
         // functions
         addHero,
         addMonster,

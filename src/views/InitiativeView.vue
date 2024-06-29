@@ -3,6 +3,8 @@
 import { storeToRefs } from "pinia";
 import {
     ArrowPathIcon,
+    BackwardIcon,
+    ForwardIcon,
     HeartIcon,
     MinusIcon,
     PlusIcon,
@@ -77,6 +79,34 @@ const monsterByInitiative = (initiative: number) => {
         return monster.initiative === initiative;
     });
 };
+
+const turnIndex = ref(0);
+// const iList = ref(InitiativeList.map((a) => {
+//     let n = a.index;
+//     if (n < turnIndex.value) {
+//         n += InitiativeList.length;
+//     }
+//     return { ...a, index: n };
+// }).sort((a,b) => a.index - b.index));
+const iList = computed(() => {
+    let a = [];
+    const n = InitiativeList.length;
+    for(let i=0; i<n; ++i) {
+        const index = (i+turnIndex.value)%n;
+        a.push(InitiativeList[index]);
+    }
+    return a;
+});
+const adjustTurn = (diff) => {
+    const n = InitiativeList.length;
+    turnIndex.value = (n + turnIndex.value + diff) % n;
+};
+const decrementTurn = () => {
+    adjustTurn(-1);
+};
+const incrementTUrn = () => {
+    adjustTurn(1);
+}
 // #endregion
 
 // #region details popup
@@ -107,8 +137,10 @@ function closeDetails() {
 <template>
     <div class="grid place-items-center w-full">
         <BaseDivider>Initiative</BaseDivider>
-        <!-- Action Buttons -->
+        <!-- #region Action Buttons -->
         <div class="w-full flex">
+            <BackwardIcon class="w-8 rounded-lg mx-1" @click="decrementTurn" />
+            <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
             <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
             <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
             <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete"
@@ -119,9 +151,10 @@ function closeDetails() {
                 Default HP
             </OnOffButton>
         </div>
-        <!-- Initiative List -->
+        <!-- #endregion Action Buttons -->
+        <!-- #region Initiative List -->
         <div container class="divide-y">
-            <div v-for="initInfo in InitiativeList" :key="initInfo.index">
+            <div v-for="initInfo in iList" :key="initInfo.index">
                 <!-- Monster Initiatives -->
                 <MonsterInitiative v-if="initInfo.type === InitiativeTypes.MONSTER" :turnImgUrl="initInfo.imgUrl"
                     :monsters="monsterByInitiative(initInfo.index)" @openDetails="openDetails" />
@@ -144,6 +177,7 @@ function closeDetails() {
                 </div>
             </div>
         </div>
+        <!-- #endregion Initiative List -->
     </div>
     <!-- Pop-Ups -->
     <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
