@@ -8,7 +8,6 @@ import { Conditions, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
-import { HeroPack1 } from "@/data/content/HeroPack1";
 // #endregion
 
 export const useInitiativeStore = defineStore("initiative", () => {
@@ -82,7 +81,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
         if (newMonster.hp < 0) {
             newMonster.hp = 0;
         }
-        if (newMonster.hp < newMonster.maxHp || confirm(`Override Max HP: ${newMonster.maxHp}`)) {
+        if (newMonster.hp != newMonster.maxHp || confirm(`Override Max HP: ${newMonster.maxHp}`)) {
             newMonster.hp++;
             updateMonster(newMonster);
         }
