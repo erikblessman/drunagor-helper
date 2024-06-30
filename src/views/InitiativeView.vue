@@ -29,14 +29,10 @@ import type { HeroData } from "@/data/repository/HeroData";
 // #endregion
 
 // #region store bindings
-const { autoConfirmDelete, useDefaultHp } = storeToRefs(useInitiativeStore());
+const { autoConfirmDelete, useDefaultHp, turnIndex } = storeToRefs(useInitiativeStore());
 const { getInitiativeList, addHero, addMonster, clearInitiative, decrementHp, getHero, incrementHp, removeHero, removeMonster } =
     useInitiativeStore();
 const { heroes } = storeToRefs(HeroStore());
-console.log(`heroes length: ${heroes.value.length}`);
-heroes.value.forEach((hero) => {
-    console.log(hero);
-});
 const heroStore = HeroStore();
 // #endregion
 
@@ -80,14 +76,6 @@ const monsterByInitiative = (initiative: number) => {
     });
 };
 
-const turnIndex = ref(0);
-// const iList = ref(InitiativeList.map((a) => {
-//     let n = a.index;
-//     if (n < turnIndex.value) {
-//         n += InitiativeList.length;
-//     }
-//     return { ...a, index: n };
-// }).sort((a,b) => a.index - b.index));
 const iList = computed(() => {
     let a = [];
     const n = InitiativeList.length;
