@@ -79,13 +79,13 @@ const monsterByInitiative = (initiative: number) => {
 const iList = computed(() => {
     let a = [];
     const n = InitiativeList.length;
-    for(let i=0; i<n; ++i) {
-        const index = (i+turnIndex.value)%n;
+    for (let i = 0; i < n; ++i) {
+        const index = (i + turnIndex.value) % n;
         a.push(InitiativeList[index]);
     }
     return a;
 });
-const adjustTurn = (diff) => {
+const adjustTurn = (diff: number) => {
     const n = InitiativeList.length;
     turnIndex.value = (n + turnIndex.value + diff) % n;
 };
@@ -207,13 +207,13 @@ function closeDetails() {
                         <div class="col-start-1 row-start-1 justify-center">
                             <HeartIcon class="fill-red-500 w-12 self-center" />
                         </div>
-                        <div
-                            class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+                        <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
                             {{ detailsMonster?.hp }}
                         </div>
                     </div>
                     <PlusIcon @click="incrementHp(detailsMonster)" class="w-12" />
-                    <TrashIcon class="fill-gray-600 w-12" @click="() => { removeMonster(detailsMonster); closeDetails(); }" />
+                    <TrashIcon class="fill-gray-600 w-12"
+                        @click="() => { removeMonster(detailsMonster); closeDetails(); }" />
                 </div>
                 <div class="grid grid-flow-col auto-cols-max">
                     <Conditions :monster="detailsMonster" />

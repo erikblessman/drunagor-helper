@@ -16,7 +16,7 @@ import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
 // #endregion
 
 const props = defineProps<{
-    monster: ActiveMonsterData,
+    monster: ActiveMonsterData | null,
 }>();
 
 // #region store bindings
@@ -25,6 +25,9 @@ const { decrementCondition, incrementCondition } = useInitiativeStore();
 
 
 const validConditions = computed(() => {
+    if (!props.monster) {
+        return [];
+    }
     return _.filter(props.monster.conditions, (condition) => {
         return !_.includes(immunities.map((c: ICondition) => c.name), condition.name);
     });
@@ -32,7 +35,7 @@ const validConditions = computed(() => {
 
 let immunities = [] as ICondition[];// props.monster.conditionImmunities || [] as ICondition[];
 
-if (props.monster.size == "large") {
+if (props.monster?.size == "large") {
     let largeImmunities = [KnockDown, Stun];
     for (let condition of largeImmunities) {
         if (!_.includes(immunities.map((c: ICondition) => c.name), condition.name)) {
@@ -44,6 +47,9 @@ if (props.monster.size == "large") {
 const isOpen = ref(false);
 
 function handleConditionClicked(condition: ICondition) {
+    if (!props.monster) {
+        return;
+    }
     if (isOpen.value) {
         incrementCondition(props.monster, condition);
     } else {
@@ -51,7 +57,10 @@ function handleConditionClicked(condition: ICondition) {
     }
 }
 
-function alertConditionImmunity(condition: ICondition, monster: MonsterData) {
+function alertConditionImmunity(condition: ICondition, monster: MonsterData | null) {
+    if (!monster) {
+        return;
+    }
     alert(`${monster.name} is immune to ${condition.name}`);
 }
 
