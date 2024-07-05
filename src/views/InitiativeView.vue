@@ -202,7 +202,7 @@ function closeDetails() {
         <template #default>
             <div class="container">
                 <div class="grid grid-flow-col auto-cols-max">
-                    <MinusIcon @click="decrementHp(detailsMonster)" class="w-12" />
+                    <MinusIcon @click="detailsMonster = decrementHp(detailsMonster)" class="w-12" />
                     <div class="grid w-12">
                         <div class="col-start-1 row-start-1 justify-center">
                             <HeartIcon class="fill-red-500 w-12 self-center" />
@@ -211,7 +211,7 @@ function closeDetails() {
                             {{ detailsMonster?.hp }}
                         </div>
                     </div>
-                    <PlusIcon @click="incrementHp(detailsMonster)" class="w-12" />
+                    <PlusIcon @click="detailsMonster = incrementHp(detailsMonster)" class="w-12" />
                     <TrashIcon class="fill-gray-600 w-12"
                         @click="() => { removeMonster(detailsMonster); closeDetails(); }" />
                 </div>

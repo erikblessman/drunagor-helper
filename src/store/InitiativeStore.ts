@@ -51,15 +51,15 @@ export const useInitiativeStore = defineStore("initiative", () => {
             _initiativeList.value[mIndex] = monster;
         }
     };
-    const decrementHp = (monster: any) => {
+    const decrementHp = (monster: any): ActiveMonsterData => {
         const mIndex = _getMonsterIndex(monster);
-        const newMonster = _initiativeList.value[mIndex];
-        if (newMonster.hp > 1) {
-            newMonster.hp -= 1;
-            updateMonster(newMonster);
-        } else {
-            removeMonster(newMonster);
+        const storeMonster = _initiativeList.value[mIndex];
+            storeMonster.hp -= 1;
+        if (storeMonster.hp < 1) {
+            storeMonster.hp = 0;
+            removeMonster(storeMonster);
         }
+        return storeMonster;
     };
     const getHero = (dungeonRole: string | undefined): HeroData | null => {
         if (!dungeonRole) {
@@ -75,16 +75,16 @@ export const useInitiativeStore = defineStore("initiative", () => {
             _initiativeList.value[mIndex] = monster;
         }
     };
-    const incrementHp = (monster: any) => {
+    const incrementHp = (monster: any) : ActiveMonsterData => {
         const mIndex = _getMonsterIndex(monster);
-        const newMonster = _initiativeList.value[mIndex];
-        if (newMonster.hp < 0) {
-            newMonster.hp = 0;
+        const storeMonster = _initiativeList.value[mIndex];
+        if (storeMonster.hp < 0) {
+            storeMonster.hp = 0;
         }
-        if (newMonster.hp != newMonster.maxHp || confirm(`Override Max HP: ${newMonster.maxHp}`)) {
-            newMonster.hp++;
-            updateMonster(newMonster);
+        if (storeMonster.hp != storeMonster.maxHp || confirm(`Override Max HP: ${storeMonster.maxHp}`)) {
+            storeMonster.hp++;
         }
+        return storeMonster;
     };
     const getInitiativeList = () => {
         return _initiativeList.value.sort((a, b) => {
@@ -101,10 +101,6 @@ export const useInitiativeStore = defineStore("initiative", () => {
                 _initiativeList.value.splice(index, 1);
             }
         }
-    };
-    const updateMonster = (monster: any) => {
-        const index = _getMonsterIndex(monster);
-        _initiativeList.value[index] = monster;
     };
     // #endregion
 
@@ -242,6 +238,5 @@ export const useInitiativeStore = defineStore("initiative", () => {
         incrementHp,
         removeHero,
         removeMonster,
-        updateMonster,
     };
 });
