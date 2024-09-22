@@ -1,3 +1,11 @@
+import AdditionalDamage1 from "@/assets/tokens/token-additional-damage-1.png";
+import AdditionalDamage2 from "@/assets/tokens/token-additional-damage-2.png";
+import AdditionalDamage3 from "@/assets/tokens/token-additional-damage-3.png";
+import AdditionalDamage4 from "@/assets/tokens/token-additional-damage-4.png";
+import AdditionalMovement1 from "@/assets/tokens/token-additional-movement-1.png";
+import AdditionalMovement2 from "@/assets/tokens/token-additional-movement-2.png";
+import AdditionalMovement3 from "@/assets/tokens/token-additional-movement-3.png";
+import AdditionalMovement4 from "@/assets/tokens/token-additional-movement-4.png";
 import BleedImageUrl from "@/assets/tokens/token-bleed.png";
 import Bleed1ImageUrl from "@/assets/tokens/token-bleed-1.png";
 import Bleed2ImageUrl from "@/assets/tokens/token-bleed-2.png";
@@ -20,6 +28,10 @@ import Poison2ImageUrl from "@/assets/tokens/token-poison-2.png";
 import Poison3ImageUrl from "@/assets/tokens/token-poison-3.png";
 import Poison4ImageUrl from "@/assets/tokens/token-poison-4.png";
 import RangersMarkImgUrl from "@/assets/tokens/token-rangers-mark.png";
+import Shield1 from "@/assets/tokens/token-shield-1.png";
+import Shield2 from "@/assets/tokens/token-shield-2.png";
+import Shield3 from "@/assets/tokens/token-shield-3.png";
+import Shield4 from "@/assets/tokens/token-shield-4.png";
 import SlowImageUrl from "@/assets/tokens/token-slow.png";
 import StealthImageUrl from "@/assets/tokens/token-stealth.png";
 import StunImageUrl from "@/assets/tokens/token-stun.png";
@@ -63,6 +75,16 @@ class RedundantCondition extends Condition {
     }
 }
 
+export const AdditionalDamage : StackableCondition = new StackableCondition({
+    name: "Additional Damage",
+    images: [AdditionalDamage1, AdditionalDamage1, AdditionalDamage2, AdditionalDamage3, AdditionalDamage4],
+});
+
+export const AdditionalMovement : StackableCondition = new StackableCondition({
+    name: "Additional Movement",
+    images: [AdditionalMovement1, AdditionalMovement1, AdditionalMovement2, AdditionalMovement3, AdditionalMovement4],
+});
+
 export const Bleed : StackableCondition = new StackableCondition({
     name: "Bleed",
     images: [BleedImageUrl, Bleed1ImageUrl, Bleed2ImageUrl, Bleed3ImageUrl, Bleed4ImageUrl],
@@ -88,6 +110,11 @@ export const KnockDown : RedundantCondition = new RedundantCondition({
     images: [KnockDownImageUrl, KnockDownImageUrl],
 });
 
+export const Shield : StackableCondition = new StackableCondition({
+    name: "Shield",
+    images: [Shield1, Shield1, Shield2, Shield3, Shield4],
+});
+
 export const Slow : RedundantCondition = new RedundantCondition({
     name: "Slow",
     images: [SlowImageUrl, SlowImageUrl],
@@ -108,4 +135,4 @@ export const Stealth : RedundantCondition = new RedundantCondition({
     images: [StealthImageUrl, StealthImageUrl],
 });
 
-export const Conditions : ICondition[] = [Bleed, Burn, KnockDown, Intimidate, Poison, RangersMark, Slow, Stealth, Stun,];
+export const Conditions : ICondition[] = [AdditionalDamage, AdditionalMovement, Bleed, Burn, KnockDown, Intimidate, Poison, RangersMark, Shield, Slow, Stealth, Stun,];

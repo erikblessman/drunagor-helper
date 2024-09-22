@@ -29,7 +29,7 @@ import type { HeroData } from "@/data/repository/HeroData";
 // #endregion
 
 // #region store bindings
-const { autoConfirmDelete, useDefaultHp, turnIndex } = storeToRefs(useInitiativeStore());
+const { autoConfirmDelete, ringColors, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
 const { getInitiativeList, addHero, addMonster, clearInitiative, decrementHp, getHero, incrementHp, removeHero, removeMonster } =
     useInitiativeStore();
 const { heroes } = storeToRefs(HeroStore());
@@ -118,7 +118,25 @@ function openDetails(monster: ActiveMonsterData) {
 function closeDetails() {
     detailsOpen.value = false;
 }
+
+const colorPickerRef = ref<InstanceType<typeof HTMLElement>>();
+
+const showColorPicker = () => {
+    if (!colorPickerRef.value) {
+        throw new Error("colorPickerRef is null");
+    }
+    colorPickerRef.value.style.display = "block";
+}
+
+const hideColorPicker = () => {
+    if (!colorPickerRef.value) {
+        throw new Error("colorPickerRef is null");
+    }
+    colorPickerRef.value.style.display = "none";
+}
 // #endregion
+
+// console.log(ringColors.value);
 
 </script>
 
@@ -214,6 +232,16 @@ function closeDetails() {
                     <PlusIcon @click="detailsMonster = incrementHp(detailsMonster)" class="w-12" />
                     <TrashIcon class="fill-gray-600 w-12"
                         @click="() => { removeMonster(detailsMonster); closeDetails(); }" />
+                    <!-- div with ring color, onclick shows next div -->
+                    <div class="rounded-full w-12 h-12 border-8" @click="showColorPicker"
+                        :style="'border-color: ' + detailsMonster?.baseColor + ';'" />
+                    <div class="grid grid-cols-3 gap-1" ref="colorPickerRef" style="display:none;">
+                        <div v-for="color in ringColors" :key="color" class="rounded-full w-12 h-12 border-8"
+                            :style="'border-color: ' + color + ';'" @click="detailsMonster.baseColor = color">
+                            Ho
+                        </div>
+                    </div>
+                    <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
                 </div>
                 <div class="grid grid-flow-col auto-cols-max">
                     <Conditions :monster="detailsMonster" />

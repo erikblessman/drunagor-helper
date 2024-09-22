@@ -17,7 +17,21 @@ export const useInitiativeStore = defineStore("initiative", () => {
     const turnIndex = useStorage("initiative.turnIndex", 0);
     const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
     const _heros = useStorage("initiative.Heros", {} as Record<string, HeroData>);
-    const _monsterMaxHp = useStorage("initiative.MonsterMaxHp", {} as Record<string, number>);
+    const ringColors = {
+        Yellow: "Yellow",
+        Navy: "Navy",
+        Pink: "HotPink",
+        Green: "Green",
+        DarkRed: "FireBrick",
+        Black: "Black",
+        Orange: "DarkOrange",
+        Gray: "Snow",
+        LightBlue: "Aquamarine",
+        Blue: "RoyalBlue",
+        Red: "Red",
+        Tan: "SaddleBrown",
+    };
+    // console.log(ringColors);
     // #endregion
 
     // #region store functions
@@ -106,20 +120,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
 
     // #region non-exported variables
     const _ringColors: any = {
-        small: [
-            "Yellow",
-            "Navy",
-            "HotPink",
-            "Green",
-            "FireBrick",
-            "Black",
-            "DarkOrange",
-            "Snow",
-            "Aquamarine",
-            "RoyalBlue",
-            "Red",
-            "SaddleBrown",
-        ],
+        small: Object.values(ringColors),
         large: ["Green", "HotPink", "Navy", "Yellow"],
     };
     // #endregion
@@ -224,8 +225,9 @@ export const useInitiativeStore = defineStore("initiative", () => {
     return {
         // properties
         autoConfirmDelete,
-        useDefaultHp,
+        ringColors,
         turnIndex,
+        useDefaultHp,
         // functions
         addHero,
         addMonster,
