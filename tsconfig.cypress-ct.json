@@ -3,6 +3,7 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "cypress/support/component.*", "cypress/support/commands.ts"],
   "exclude": [],
   "compilerOptions": {
+    "target": "es2017", 
     "composite": true
   }
 }
