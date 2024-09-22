@@ -49,14 +49,14 @@ export const HeroStore = defineStore("hero", () => {
   }
 
   function getHero(id: string) {
-    switch(id) {
-      case 'catharina-mage':
+    switch (id) {
+      case "catharina-mage":
         return new CatharinaMage();
-      case 'sskar':
+      case "sskar":
         return new Sskar();
-      case 'vacren':
+      case "vacren":
         return new VacrenWarlord();
-      case 'kellam':
+      case "kellam":
         return new Kellam();
       default:
         throw new Error("Unknown hero: " + id);

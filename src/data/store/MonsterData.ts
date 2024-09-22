@@ -22,7 +22,7 @@ export interface MonsterData {
   size: string;
   initiative: number;
   translation_key: string;
-};
+}
 
 export interface ActiveMonsterData extends MonsterData {
   hp: number;
@@ -32,5 +32,5 @@ export interface ActiveMonsterData extends MonsterData {
   initiative: number;
   active: boolean;
   conditions: ICondition[];
-  rank: null | 'rookie' | 'fighter' | 'veteran' | 'champion';
-};
+  rank: null | "rookie" | "fighter" | "veteran" | "champion";
+}

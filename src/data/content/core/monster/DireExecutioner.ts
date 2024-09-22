@@ -1,5 +1,6 @@
 import ImageUrl from "@/assets/monster/big/ExecutionerBig.webp";
-import MiniatureUrl from "@/assets/monster/miniature/ExecutionerMiniature.webp";import Card from "@/assets/monster/cards/scenario-monsters/dire-executioner.jpg";
+import MiniatureUrl from "@/assets/monster/miniature/ExecutionerMiniature.webp";
+import Card from "@/assets/monster/cards/scenario-monsters/dire-executioner.jpg";
 import InitiativePlaces from "@/data/initiative/InitiativePlaces";
 import type { MonsterData } from "@/data/store/MonsterData";
 import type { ContentId } from "@/data/type/ContentId";
@@ -15,10 +16,10 @@ export class DireExecutioner implements MonsterData {
     big: ImageUrl,
     miniature: MiniatureUrl,
     cards: {
-      rookie: [Card,],
-      fighter: [Card,],
-      veteran: [Card,],
-      champion: [Card,],
+      rookie: [Card],
+      fighter: [Card],
+      veteran: [Card],
+      champion: [Card],
     },
   };
   color: MonsterColor = "other";

@@ -37,102 +37,115 @@ import StealthImageUrl from "@/assets/tokens/token-stealth.png";
 import StunImageUrl from "@/assets/tokens/token-stun.png";
 
 export interface ICondition {
-    name: string;
-    count: number;
-    maxCount: number;
-    description: string;
-    images: string[];
+  name: string;
+  count: number;
+  maxCount: number;
+  description: string;
+  images: string[];
 }
 
 class Condition implements ICondition {
-    constructor(object: any) {
-        this.name = object.name;
-        this.count = 0;
-        this.maxCount = object.maxCount;
-        this.description = object.description;
-        this.images = object.images;
-    }
-    name: string;
-    count: number;
-    maxCount: number;
-    description: string;
-    images: string[];
+  constructor(object: any) {
+    this.name = object.name;
+    this.count = 0;
+    this.maxCount = object.maxCount;
+    this.description = object.description;
+    this.images = object.images;
+  }
+  name: string;
+  count: number;
+  maxCount: number;
+  description: string;
+  images: string[];
 }
 
-const MAX_STACKABLE_COUNT : number = 4;
+const MAX_STACKABLE_COUNT: number = 4;
 class StackableCondition extends Condition {
-    constructor(object: any) {
-        object.maxCount = MAX_STACKABLE_COUNT;
-        super(object);
-    }
+  constructor(object: any) {
+    object.maxCount = MAX_STACKABLE_COUNT;
+    super(object);
+  }
 }
 
-const MAX_REDUNDANT_COUNT : number = 1;
+const MAX_REDUNDANT_COUNT: number = 1;
 class RedundantCondition extends Condition {
-    constructor(object: any) {
-        object.maxCount = MAX_REDUNDANT_COUNT;
-        super(object);
-    }
+  constructor(object: any) {
+    object.maxCount = MAX_REDUNDANT_COUNT;
+    super(object);
+  }
 }
 
-export const AdditionalDamage : StackableCondition = new StackableCondition({
-    name: "Additional Damage",
-    images: [AdditionalDamage1, AdditionalDamage1, AdditionalDamage2, AdditionalDamage3, AdditionalDamage4],
+export const AdditionalDamage: StackableCondition = new StackableCondition({
+  name: "Additional Damage",
+  images: [AdditionalDamage1, AdditionalDamage1, AdditionalDamage2, AdditionalDamage3, AdditionalDamage4],
 });
 
-export const AdditionalMovement : StackableCondition = new StackableCondition({
-    name: "Additional Movement",
-    images: [AdditionalMovement1, AdditionalMovement1, AdditionalMovement2, AdditionalMovement3, AdditionalMovement4],
+export const AdditionalMovement: StackableCondition = new StackableCondition({
+  name: "Additional Movement",
+  images: [AdditionalMovement1, AdditionalMovement1, AdditionalMovement2, AdditionalMovement3, AdditionalMovement4],
 });
 
-export const Bleed : StackableCondition = new StackableCondition({
-    name: "Bleed",
-    images: [BleedImageUrl, Bleed1ImageUrl, Bleed2ImageUrl, Bleed3ImageUrl, Bleed4ImageUrl],
+export const Bleed: StackableCondition = new StackableCondition({
+  name: "Bleed",
+  images: [BleedImageUrl, Bleed1ImageUrl, Bleed2ImageUrl, Bleed3ImageUrl, Bleed4ImageUrl],
 });
 
-export const Poison : StackableCondition = new StackableCondition({
-    name: "Poison",
-    images: [PoisonImageUrl, Poison1ImageUrl, Poison2ImageUrl, Poison3ImageUrl, Poison4ImageUrl],
+export const Poison: StackableCondition = new StackableCondition({
+  name: "Poison",
+  images: [PoisonImageUrl, Poison1ImageUrl, Poison2ImageUrl, Poison3ImageUrl, Poison4ImageUrl],
 });
 
-export const Burn : StackableCondition = new StackableCondition({
-    name: "Burn",
-    images: [BurnImageUrl, Burn1ImageUrl, Burn2ImageUrl, Burn3ImageUrl, Burn4ImageUrl],
+export const Burn: StackableCondition = new StackableCondition({
+  name: "Burn",
+  images: [BurnImageUrl, Burn1ImageUrl, Burn2ImageUrl, Burn3ImageUrl, Burn4ImageUrl],
 });
 
-export const Stun : RedundantCondition = new RedundantCondition({
-    name: "Stun",
-    images: [StunImageUrl, StunImageUrl],
+export const Stun: RedundantCondition = new RedundantCondition({
+  name: "Stun",
+  images: [StunImageUrl, StunImageUrl],
 });
 
-export const KnockDown : RedundantCondition = new RedundantCondition({
-    name: "Knock Down",
-    images: [KnockDownImageUrl, KnockDownImageUrl],
+export const KnockDown: RedundantCondition = new RedundantCondition({
+  name: "Knock Down",
+  images: [KnockDownImageUrl, KnockDownImageUrl],
 });
 
-export const Shield : StackableCondition = new StackableCondition({
-    name: "Shield",
-    images: [Shield1, Shield1, Shield2, Shield3, Shield4],
+export const Shield: StackableCondition = new StackableCondition({
+  name: "Shield",
+  images: [Shield1, Shield1, Shield2, Shield3, Shield4],
 });
 
-export const Slow : RedundantCondition = new RedundantCondition({
-    name: "Slow",
-    images: [SlowImageUrl, SlowImageUrl],
+export const Slow: RedundantCondition = new RedundantCondition({
+  name: "Slow",
+  images: [SlowImageUrl, SlowImageUrl],
 });
 
-export const RangersMark : RedundantCondition = new RedundantCondition({
-    name: "Ranger's Mark",
-    images: [RangersMarkImgUrl, RangersMarkImgUrl],
+export const RangersMark: RedundantCondition = new RedundantCondition({
+  name: "Ranger's Mark",
+  images: [RangersMarkImgUrl, RangersMarkImgUrl],
 });
 
-export const Intimidate : StackableCondition = new StackableCondition({
-    name: "Intimidate",
-    images: [IntimidateImageUrl, Intimidate1ImageUrl, Intimidate2ImageUrl, Intimidate3ImageUrl, Intimidate4ImageUrl],
+export const Intimidate: StackableCondition = new StackableCondition({
+  name: "Intimidate",
+  images: [IntimidateImageUrl, Intimidate1ImageUrl, Intimidate2ImageUrl, Intimidate3ImageUrl, Intimidate4ImageUrl],
 });
 
-export const Stealth : RedundantCondition = new RedundantCondition({
-    name: "Stealth",
-    images: [StealthImageUrl, StealthImageUrl],
+export const Stealth: RedundantCondition = new RedundantCondition({
+  name: "Stealth",
+  images: [StealthImageUrl, StealthImageUrl],
 });
 
-export const Conditions : ICondition[] = [AdditionalDamage, AdditionalMovement, Bleed, Burn, KnockDown, Intimidate, Poison, RangersMark, Shield, Slow, Stealth, Stun,];
+export const Conditions: ICondition[] = [
+  AdditionalDamage,
+  AdditionalMovement,
+  Bleed,
+  Burn,
+  KnockDown,
+  Intimidate,
+  Poison,
+  RangersMark,
+  Shield,
+  Slow,
+  Stealth,
+  Stun,
+];

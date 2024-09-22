@@ -13,12 +13,12 @@ export class FoulShooter implements MonsterData {
   variants: VariantId[] = ["standard", "alternate"];
   images = {
     big: ImageUrl,
-    miniature: '',
+    miniature: "",
     cards: {
-      rookie: [Card,],
-      fighter: [Card,],
-      veteran: [Card,],
-      champion: [Card,],
+      rookie: [Card],
+      fighter: [Card],
+      veteran: [Card],
+      champion: [Card],
     },
   };
   color: MonsterColor = "other";

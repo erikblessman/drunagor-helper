@@ -64,7 +64,7 @@ import { DireExecutioner } from "../content/core/monster/DireExecutioner";
 export const MonsterDataStore = defineStore("data-monster", () => {
   const configurationStore = ConfigurationStore();
 
-  const monsters : MonsterData[] = [
+  const monsters: MonsterData[] = [
     new Abomination(),
     new BoneReaper(),
     new CorruptedFarmer(),

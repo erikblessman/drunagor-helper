@@ -10,121 +10,121 @@ import BottomRedImgUrl from "@/assets/initiative/bottom-red.png";
 import BottomGrayImgUrl from "@/assets/initiative/bottom-gray.png";
 
 export default class InitiativePlaces {
-    static readonly DEFENDER: number = 0;
-    static readonly TOP_ORANGE: number = 1;
-    static readonly TOP_GREEN: number = 2;
-    static readonly LEADER: number = 3;
-    static readonly TOP_BLUE: number = 4;
-    static readonly TOP_RED: number = 5;
-    static readonly CONTROLLER: number = 6;
-    static readonly TOP_GRAY: number = 7;
-    static readonly BOTTOM_ORANGE: number = 8;
-    static readonly SUPPORT: number = 9;
-    static readonly BOTTOM_GREEN: number = 10;
-    static readonly BOTTOM_BLUE: number = 11;
-    static readonly STRIKER: number = 12;
-    static readonly BOTTOM_RED: number = 13;
-    static readonly BOTTOM_GRAY: number = 14;
-    static readonly RUNE: number = 15;
+  static readonly DEFENDER: number = 0;
+  static readonly TOP_ORANGE: number = 1;
+  static readonly TOP_GREEN: number = 2;
+  static readonly LEADER: number = 3;
+  static readonly TOP_BLUE: number = 4;
+  static readonly TOP_RED: number = 5;
+  static readonly CONTROLLER: number = 6;
+  static readonly TOP_GRAY: number = 7;
+  static readonly BOTTOM_ORANGE: number = 8;
+  static readonly SUPPORT: number = 9;
+  static readonly BOTTOM_GREEN: number = 10;
+  static readonly BOTTOM_BLUE: number = 11;
+  static readonly STRIKER: number = 12;
+  static readonly BOTTOM_RED: number = 13;
+  static readonly BOTTOM_GRAY: number = 14;
+  static readonly RUNE: number = 15;
 }
 
 export class InitiativeTypes {
-    static readonly HERO: string = "hero";
-    static readonly MONSTER: string = "monster";
-    static readonly RUNE: string = "rune";
+  static readonly HERO: string = "hero";
+  static readonly MONSTER: string = "monster";
+  static readonly RUNE: string = "rune";
 }
 
 export const InitiativeList = [
-    {
-        type: InitiativeTypes.HERO,
-        index: InitiativePlaces.DEFENDER,
-        text: "DEFENDER",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.TOP_ORANGE,
-        imgUrl: TopOrangeImgUrl,
-        text: "TOP ORANGE",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.TOP_GREEN,
-        imgUrl: TopGreenImgUrl,
-        text: "TOP GREEN",
-    },
-    {
-        type: InitiativeTypes.HERO,
-        index: InitiativePlaces.LEADER,
-        text: "LEADER",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.TOP_BLUE,
-        imgUrl: TopBlueImgUrl,
-        text: "TOP BLUE",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.TOP_RED,
-        imgUrl: TopRedImgUrl,
-        text: "TOP RED",
-    },
-    {
-        type: InitiativeTypes.HERO,
-        index: InitiativePlaces.CONTROLLER,
-        text: "CONTROLLER",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.TOP_GRAY,
-        imgUrl: TopGrayImgUrl,
-        text: "TOP GRAY",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.BOTTOM_ORANGE,
-        imgUrl: BottomOrangeImgUrl,
-        text: "BOTTOM ORANGE",
-    },
-    {
-        type: InitiativeTypes.HERO,
-        index: InitiativePlaces.SUPPORT,
-        text: "SUPPORT",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.BOTTOM_GREEN,
-        imgUrl: BottomGreenImgUrl,
-        text: "BOTTOM GREEN",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.BOTTOM_BLUE,
-        imgUrl: BottomBlueImgUrl,
-        text: "BOTTOM BLUE",
-    },
-    {
-        type: InitiativeTypes.HERO,
-        index: InitiativePlaces.STRIKER,
-        text: "STRIKER",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.BOTTOM_RED,
-        imgUrl: BottomRedImgUrl,
-        text: "BOTTOM RED",
-    },
-    {
-        type: InitiativeTypes.MONSTER,
-        index: InitiativePlaces.BOTTOM_GRAY,
-        imgUrl: BottomGrayImgUrl,
-        text: "BOTTOM GRAY",
-    },
-    {
-        type: InitiativeTypes.RUNE,
-        index: InitiativePlaces.RUNE,
-        text: "RUNE",
-    }
+  {
+    type: InitiativeTypes.HERO,
+    index: InitiativePlaces.DEFENDER,
+    text: "DEFENDER",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.TOP_ORANGE,
+    imgUrl: TopOrangeImgUrl,
+    text: "TOP ORANGE",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.TOP_GREEN,
+    imgUrl: TopGreenImgUrl,
+    text: "TOP GREEN",
+  },
+  {
+    type: InitiativeTypes.HERO,
+    index: InitiativePlaces.LEADER,
+    text: "LEADER",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.TOP_BLUE,
+    imgUrl: TopBlueImgUrl,
+    text: "TOP BLUE",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.TOP_RED,
+    imgUrl: TopRedImgUrl,
+    text: "TOP RED",
+  },
+  {
+    type: InitiativeTypes.HERO,
+    index: InitiativePlaces.CONTROLLER,
+    text: "CONTROLLER",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.TOP_GRAY,
+    imgUrl: TopGrayImgUrl,
+    text: "TOP GRAY",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.BOTTOM_ORANGE,
+    imgUrl: BottomOrangeImgUrl,
+    text: "BOTTOM ORANGE",
+  },
+  {
+    type: InitiativeTypes.HERO,
+    index: InitiativePlaces.SUPPORT,
+    text: "SUPPORT",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.BOTTOM_GREEN,
+    imgUrl: BottomGreenImgUrl,
+    text: "BOTTOM GREEN",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.BOTTOM_BLUE,
+    imgUrl: BottomBlueImgUrl,
+    text: "BOTTOM BLUE",
+  },
+  {
+    type: InitiativeTypes.HERO,
+    index: InitiativePlaces.STRIKER,
+    text: "STRIKER",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.BOTTOM_RED,
+    imgUrl: BottomRedImgUrl,
+    text: "BOTTOM RED",
+  },
+  {
+    type: InitiativeTypes.MONSTER,
+    index: InitiativePlaces.BOTTOM_GRAY,
+    imgUrl: BottomGrayImgUrl,
+    text: "BOTTOM GRAY",
+  },
+  {
+    type: InitiativeTypes.RUNE,
+    index: InitiativePlaces.RUNE,
+    text: "RUNE",
+  },
 ];
 
 export const INITIATIVE_ORANGE: string = "e88555";

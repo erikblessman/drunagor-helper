@@ -15,10 +15,10 @@ export class Nightmare implements MonsterData {
     big: ImageUrl,
     miniature: "",
     cards: {
-      rookie: [Card,],
-      fighter: [Card,],
-      veteran: [Card,],
-      champion: [Card,],
+      rookie: [Card],
+      fighter: [Card],
+      veteran: [Card],
+      champion: [Card],
     },
   };
   color: MonsterColor = "other";

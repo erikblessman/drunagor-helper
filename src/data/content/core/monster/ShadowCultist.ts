@@ -31,10 +31,10 @@ export class ShadowCultist implements MonsterData {
     big: ImageUrl,
     miniature: MiniatureUrl,
     cards: {
-      rookie: [RookieStandard, RookieAlternate, RookieSideA, RookieSideB,],
-      fighter: [FighterStandard, FighterAlternate, FighterSideA, FighterSideB,],
-      veteran: [VeteranStandard, VeteranAlternate, VeteranSideA, VeteranSideB,],
-      champion: [ChampionStandard, ChampionAlternate, ChampionSideA, ChampionSideB,],
+      rookie: [RookieStandard, RookieAlternate, RookieSideA, RookieSideB],
+      fighter: [FighterStandard, FighterAlternate, FighterSideA, FighterSideB],
+      veteran: [VeteranStandard, VeteranAlternate, VeteranSideA, VeteranSideB],
+      champion: [ChampionStandard, ChampionAlternate, ChampionSideA, ChampionSideB],
     },
   };
   color: MonsterColor = "white";

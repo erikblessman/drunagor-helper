@@ -23,11 +23,11 @@ export class Executioner implements MonsterData {
     big: ImageUrl,
     miniature: MiniatureUrl,
     cards: {
-      rookie: [RookieStandard, RookieAlternate,],
-      fighter: [FighterStandard, FighterAlternate,],
-      veteran: [VeteranStandard, VeteranAlternate,],
-      champion: [ChampionStandard, ChampionAlternate,],
-    }
+      rookie: [RookieStandard, RookieAlternate],
+      fighter: [FighterStandard, FighterAlternate],
+      veteran: [VeteranStandard, VeteranAlternate],
+      champion: [ChampionStandard, ChampionAlternate],
+    },
   };
   color: MonsterColor = "gray";
   size: string = "small";

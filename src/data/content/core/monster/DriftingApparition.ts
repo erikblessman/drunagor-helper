@@ -17,10 +17,10 @@ export class DriftingApparition implements MonsterData {
     big: ImageUrl,
     miniature: MiniatureUrl,
     cards: {
-      rookie: [CardSideA, CardSideB,],
-      fighter: [CardSideA, CardSideB,],
-      veteran: [CardSideA, CardSideB,],
-      champion: [CardSideA, CardSideB,],
+      rookie: [CardSideA, CardSideB],
+      fighter: [CardSideA, CardSideB],
+      veteran: [CardSideA, CardSideB],
+      champion: [CardSideA, CardSideB],
     },
   };
   color: MonsterColor = "other";

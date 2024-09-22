@@ -22,11 +22,11 @@ export class NagianHunter implements MonsterData {
     big: ImageUrl,
     miniature: "",
     cards: {
-      rookie: [RookieStandard, RookieAlternate,],
-      fighter: [FighterStandard, FighterAlternate,],
-      veteran: [VeteranStandard, VeteranAlternate,],
-      champion: [ChampionStandard, ChampionAlternate,],
-    }
+      rookie: [RookieStandard, RookieAlternate],
+      fighter: [FighterStandard, FighterAlternate],
+      veteran: [VeteranStandard, VeteranAlternate],
+      champion: [ChampionStandard, ChampionAlternate],
+    },
   };
   color: MonsterColor = "white";
   size: string = "small";

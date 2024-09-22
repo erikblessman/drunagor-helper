@@ -16,10 +16,10 @@ export class TormentOfGrief implements MonsterData {
     big: ImageUrl,
     miniature: MiniatureUrl,
     cards: {
-      rookie: [Card,],
-      fighter: [Card,],
-      veteran: [Card,],
-      champion: [Card,],
+      rookie: [Card],
+      fighter: [Card],
+      veteran: [Card],
+      champion: [Card],
     },
   };
   color: MonsterColor = "other";

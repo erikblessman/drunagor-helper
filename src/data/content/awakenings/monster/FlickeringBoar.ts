@@ -14,12 +14,12 @@ export class FlickeringBoar implements MonsterData {
   variants: VariantId[] = ["standard", "alternate"];
   images = {
     big: ImageUrl,
-    miniature: '',
+    miniature: "",
     cards: {
-      rookie: [Card, CardBack,],
-      fighter: [Card, CardBack,],
-      veteran: [Card, CardBack,],
-      champion: [Card, CardBack,],
+      rookie: [Card, CardBack],
+      fighter: [Card, CardBack],
+      veteran: [Card, CardBack],
+      champion: [Card, CardBack],
     },
   };
   color: MonsterColor = "other";
