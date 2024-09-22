@@ -128,12 +128,12 @@ const showColorPicker = () => {
     colorPickerRef.value.style.display = "block";
 }
 
-const hideColorPicker = () => {
-    if (!colorPickerRef.value) {
-        throw new Error("colorPickerRef is null");
-    }
-    colorPickerRef.value.style.display = "none";
-}
+// const hideColorPicker = () => {
+//     if (!colorPickerRef.value) {
+//         throw new Error("colorPickerRef is null");
+//     }
+//     colorPickerRef.value.style.display = "none";
+// }
 // #endregion
 
 // console.log(ringColors.value);
