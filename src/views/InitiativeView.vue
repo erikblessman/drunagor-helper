@@ -237,7 +237,8 @@ const showColorPicker = () => {
                         :style="'border-color: ' + detailsMonster?.baseColor + ';'" />
                     <div class="grid grid-cols-3 gap-1" ref="colorPickerRef" style="display:none;">
                         <div v-for="color in ringColors" :key="color" class="rounded-full w-12 h-12 border-8"
-                            :style="'border-color: ' + color + ';'" @click="detailsMonster.baseColor = color">
+                            :style="'border-color: ' + color + ';'"
+                            @click="detailsMonster && (detailsMonster.baseColor = color)">
                             Ho
                         </div>
                     </div>
