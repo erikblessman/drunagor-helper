@@ -7,6 +7,7 @@ import { HeartIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import { useInitiativeStore } from "@/store/InitiativeStore";
 import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
+import { toRef } from "vue";
 // #endregion
 
 // #region props
@@ -14,6 +15,8 @@ const props = defineProps<{
   turnImgUrl?: string;
   monsters: ActiveMonsterData[];
 }>();
+
+const monsterList = toRef(props, "monsters");
 // #endregion
 
 // #region emits
@@ -29,10 +32,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
   <div class="grid grid-cols-12" id="initiative-container">
     <div><img :src="turnImgUrl" /></div>
     <div class="col-span-11">
-      <template
-        v-for="monster in props.monsters.sort((a, b) => a.msTimestamp - b.msTimestamp)"
-        :key="monster.msTimestamp"
-      >
+      <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
         <div
           class="grid grid-flow-col auto-cols-max"
           v-touch:swipe.right="() => incrementHp(monster)"
