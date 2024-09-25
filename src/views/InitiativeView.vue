@@ -16,7 +16,7 @@ import { ref, computed } from "vue";
 
 // #region internal imports
 import { HeroStore } from "@/store/HeroStore";
-import { useInitiativeStore } from "@/store/InitiativeStore";
+import { useInitiativeStore, ringColors } from "@/store/InitiativeStore";
 import MonsterPicker from "@/components/initiative/MonsterPicker.vue";
 import MonsterInitiative from "@/components/initiative/MonsterInitiative.vue";
 import { InitiativeList, InitiativeTypes } from "@/data/initiative/InitiativePlaces";
@@ -29,7 +29,7 @@ import type { HeroData } from "@/data/repository/HeroData";
 // #endregion
 
 // #region store bindings
-const { autoConfirmDelete, ringColors, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
+const { autoConfirmDelete, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
 const {
   getInitiativeList,
   addHero,
@@ -71,6 +71,7 @@ const openMonsterPicker = (): void => {
 const pickMonster = (monster: any): void => {
   const activeMonster = addMonster(monster);
   openDetails(activeMonster);
+  debugFirstMonsterColor("pickMonster");
 };
 // #endregion
 
@@ -127,25 +128,21 @@ function openDetails(monster: ActiveMonsterData) {
 function closeDetails() {
   detailsOpen.value = false;
 }
-
-const colorPickerRef = ref<InstanceType<typeof HTMLElement>>();
-
-const showColorPicker = () => {
-  if (!colorPickerRef.value) {
-    throw new Error("colorPickerRef is null");
+let colorPickerVisible = ref(false);
+function toggleColorPicker() {
+  colorPickerVisible.value = !colorPickerVisible.value;
+}
+function changeColor(color: string) {
+  if (detailsMonster.value) {
+    detailsMonster.value.baseColor = color;
   }
-  colorPickerRef.value.style.display = "block";
-};
+  debugFirstMonsterColor("changeColor");
+}
 
-// const hideColorPicker = () => {
-//     if (!colorPickerRef.value) {
-//         throw new Error("colorPickerRef is null");
-//     }
-//     colorPickerRef.value.style.display = "none";
-// }
+function debugFirstMonsterColor(label: string) {
+  false && console.log(`debugFirstMonsterColor.${label}`, getInitiativeList()[0]?.baseColor);
+}
 // #endregion
-
-// console.log(ringColors.value);
 </script>
 
 <template>
@@ -254,19 +251,17 @@ const showColorPicker = () => {
           <!-- div with ring color, onclick shows next div -->
           <div
             class="rounded-full w-12 h-12 border-8"
-            @click="showColorPicker"
+            @click="toggleColorPicker"
             :style="'border-color: ' + detailsMonster?.baseColor + ';'"
-          />
-          <div class="grid grid-cols-3 gap-1" ref="colorPickerRef" style="display: none">
+          ></div>
+          <div class="grid grid-cols-3 gap-1" v-if="colorPickerVisible">
             <div
               v-for="color in ringColors"
               :key="color"
               class="rounded-full w-12 h-12 border-8"
               :style="'border-color: ' + color + ';'"
-              @click="detailsMonster && (detailsMonster.baseColor = color)"
-            >
-              Ho
-            </div>
+              @click="changeColor(color)"
+            ></div>
           </div>
           <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
         </div>

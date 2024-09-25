@@ -4,6 +4,22 @@ import { useStorage } from "@vueuse/core";
 // #endregion
 
 // #region internal imports
+
+export const ringColors = {
+  Yellow: "Yellow",
+  Navy: "Navy",
+  Pink: "HotPink",
+  Green: "Green",
+  DarkRed: "FireBrick",
+  Black: "Black",
+  Orange: "DarkOrange",
+  Gray: "Snow",
+  LightBlue: "Aquamarine",
+  Blue: "RoyalBlue",
+  Red: "Red",
+  Tan: "SaddleBrown",
+};
+
 import { Conditions, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
@@ -17,21 +33,6 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const turnIndex = useStorage("initiative.turnIndex", 0);
   const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
   const _heros = useStorage("initiative.Heros", {} as Record<string, HeroData>);
-  const ringColors = {
-    Yellow: "Yellow",
-    Navy: "Navy",
-    Pink: "HotPink",
-    Green: "Green",
-    DarkRed: "FireBrick",
-    Black: "Black",
-    Orange: "DarkOrange",
-    Gray: "Snow",
-    LightBlue: "Aquamarine",
-    Blue: "RoyalBlue",
-    Red: "Red",
-    Tan: "SaddleBrown",
-  };
-  // console.log(ringColors);
   // #endregion
 
   // #region store functions
@@ -50,7 +51,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
       cardIndex: 0,
     };
     _initiativeList.value.push(newMonster);
-    return newMonster;
+    return _initiativeList.value[_initiativeList.value.length - 1];
   };
   const clearInitiative = () => {
     if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
