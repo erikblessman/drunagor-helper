@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // #region external imports
-import { HeartIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { HeartIcon, QuestionMarkCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
 // #endregion
 
 // #region internal imports
@@ -30,7 +30,9 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 
 <template>
   <div class="grid grid-cols-12" id="initiative-container">
-    <div><img :src="turnImgUrl" /></div>
+    <div>
+      <img :src="turnImgUrl" />
+    </div>
     <div class="col-span-11">
       <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
         <div
@@ -38,13 +40,17 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
           v-touch:swipe.right="() => incrementHp(monster)"
           v-touch:swipe.left="() => decrementHp(monster)"
         >
-          <img
-            :src="monster.images.big"
-            @click="emit('open-details', monster)"
-            :style="'border-color:' + monster.baseColor + ';'"
-            class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
-            :class="monster.size == 'large' ? 'w-32' : 'w-24'"
-          />
+          <span @click="emit('open-details', monster)">
+            <img
+              v-if="(monster?.images?.big?.length ?? 0) > 0"
+              :src="monster.images.big"
+              
+              :style="'border-color:' + monster.baseColor + ';'"
+              class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
+              :class="monster.size == 'large' ? 'w-32' : 'w-24'"
+            />
+            <QuestionMarkCircleIcon v-else class="h-16 text-gray-200 rounded-lg" />
+          </span>
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>
             <div class="grid grid-flow-col auto-cols-max">

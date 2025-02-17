@@ -5,10 +5,10 @@ import BaseList from "@/components/BaseList.vue";
 import BaseListItem from "@/components/BaseListItem.vue";
 import { useToast } from "vue-toastification";
 import * as _ from "lodash-es";
-import { XMarkIcon } from "@heroicons/vue/24/solid";
+import { AdjustmentsHorizontalIcon, QuestionMarkCircleIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
-import type { MonsterData } from "@/data/store/MonsterData";
-import { QuestionMarkCircleIcon } from "@heroicons/vue/24/outline";
+import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
+import { InitiativeList } from "@/data/initiative/InitiativePlaces";
 
 const toast = useToast();
 
@@ -55,6 +55,48 @@ function randomMonster(color: string) {
     toast.error("No monsters of that color");
   }
 }
+
+function calcInitiative(color: string, position: string) : number {
+  const initObj = _.find(InitiativeList, (x) => {
+    return x.text === position.toUpperCase() + " " + color.toUpperCase();
+  });
+  return initObj?.index ?? 1;
+}
+
+function addCustom(): void {
+  const name: string = prompt("Name") ?? 'custom';
+  const color: string = prompt("Color") ?? 'Gray';
+  const position: string = prompt("Top/Bottom") ?? 'Bottom';
+  const initiative: number = calcInitiative(color, position);
+  const monster: ActiveMonsterData = {
+    id: name,
+    name: name,
+    hp: 0,
+    maxHp: 0,
+    content: "core",
+    baseColor: '',
+    msTimestamp: Date.now(),
+    active: true,
+    conditions: [],
+    rank: 'champion',
+    variants: [],
+    images: {
+      big: '',
+      miniature: '',
+      cards: {
+        rookie: [],
+        fighter: [],
+        veteran: [],
+        champion: [],
+      },
+    },
+    color: "black",
+    size: "small",
+    initiative: initiative,
+    translation_key: ''
+  };
+  pickMonster(monster);
+}
 </script>
 
 <template>
@@ -62,13 +104,20 @@ function randomMonster(color: string) {
     <template #header>
       <div class="grid grid-cols-2">
         <div class="flex">
-          <div class="w-full font-medium place-self-center">Add Monster</div>
+          <div class="w-full font-medium place-self-center">Add&nbsp;Monster</div>
           <select class="bg-base-100 py-2 pl-3 pr-20 w-full leading-5 focus:ring-0 rounded-lg" v-model="rank">
             <option value="rookie">Rookie</option>
             <option value="fighter">Fighter</option>
             <option value="veteran">Veteran</option>
             <option value="champion">Champion</option>
           </select>
+          <button
+            id="custom"
+            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
+            @click="addCustom"
+          >
+            <AdjustmentsHorizontalIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
+          </button>
         </div>
         <div>
           <button
