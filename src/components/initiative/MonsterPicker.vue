@@ -64,9 +64,12 @@ function calcInitiative(color: string, position: string) : number {
 }
 
 function addCustom(): void {
-  const name: string = prompt("Name") ?? 'custom';
-  const color: string = prompt("Color") ?? 'Gray';
-  const position: string = prompt("Top/Bottom") ?? 'Bottom';
+  const name: string | null = prompt("Name", "Special");
+  if (name === null) { return; }
+  const color: string | null = prompt("Color", "Gray");
+  if (color === null) { return; }
+  const position: string | null = prompt("Top/Bottom", "Bottom");
+  if (position === null) { return; }
   const initiative: number = calcInitiative(color, position);
   const monster: ActiveMonsterData = {
     id: name,
