@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import {
   ArrowPathIcon,
   BackwardIcon,
+  UserCircleIcon,
   ForwardIcon,
   HeartIcon,
   MinusIcon,
@@ -269,7 +270,11 @@ function debugFirstMonsterColor(label: string) {
           <Conditions :monster="detailsMonster" />
         </div>
         <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'" @click="closeDetails">
-          <img :src="detailsMonsterCardUrl" class="rounded-sm shadow dark:bg-gray-800 w-full" />
+          <img
+            v-if="(detailsMonsterCardUrl?.length ?? 0) > 0"
+            :src="detailsMonsterCardUrl"
+            class="rounded-sm shadow dark:bg-gray-800 w-full" />
+          <UserCircleIcon v-else class="h-100 text-gray-200 rounded-lg" />
         </div>
         <img :src="detailsMonster?.images?.miniature" class="rounded-sm shadow dark:bg-gray-800 w-full" />
       </div>

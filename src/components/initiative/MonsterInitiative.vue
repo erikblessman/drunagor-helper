@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // #region external imports
-import { HeartIcon, QuestionMarkCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { HeartIcon, UserCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
 // #endregion
 
 // #region internal imports
@@ -49,7 +49,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
               class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
               :class="monster.size == 'large' ? 'w-32' : 'w-24'"
             />
-            <QuestionMarkCircleIcon v-else class="h-16 text-gray-200 rounded-lg" />
+            <UserCircleIcon v-else class="h-16 text-gray-200 rounded-lg" />
           </span>
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>
