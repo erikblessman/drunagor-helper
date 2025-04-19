@@ -44,12 +44,13 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
             <img
               v-if="(monster?.images?.big?.length ?? 0) > 0"
               :src="monster.images.big"
-              
               :style="'border-color:' + monster.baseColor + ';'"
               class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
               :class="monster.size == 'large' ? 'w-32' : 'w-24'"
             />
-            <UserCircleIcon v-else class="h-16 text-gray-200 rounded-lg" />
+            <UserCircleIcon v-else
+              :style="'border-color:' + monster.baseColor + ';'"
+              class="h-16 text-gray-200 rounded-lg" />
           </span>
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>

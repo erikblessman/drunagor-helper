@@ -60,6 +60,14 @@ import { VileSpawn } from "../content/awakenings/monster/VileSpawn";
 import { SowerCultist } from "../content/apocalypse/monster/SowerCultist";
 import { SkeletonSentry } from "../content/awakenings/monster/SkeletonSentry";
 import { DireExecutioner } from "../content/core/monster/DireExecutioner";
+import { CommanderDoctor } from "../content/awakenings/monster/CommanderDoctor";
+import { CommanderFlinch } from "../content/awakenings/monster/CommanderFlinch";
+import { CommanderHexer } from "../content/awakenings/monster/CommanderHexer";
+import { CommanderHorde } from "../content/awakenings/monster/CommanderHorde";
+import { CommanderHunter } from "../content/awakenings/monster/CommanderHunter";
+import { CommanderOx } from "../content/awakenings/monster/CommanderOx";
+import { CommanderSpawn } from "../content/awakenings/monster/CommanderSpawn";
+import { CommanderWitch } from "../content/awakenings/monster/CommanderWitch";
 
 export const MonsterDataStore = defineStore("data-monster", () => {
   const configurationStore = ConfigurationStore();
@@ -128,6 +136,17 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     new VileSpawn(),
   ];
 
+  const randomCommanders: MonsterData[] = [
+    new CommanderDoctor(),
+    new CommanderFlinch(),
+    new CommanderHexer(),
+    new CommanderHorde(),
+    new CommanderHunter(),
+    new CommanderOx(),
+    new CommanderSpawn(),
+    new CommanderWitch(),
+  ];
+
   function find(monsterId: string): MonsterData {
     const monster = _.find(monsters, { id: monsterId });
     if (monster === undefined) {
@@ -154,6 +173,7 @@ export const MonsterDataStore = defineStore("data-monster", () => {
 
   return {
     monsters,
+    randomCommanders,
     scenarioMonsters,
     find,
     findAll,

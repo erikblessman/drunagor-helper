@@ -158,6 +158,12 @@ function addCustom(): void {
             {{ monster.name }}
           </BaseListItem>
         </template>
+        <div>Random Commanders</div>
+        <template v-for="monster in monsterStore.randomCommanders" :key="monster.id">
+          <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
+            {{ monster.name }}
+          </BaseListItem>
+        </template>
       </BaseList>
     </template>
   </BaseModal>
