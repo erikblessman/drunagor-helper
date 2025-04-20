@@ -147,19 +147,29 @@ function addCustom(): void {
           <QuestionMarkCircleIcon class="w-12 fill-black stroke-gray-500" />
           Random Black
         </BaseListItem>
+
         <template v-for="monster in monsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
+
         <div>Scenario Monsters</div>
         <template v-for="monster in monsterStore.scenarioMonsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
+
         <div>Random Commanders</div>
         <template v-for="monster in monsterStore.randomCommanders" :key="monster.id">
+          <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
+            {{ monster.name }}
+          </BaseListItem>
+        </template>
+
+        <div>Scenario Commanders</div>
+        <template v-for="monster in monsterStore.scenarioCommanders" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>

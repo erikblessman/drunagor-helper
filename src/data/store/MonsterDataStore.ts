@@ -60,6 +60,8 @@ import { VileSpawn } from "../content/awakenings/monster/VileSpawn";
 import { SowerCultist } from "../content/apocalypse/monster/SowerCultist";
 import { SkeletonSentry } from "../content/awakenings/monster/SkeletonSentry";
 import { DireExecutioner } from "../content/core/monster/DireExecutioner";
+
+// Random Commanders
 import { CommanderDoctor } from "../content/awakenings/monster/CommanderDoctor";
 import { CommanderFlinch } from "../content/awakenings/monster/CommanderFlinch";
 import { CommanderHexer } from "../content/awakenings/monster/CommanderHexer";
@@ -68,6 +70,21 @@ import { CommanderHunter } from "../content/awakenings/monster/CommanderHunter";
 import { CommanderOx } from "../content/awakenings/monster/CommanderOx";
 import { CommanderSpawn } from "../content/awakenings/monster/CommanderSpawn";
 import { CommanderWitch } from "../content/awakenings/monster/CommanderWitch";
+
+// Scenario Commanders
+import { MayaTheRanger } from "../content/awakenings/monster/MayaTheRanger";
+import { SoulHarvester } from "../content/awakenings/monster/SoulHarvester";
+import { HeroLorennor } from "../content/apocalypse/monster/HeroLorennor";
+import { HeroUldannor } from "../content/apocalypse/monster/HeroUldannor";
+import { RadoslawRadek } from "../content/apocalypse/monster/RadoslawRadek";
+import { Scavenger } from "../content/apocalypse/monster/Scavenger";
+import { ScavengerAlly } from "../content/apocalypse/monster/ScavengerAlly";
+import { TheBlackPrince } from "../content/apocalypse/monster/TheBlackPrince";
+import { TheFallenMaiden } from "../content/apocalypse/monster/TheFallenMaiden";
+import { TheGrandBetrayer } from "../content/apocalypse/monster/TheGrandBetrayer";
+import { TheLovers } from "../content/apocalypse/monster/TheLovers";
+import { TheUndeadKing } from "../content/apocalypse/monster/TheUndeadKing";
+import { UnderworldFlayer } from "../content/apocalypse/monster/UnderworldFlayer";
 
 export const MonsterDataStore = defineStore("data-monster", () => {
   const configurationStore = ConfigurationStore();
@@ -147,6 +164,22 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     new CommanderWitch(),
   ];
 
+  const scenarioCommanders: MonsterData[] = [
+    new MayaTheRanger(),
+    new SoulHarvester(),
+    new HeroLorennor(),
+    new HeroUldannor(),
+    new RadoslawRadek(),
+    new Scavenger(),
+    new ScavengerAlly(),
+    new TheBlackPrince(),
+    new TheFallenMaiden(),
+    new TheGrandBetrayer(),
+    new TheLovers(),
+    new TheUndeadKing(),
+    new UnderworldFlayer(),
+  ];
+
   function find(monsterId: string): MonsterData {
     const monster = _.find(monsters, { id: monsterId });
     if (monster === undefined) {
@@ -174,6 +207,7 @@ export const MonsterDataStore = defineStore("data-monster", () => {
   return {
     monsters,
     randomCommanders,
+    scenarioCommanders,
     scenarioMonsters,
     find,
     findAll,
