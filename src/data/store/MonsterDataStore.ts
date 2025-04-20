@@ -86,6 +86,15 @@ import { TheLovers } from "../content/apocalypse/monster/TheLovers";
 import { TheUndeadKing } from "../content/apocalypse/monster/TheUndeadKing";
 import { UnderworldFlayer } from "../content/apocalypse/monster/UnderworldFlayer";
 
+// Special Commanders
+import { CommanderGolem } from "../content/apocalypse/monster/CommanderGolem";
+import { CommanderArchon } from "../content/core/monster/CommanderArchon";
+import { CommanderBane } from "../content/core/monster/CommanderBane";
+import { CommanderBruteSideA } from "../content/core/monster/CommanderBruteSidaA";
+import { CommanderBruteSideB } from "../content/core/monster/CommanderBruteSidaB";
+import { CommanderThern } from "../content/spoilsofwar/monster/CommanderThern";
+import { CommanderTwins } from "../content/spoilsofwar/monster/CommanderTwins";
+
 export const MonsterDataStore = defineStore("data-monster", () => {
   const configurationStore = ConfigurationStore();
 
@@ -180,6 +189,16 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     new UnderworldFlayer(),
   ];
 
+  const specialCommanders: MonsterData[] = [
+    new CommanderGolem(),
+    new CommanderArchon(),
+    new CommanderBane(),
+    new CommanderBruteSideA(),
+    new CommanderBruteSideB(),
+    new CommanderThern(),
+    new CommanderTwins(),
+  ];
+
   function find(monsterId: string): MonsterData {
     const monster = _.find(monsters, { id: monsterId });
     if (monster === undefined) {
@@ -209,6 +228,7 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     randomCommanders,
     scenarioCommanders,
     scenarioMonsters,
+    specialCommanders,
     find,
     findAll,
     findAllEnabled,
