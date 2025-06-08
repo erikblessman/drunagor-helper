@@ -52,7 +52,22 @@ const closeHeroPicker = (): void => {
   dungeonRoleToPick.value = null;
 };
 const heroData: HeroData[] = heroes.value.map((hero) => {
-  return heroStore.getHero(hero.heroId);
+  return heroStore.getHero(hero.heroId) ?? {
+    id: hero.heroId,
+    name: "UNKNOWN HERO",
+    content: "core",
+    class: "Warrior",
+    path: "Strength",
+    race: "Human",
+    proficiencies: {
+      weapon: ["Heavy"],
+      offHand: ["Off Hand Weapon"],
+      armor: ["Plate"],
+  },
+  images: {
+    avatar: 'https://cdn-icons-png.freepik.com/256/11748/11748483.png',
+  },
+};
 });
 const assignHero = (hero: HeroData): void => {
   addHero(dungeonRoleToPick.value as string, hero);
