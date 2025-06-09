@@ -13,6 +13,7 @@ import { CoreItemDataRepository } from "@/data/repository/campaign/core/CoreItem
 import type { ItemDataRepository } from "@/data/repository/ItemDataRepository";
 import { ApocalypseItemDataRepository } from "@/data/repository/campaign/apocalypse/ApocalypseItemDataRepository";
 import { AwakeningsItemDataRepository } from "@/data/repository/campaign/awakenings/AwakeningsItemDataRepository";
+import { UnrestrictedItemDataRepository } from "@/data/repository/campaign/UnrestrictedItemDataRepository";
 import { useI18n } from "vue-i18n";
 
 const route = useRoute();
@@ -25,7 +26,10 @@ const campaignStore = CampaignStore();
 const campaign = campaignStore.find(campaignId);
 let repository: ItemDataRepository;
 
-if (campaign.campaign === "core") {
+const restrictItems = false;
+if (!restrictItems) {
+  repository = new UnrestrictedItemDataRepository();
+} else if (campaign.campaign === "core") {
   repository = new CoreItemDataRepository();
 } else if (campaign.campaign === "apocalypse") {
   repository = new ApocalypseItemDataRepository();
