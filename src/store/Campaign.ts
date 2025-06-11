@@ -2,6 +2,7 @@ export class Campaign {
   public campaignId: string;
   public campaign: "core" | "apocalypse" | "awakenings";
   public name: string = "";
+  public notes: string = "";
   public statusIds: string[] = [];
   public outcomeIds: string[] = [];
   public followerIds: string[] = [];
@@ -13,11 +14,11 @@ export class Campaign {
     doom: number;
     heroism: number;
   } = {
-    perseverance: 0,
-    tragedy: 0,
-    doom: 0,
-    heroism: 0,
-  };
+      perseverance: 0,
+      tragedy: 0,
+      doom: 0,
+      heroism: 0,
+    };
   public isSequentialAdventure: boolean = false;
   public sequentialAdventureRunes: number = 0;
 
