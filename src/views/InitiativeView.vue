@@ -113,8 +113,11 @@ const iList = computed(() => {
 });
 const adjustTurn = (diff: number) => {
   const n = InitiativeList.length;
-  turnIndex.value = (n + turnIndex.value + diff) % n;
+  turnIndex.value = (turnIndex.value + diff);
 };
+const roundNumber = computed(() => {
+  return 1 + Math.floor(turnIndex.value/InitiativeList.length);
+})
 const decrementTurn = () => {
   adjustTurn(-1);
 };
@@ -167,6 +170,7 @@ function debugFirstMonsterColor(label: string) {
     <!-- #region Action Buttons -->
     <div class="w-full flex">
       <BackwardIcon class="w-8 rounded-lg mx-1" @click="decrementTurn" />
+      <div class="flex justify-center rounded-full text-lg font-black border-2 w-8">{{ roundNumber }}</div>
       <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
       <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
       <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
@@ -188,8 +192,8 @@ function debugFirstMonsterColor(label: string) {
           :monsters="monsterByInitiative(initInfo.index)"
           @openDetails="openDetails"
         />
-        <!-- Non Monster Initiatives -->
-        <div v-else class="grid grid-cols-12 divide-y" id="initiative-container">
+        <!-- Hero Initiatives -->
+        <div v-else-if="initInfo.type === InitiativeTypes.HERO" class="grid grid-cols-12 divide-y" id="initiative-container">
           <div v-if="getHero(initInfo.text) == null" class="col-span-11 col-start-2 text-4xl font-extrabold mb-4 flex">
             {{ initInfo.text }}
             <PlusIcon class="w-8 bg-slate-800 rounded-lg ml-4" @click="() => (dungeonRoleToPick = initInfo.text)" />
@@ -200,6 +204,13 @@ function debugFirstMonsterColor(label: string) {
               {{ getHero(initInfo.text)?.name }}
               <MinusIcon class="w-8 h-8 bg-slate-800 rounded-lg ml-4 mt-2" @click="() => removeHero(initInfo.text)" />
             </div>
+          </div>
+        </div>
+        <!-- Rune Initiative -->
+        <div v-else-if="initInfo.type === InitiativeTypes.RUNE" class="grid grid-cols-12 divide-y" id="initiative-container">
+          <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4 flex">
+            RUNE: Draw {{ roundNumber % 2 === 1 ? 1 : 2 }} Tiles
+            <PlusIcon class="w-8 bg-slate-800 rounded-lg ml-4" @click="() => (dungeonRoleToPick = initInfo.text)" />
           </div>
         </div>
       </div>

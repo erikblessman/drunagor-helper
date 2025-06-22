@@ -55,6 +55,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
   };
   const clearInitiative = () => {
     if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
+      turnIndex.value = 0;
       _initiativeList.value = [];
     }
   };
