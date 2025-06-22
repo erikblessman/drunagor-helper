@@ -38,7 +38,7 @@ export const InitiativeList = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.DEFENDER,
-    text: "DEFENDER",
+    text: "DEFENDER/BRUISER",
   },
   {
     type: InitiativeTypes.MONSTER,
@@ -55,7 +55,7 @@ export const InitiativeList = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.LEADER,
-    text: "LEADER",
+    text: "LEADER/WARDEN",
   },
   {
     type: InitiativeTypes.MONSTER,
@@ -72,7 +72,7 @@ export const InitiativeList = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.CONTROLLER,
-    text: "CONTROLLER",
+    text: "CONTROLLER/TRICKSTER",
   },
   {
     type: InitiativeTypes.MONSTER,
@@ -89,7 +89,7 @@ export const InitiativeList = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.SUPPORT,
-    text: "SUPPORT",
+    text: "SUPPORT/ADEPT",
   },
   {
     type: InitiativeTypes.MONSTER,
@@ -106,7 +106,7 @@ export const InitiativeList = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.STRIKER,
-    text: "STRIKER",
+    text: "STRIKER/SLAYER",
   },
   {
     type: InitiativeTypes.MONSTER,
