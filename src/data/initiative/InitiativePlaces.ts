@@ -34,7 +34,29 @@ export class InitiativeTypes {
   static readonly RUNE: string = "rune";
 }
 
-export const InitiativeList = [
+export enum InitiativeColors {
+  ORANGE = "ORANGE",
+  GREEN = "GREEN",
+  BLUE = "BLUE",
+  RED = "RED",
+  GRAY = "GRAY",
+};
+
+export enum InitiativePositions {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+}
+
+export interface InitiativeInfo {
+  type: InitiativeTypes;
+  index: number;
+  text: string;
+  imgUrl?: string;
+  position?: InitiativePositions;
+  color?: InitiativeColors;
+}
+
+export const InitiativeList: InitiativeInfo[] = [
   {
     type: InitiativeTypes.HERO,
     index: InitiativePlaces.DEFENDER,
@@ -44,12 +66,16 @@ export const InitiativeList = [
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.TOP_ORANGE,
     imgUrl: TopOrangeImgUrl,
+    position: InitiativePositions.TOP,
+    color: InitiativeColors.ORANGE,
     text: "TOP ORANGE",
   },
   {
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.TOP_GREEN,
     imgUrl: TopGreenImgUrl,
+    position: InitiativePositions.TOP,
+    color: InitiativeColors.GREEN,
     text: "TOP GREEN",
   },
   {
@@ -61,12 +87,16 @@ export const InitiativeList = [
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.TOP_BLUE,
     imgUrl: TopBlueImgUrl,
+    position: InitiativePositions.TOP,
+    color: InitiativeColors.BLUE,
     text: "TOP BLUE",
   },
   {
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.TOP_RED,
     imgUrl: TopRedImgUrl,
+    position: InitiativePositions.TOP,
+    color: InitiativeColors.RED,
     text: "TOP RED",
   },
   {
@@ -78,12 +108,16 @@ export const InitiativeList = [
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.TOP_GRAY,
     imgUrl: TopGrayImgUrl,
+    position: InitiativePositions.TOP,
+    color: InitiativeColors.GRAY,
     text: "TOP GRAY",
   },
   {
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.BOTTOM_ORANGE,
     imgUrl: BottomOrangeImgUrl,
+    position: InitiativePositions.BOTTOM,
+    color: InitiativeColors.ORANGE,
     text: "BOTTOM ORANGE",
   },
   {
@@ -95,12 +129,16 @@ export const InitiativeList = [
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.BOTTOM_GREEN,
     imgUrl: BottomGreenImgUrl,
+    position: InitiativePositions.BOTTOM,
+    color: InitiativeColors.GREEN,
     text: "BOTTOM GREEN",
   },
   {
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.BOTTOM_BLUE,
     imgUrl: BottomBlueImgUrl,
+    position: InitiativePositions.BOTTOM,
+    color: InitiativeColors.BLUE,
     text: "BOTTOM BLUE",
   },
   {
@@ -112,12 +150,16 @@ export const InitiativeList = [
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.BOTTOM_RED,
     imgUrl: BottomRedImgUrl,
+    position: InitiativePositions.BOTTOM,
+    color: InitiativeColors.RED,
     text: "BOTTOM RED",
   },
   {
     type: InitiativeTypes.MONSTER,
     index: InitiativePlaces.BOTTOM_GRAY,
     imgUrl: BottomGrayImgUrl,
+    position: InitiativePositions.BOTTOM,
+    color: InitiativeColors.GRAY,
     text: "BOTTOM GRAY",
   },
   {

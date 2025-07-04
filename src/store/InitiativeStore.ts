@@ -24,6 +24,8 @@ import { Conditions, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
+import { DarknessTokens, type IToken } from "@/data/initiative/DarknessTokens";
+import _ from "lodash";
 // #endregion
 
 export const useInitiativeStore = defineStore("initiative", () => {
@@ -31,6 +33,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const autoConfirmDelete = useStorage("initiative.AutoConfirmDelete", false);
   const useDefaultHp = useStorage("initiative.UseDefaultHp", true);
   const turnIndex = useStorage("initiative.turnIndex", 0);
+  const darknessTokens = useStorage("initiative.Tokens", _.shuffle(DarknessTokens) as IToken[]);
   const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
   const _heros = useStorage("initiative.Heros", {} as Record<string, HeroData>);
   // #endregion
@@ -56,6 +59,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const clearInitiative = () => {
     if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
       turnIndex.value = 0;
+      darknessTokens.value = _.shuffle(DarknessTokens);
       _initiativeList.value = [];
     }
   };
@@ -238,6 +242,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     autoConfirmDelete,
     ringColors,
     turnIndex,
+    darknessTokens,
     useDefaultHp,
     // functions
     addHero,

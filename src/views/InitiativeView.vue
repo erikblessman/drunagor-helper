@@ -3,6 +3,7 @@
 import { storeToRefs } from "pinia";
 import {
   ArrowPathIcon,
+  ArrowUpCircleIcon,
   BackwardIcon,
   UserCircleIcon,
   ForwardIcon,
@@ -20,17 +21,18 @@ import { HeroStore } from "@/store/HeroStore";
 import { useInitiativeStore, ringColors } from "@/store/InitiativeStore";
 import MonsterPicker from "@/components/initiative/MonsterPicker.vue";
 import MonsterInitiative from "@/components/initiative/MonsterInitiative.vue";
-import { InitiativeList, InitiativeTypes } from "@/data/initiative/InitiativePlaces";
+import { InitiativeColors, InitiativeList, InitiativeTypes, type InitiativeInfo } from "@/data/initiative/InitiativePlaces";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { HeroData } from "@/data/repository/HeroData";
+import { BlankToken, DarknessTokens, type IToken } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 // #region store bindings
-const { autoConfirmDelete, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
+const { autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
 const {
   getInitiativeList,
   addHero,
@@ -87,7 +89,6 @@ const openMonsterPicker = (): void => {
 const pickMonster = (monster: any): void => {
   const activeMonster = addMonster(monster);
   openDetails(activeMonster);
-  debugFirstMonsterColor("pickMonster");
 };
 // #endregion
 
@@ -112,7 +113,6 @@ const iList = computed(() => {
   return a;
 });
 const adjustTurn = (diff: number) => {
-  const n = InitiativeList.length;
   turnIndex.value = (turnIndex.value + diff);
 };
 const roundNumber = computed(() => {
@@ -124,6 +124,32 @@ const decrementTurn = () => {
 const incrementTUrn = () => {
   adjustTurn(1);
 };
+const getTokenCount = (initInfo: InitiativeInfo) => {
+  return darknessTokens.value.filter(i => i.color == initInfo.color && i.isDrawn).length;
+}
+// #endregion
+
+// #region darkness tiles bag popup
+const isDarknessTokenBagOpen = ref(false);
+function getTokenColor(token: IToken): string {
+  if (!token.isDrawn) {
+    return "black";
+  }
+  switch (token.color) {
+    case InitiativeColors.BLUE:
+      return "blue";
+    case InitiativeColors.ORANGE:
+      return "orange";
+    case InitiativeColors.GRAY:
+      return "gray";
+    case InitiativeColors.GREEN:
+      return "green";
+    case InitiativeColors.RED:
+      return "red";
+    default:
+      return "pink";
+  }
+}
 // #endregion
 
 // #region details popup
@@ -155,12 +181,11 @@ function changeColor(color: string) {
   if (detailsMonster.value) {
     detailsMonster.value.baseColor = color;
   }
-  debugFirstMonsterColor("changeColor");
+}
+function drawToken(token: IToken) {
+  token.isDrawn = !token.isDrawn;
 }
 
-function debugFirstMonsterColor(label: string) {
-  false && console.log(`debugFirstMonsterColor.${label}`, getInitiativeList()[0]?.baseColor);
-}
 // #endregion
 </script>
 
@@ -190,6 +215,7 @@ function debugFirstMonsterColor(label: string) {
           v-if="initInfo.type === InitiativeTypes.MONSTER"
           :turnImgUrl="initInfo.imgUrl"
           :monsters="monsterByInitiative(initInfo.index)"
+          :tokenCount="getTokenCount(initInfo)"
           @openDetails="openDetails"
         />
         <!-- Hero Initiatives -->
@@ -210,7 +236,7 @@ function debugFirstMonsterColor(label: string) {
         <div v-else-if="initInfo.type === InitiativeTypes.RUNE" class="grid grid-cols-12 divide-y" id="initiative-container">
           <div class="col-span-11 col-start-2 text-4xl font-extrabold mb-4 flex">
             RUNE: Draw {{ roundNumber % 2 === 1 ? 1 : 2 }} Tiles
-            <PlusIcon class="w-8 bg-slate-800 rounded-lg ml-4" @click="() => (dungeonRoleToPick = initInfo.text)" />
+            <ArrowUpCircleIcon class="w-8 bg-slate-800 rounded-lg ml-4" @click="() => isDarknessTokenBagOpen = true" />
           </div>
         </div>
       </div>
@@ -219,6 +245,21 @@ function debugFirstMonsterColor(label: string) {
   </div>
   <!-- Pop-Ups -->
   <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
+  <BaseModal :is-open="isDarknessTokenBagOpen" @close-modal="() => isDarknessTokenBagOpen = false">
+    <template #header>
+      <div class="font-medium">Darkness Tokens</div>
+    </template>
+    <template #default>
+      <div class="container">
+        <div class="grid grid-cols-3 gap-4">
+          <div v-for="token in darknessTokens" :key="token.color + '|' + token.image" class="border-4 p-8 rounded-full flex flex-col items-center"
+          :style="{backgroundColor: getTokenColor(token)}" >
+            <img :src="token.isDrawn?token.image:BlankToken" @click="() => drawToken(token)" />
+          </div>
+        </div>
+      </div>
+    </template>
+  </BaseModal>
   <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker">
     <template #header>
       <div class="font-medium">Pick a Hero</div>

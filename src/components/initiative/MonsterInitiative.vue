@@ -14,6 +14,7 @@ import { toRef } from "vue";
 const props = defineProps<{
   turnImgUrl?: string;
   monsters: ActiveMonsterData[];
+  tokenCount: number;
 }>();
 
 const monsterList = toRef(props, "monsters");
@@ -30,8 +31,8 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 
 <template>
   <div class="grid grid-cols-12" id="initiative-container">
-    <div>
-      <img :src="turnImgUrl" />
+    <div class="flex flex-row">
+      <img :src="turnImgUrl" />{{ tokenCount }}
     </div>
     <div class="col-span-11">
       <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
