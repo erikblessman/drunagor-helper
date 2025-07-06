@@ -122,16 +122,23 @@ const decrementTurn = () => {
   adjustTurn(-1);
 };
 const incrementTUrn = () => {
-  let isRuneTurn: boolean = false;
-  let isTurnEmpty: boolean = true;
   const max = 20;
   let i = 0;
+  let skipTurn: boolean = autoSkip.value;
   do {
     adjustTurn(1);
-    isRuneTurn = iList.value[0].type == InitiativeTypes.RUNE;
-    const monsters = monsterByInitiative(iList.value[0].index);
-    isTurnEmpty = monsters == null || monsters.length <= 0;
-  } while (isTurnEmpty && autoSkip.value && !isRuneTurn && ++i < max);
+    switch (iList.value[0].type) {
+      case InitiativeTypes.RUNE:
+        skipTurn = false;
+      case InitiativeTypes.MONSTER:
+        skipTurn &&= monsterByInitiative(iList.value[0].index)?.length <= 0;
+        break;
+      case InitiativeTypes.HERO:
+        skipTurn &&= getHero(iList.value[0]?.text) == null;
+        console.log(iList.value[0]);
+        break;
+    }
+  } while (skipTurn && ++i < max);
 };
 const getTokenCount = (initInfo: InitiativeInfo) => {
   return darknessTokens.value.filter(i => i.color == initInfo.color && i.isDrawn).length;
