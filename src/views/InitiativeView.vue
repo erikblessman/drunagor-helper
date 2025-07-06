@@ -28,7 +28,7 @@ import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { HeroData } from "@/data/repository/HeroData";
-import { BlankToken, DarknessTokens, type IToken } from "@/data/initiative/DarknessTokens";
+import { BlankToken, type IToken } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 // #region store bindings
@@ -247,7 +247,20 @@ function drawToken(token: IToken) {
   <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
   <BaseModal :is-open="isDarknessTokenBagOpen" @close-modal="() => isDarknessTokenBagOpen = false">
     <template #header>
-      <div class="font-medium">Darkness Tokens</div>
+      <div class="grid grid-cols-2">
+        <div class="flex">
+          <div class="w-full font-medium place-self-center">Darkness&nbsp;Tokens</div>
+        </div>
+        <div>
+          <button
+            id="close-modal"
+            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
+            @click="() => isDarknessTokenBagOpen = false"
+          >
+            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
+          </button>
+        </div>
+      </div>
     </template>
     <template #default>
       <div class="container">
