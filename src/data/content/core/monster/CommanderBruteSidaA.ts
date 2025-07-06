@@ -24,5 +24,5 @@ export class CommanderBruteSideA implements MonsterData {
   color: MonsterColor = "other";
   translation_key = "monster.commander-brute";
   size: string = "large";
-  initiative: number = InitiativePlaces.TOP_GRAY;
+  initiative: number = InitiativePlaces.TOP_GREEN;
 }

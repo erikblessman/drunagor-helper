@@ -24,5 +24,5 @@ export class CommanderThern implements MonsterData {
   color: MonsterColor = "other";
   translation_key = "monster.commander-thern";
   size: string = "small";
-  initiative: number = InitiativePlaces.TOP_GRAY;
+  initiative: number = InitiativePlaces.TOP_GREEN;
 }
