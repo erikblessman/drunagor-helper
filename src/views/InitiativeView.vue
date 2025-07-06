@@ -32,7 +32,7 @@ import { BlankToken, type IToken } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 // #region store bindings
-const { autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
+const { autoSkip, autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
 const {
   getInitiativeList,
   addHero,
@@ -122,7 +122,16 @@ const decrementTurn = () => {
   adjustTurn(-1);
 };
 const incrementTUrn = () => {
-  adjustTurn(1);
+  let isRuneTurn: boolean = false;
+  let isTurnEmpty: boolean = true;
+  const max = 20;
+  let i = 0;
+  do {
+    adjustTurn(1);
+    isRuneTurn = iList.value[0].type == InitiativeTypes.RUNE;
+    const monsters = monsterByInitiative(iList.value[0].index);
+    isTurnEmpty = monsters == null || monsters.length <= 0;
+  } while (isTurnEmpty && autoSkip.value && !isRuneTurn && ++i < max);
 };
 const getTokenCount = (initInfo: InitiativeInfo) => {
   return darknessTokens.value.filter(i => i.color == initInfo.color && i.isDrawn).length;
@@ -199,6 +208,9 @@ function drawToken(token: IToken) {
       <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
       <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
       <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
+      <OnOffButton :flag="autoSkip" @click="autoSkip = !autoSkip" class="py-1 px-4 mx-1">
+        Auto-Skip
+      </OnOffButton>
       <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete" class="py-1 px-4 mx-1">
         Auto Confirm
       </OnOffButton>

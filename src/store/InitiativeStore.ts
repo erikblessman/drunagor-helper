@@ -30,6 +30,7 @@ import _ from "lodash";
 
 export const useInitiativeStore = defineStore("initiative", () => {
   // #region store variables
+  const autoSkip = useStorage("initiative.AutoSkip", true);
   const autoConfirmDelete = useStorage("initiative.AutoConfirmDelete", false);
   const useDefaultHp = useStorage("initiative.UseDefaultHp", true);
   const turnIndex = useStorage("initiative.turnIndex", 0);
@@ -239,6 +240,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
 
   return {
     // properties
+    autoSkip,
     autoConfirmDelete,
     ringColors,
     turnIndex,
