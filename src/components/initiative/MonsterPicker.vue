@@ -9,6 +9,7 @@ import { AdjustmentsHorizontalIcon, QuestionMarkCircleIcon, XMarkIcon } from "@h
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
 import { InitiativeList } from "@/data/initiative/InitiativePlaces";
+import { stringifyQuery } from "vue-router";
 
 const toast = useToast();
 
@@ -45,12 +46,14 @@ function pickMonster(monster: MonsterData) {
 function randomMonster(color: string) {
   let randomMonster = _.sample(monsters.filter((m) => m.color === color));
   if (randomMonster) {
-    const tag = prompt("Tag", "R" + color.substring(0, 1).toUpperCase());
-    let name = randomMonster.name;
-    if (tag) {
-      name += " [" + tag + "]";
+    const tag = prompt("Tag", color.substring(0, 1).toUpperCase());
+    if (tag !== null) {
+      let name = randomMonster.name;
+      if (tag.length > 0) {
+        name += " [" + tag + "]";
+      }
+      pickMonster({ ...randomMonster, name: name });
     }
-    pickMonster({ ...randomMonster, name: name });
   } else {
     toast.error("No monsters of that color");
   }
