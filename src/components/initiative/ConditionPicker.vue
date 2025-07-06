@@ -70,6 +70,7 @@ function alertConditionImmunity(condition: ICondition, monster: MonsterData | nu
 </script>
 
 <template>
+  <ChevronLeftIcon v-if="isOpen" class="w-12 fill-wite" @click="isOpen = false" />
   <div v-for="(condition, index) in validConditions" :key="index">
     <img
       :src="condition.images[condition.count]"
@@ -88,7 +89,6 @@ function alertConditionImmunity(condition: ICondition, monster: MonsterData | nu
     />
   </div>
   <ChevronRightIcon v-if="!isOpen" class="w-12 fill-wite" @click="isOpen = true" />
-  <ChevronLeftIcon v-if="isOpen" class="w-12 fill-wite" @click="isOpen = false" />
 </template>
 
 <style scoped></style>
