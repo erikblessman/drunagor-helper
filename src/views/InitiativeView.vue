@@ -135,7 +135,6 @@ const incrementTUrn = () => {
         break;
       case InitiativeTypes.HERO:
         skipTurn &&= getHero(iList.value[0]?.text) == null;
-        console.log(iList.value[0]);
         break;
     }
   } while (skipTurn && ++i < max);
