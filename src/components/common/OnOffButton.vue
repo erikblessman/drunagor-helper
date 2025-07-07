@@ -4,7 +4,7 @@ let props = defineProps(["flag"]);
 
 <template>
   <div class="flex flex-wrap bg-base-100 justify-center rounded-lg" :class="props.flag ? 'bg-green-600' : 'bg-red-600'">
-    <slot></slot>: {{ props.flag ? "ON" : "OFF" }}
+    <slot></slot>
   </div>
 </template>
 

@@ -5,11 +5,13 @@ import {
   ArrowPathIcon,
   ArrowUpCircleIcon,
   BackwardIcon,
+  CheckCircleIcon,
   UserCircleIcon,
   ForwardIcon,
   HeartIcon,
   MinusIcon,
   PlusIcon,
+  RocketLaunchIcon,
   TrashIcon,
   XMarkIcon,
 } from "@heroicons/vue/24/solid";
@@ -222,25 +224,31 @@ function updateMonsterHp(monster: any) {
 
 <template>
   <div class="grid place-items-center w-full">
-    <BaseDivider>Initiative</BaseDivider>
     <!-- #region Action Buttons -->
-    <div class="w-full flex">
-      <BackwardIcon class="w-8 rounded-lg mx-1" @click="decrementTurn" />
-      <div class="flex justify-center rounded-full text-lg font-black border-2 w-8">{{ roundNumber }}</div>
-      <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
-      <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
-      <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
-      <OnOffButton :flag="autoSkip" @click="autoSkip = !autoSkip" class="py-1 px-4 mx-1">
-        Auto-Skip
-      </OnOffButton>
-      <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete" class="py-1 px-4 mx-1">
-        Auto Confirm
-      </OnOffButton>
-      <OnOffButton :flag="useDefaultHp" @click="useDefaultHp = !useDefaultHp" class="py-1 px-4 mx-1">
-        Default HP
-      </OnOffButton>
+    <div class="w-full flex sticky">
+      <div class="flex justify-start">
+        <BackwardIcon class="w-8 rounded-lg mx-1" @click="decrementTurn" />
+        <div class="flex justify-center rounded-full text-2xl font-black border-2 w-8 p-1">{{ roundNumber }}</div>
+        <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
+        <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
+        <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
+      </div>
+      <div class="ml-auto">
+        <div class="w-full flex">
+          <OnOffButton :flag="autoSkip" @click="autoSkip = !autoSkip" class="p-1 m-1">
+            <RocketLaunchIcon class="w-8" />
+          </OnOffButton>
+          <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete" class="p-1 m-1">
+            <CheckCircleIcon class="w-8" />
+          </OnOffButton>
+          <OnOffButton :flag="useDefaultHp" @click="useDefaultHp = !useDefaultHp" class="p-1 m-1">
+            <HeartIcon class="w-8" />
+          </OnOffButton>
+        </div>
+      </div>
     </div>
     <!-- #endregion Action Buttons -->
+    <BaseDivider>Initiative</BaseDivider>
     <!-- #region Initiative List -->
     <div container class="divide-y">
       <div v-for="initInfo in iList" :key="initInfo.index">
