@@ -200,6 +200,22 @@ function changeColor(color: string) {
 function drawToken(token: IToken) {
   token.isDrawn = !token.isDrawn;
 }
+function updateMonsterHp(monster: any) {
+  const _maxHp = prompt('Max HP', monster.maxHp.toString());
+  if (_maxHp) {
+    const maxHp = parseInt(_maxHp);
+    if (!isNaN(maxHp)) {
+      monster.maxHp = maxHp;
+    }
+  }
+  const _hp = prompt('HP', monster.hp.toString());
+  if (_hp) {
+    const hp = parseInt(_hp);
+    if (!isNaN(hp)) {
+      monster.hp = hp;
+    }
+  }
+}
 
 // #endregion
 </script>
@@ -329,7 +345,7 @@ function drawToken(token: IToken) {
       <div class="container">
         <div class="grid grid-flow-col auto-cols-max">
           <MinusIcon @click="detailsMonster = decrementHp(detailsMonster)" class="w-12" />
-          <div class="grid w-12">
+          <div class="grid w-12" @click="() => updateMonsterHp(detailsMonster)">
             <div class="col-start-1 row-start-1 justify-center">
               <HeartIcon class="fill-red-500 w-12 self-center" />
             </div>
