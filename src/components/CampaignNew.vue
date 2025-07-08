@@ -41,21 +41,7 @@ function newCampaign(campaign: "core" | "apocalypse" | "awakenings") {
   >
     {{ t("label.new-campaign") }}
   </button>
-  <BaseModal :is-open="isOpen" @close-modal="closeModal">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">{{ t("label.new-campaign") }}</div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal :is-open="isOpen" @close-modal="closeModal" :title="t('label.new-campaign')">
     <template #default>
       <div class="grid place-items-center gap-2">
         <img id="campaign-core" class="cursor-pointer" :src="CoreLogo.toString()" @click="newCampaign('core')" />

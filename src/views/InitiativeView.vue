@@ -18,19 +18,23 @@ import {
 import { ref, computed } from "vue";
 // #endregion
 
-// #region internal imports
+// #region internal imports ------------------------------------------------------------------------
+import DarknessTokenBag from "@/components/initiative/DarknessTokenBag.vue"
 import { HeroStore } from "@/store/HeroStore";
 import { useInitiativeStore, ringColors } from "@/store/InitiativeStore";
 import MonsterPicker from "@/components/initiative/MonsterPicker.vue";
 import MonsterInitiative from "@/components/initiative/MonsterInitiative.vue";
-import { InitiativeColors, InitiativeList, InitiativeTypes, type InitiativeInfo } from "@/data/initiative/InitiativePlaces";
+import {
+  InitiativeList,
+  InitiativeTypes,
+  type InitiativeInfo
+} from "@/data/initiative/InitiativePlaces";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { HeroData } from "@/data/repository/HeroData";
-import { BlankToken, type IToken } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 // #region store bindings
@@ -148,25 +152,6 @@ const getTokenCount = (initInfo: InitiativeInfo) => {
 
 // #region darkness tiles bag popup
 const isDarknessTokenBagOpen = ref(false);
-function getTokenColor(token: IToken): string {
-  if (!token.isDrawn) {
-    return "black";
-  }
-  switch (token.color) {
-    case InitiativeColors.BLUE:
-      return "blue";
-    case InitiativeColors.ORANGE:
-      return "orange";
-    case InitiativeColors.GRAY:
-      return "gray";
-    case InitiativeColors.GREEN:
-      return "green";
-    case InitiativeColors.RED:
-      return "red";
-    default:
-      return "pink";
-  }
-}
 // #endregion
 
 // #region details popup
@@ -198,9 +183,6 @@ function changeColor(color: string) {
   if (detailsMonster.value) {
     detailsMonster.value.baseColor = color;
   }
-}
-function drawToken(token: IToken) {
-  token.isDrawn = !token.isDrawn;
 }
 function updateMonsterHp(monster: any) {
   const _maxHp = prompt('Max HP', monster.maxHp.toString());
@@ -287,67 +269,26 @@ function updateMonsterHp(monster: any) {
   </div>
   <!-- Pop-Ups -->
   <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
-  <BaseModal :is-open="isDarknessTokenBagOpen" @close-modal="() => isDarknessTokenBagOpen = false">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="flex">
-          <div class="w-full font-medium place-self-center">Darkness&nbsp;Tokens</div>
-        </div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="() => isDarknessTokenBagOpen = false"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
-    <template #default>
-      <div class="container">
-        <div class="grid grid-cols-3 gap-4">
-          <div v-for="token in darknessTokens" :key="token.color + '|' + token.image" class="border-4 p-8 rounded-full flex flex-col items-center"
-          :style="{backgroundColor: getTokenColor(token)}" >
-            <img :src="token.isDrawn?token.image:BlankToken" @click="() => drawToken(token)" />
-          </div>
-        </div>
-      </div>
-    </template>
+  <BaseModal
+    title="Darkness Token Bag"
+    :is-open="isDarknessTokenBagOpen"
+    @close-modal="() => isDarknessTokenBagOpen = false">
+    <DarknessTokenBag />
   </BaseModal>
-  <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker">
-    <template #header>
-      <div class="font-medium">Pick a Hero</div>
-    </template>
-    <template #default>
-      <div class="container">
-        <div class="grid grid-cols-3 gap-4">
-          <div v-for="hero in heroData" :key="hero.name" class="flex flex-col items-center">
-            <img :src="hero.images.avatar" class="rounded-full" @click="() => assignHero(hero)" />
-            <div>{{ hero.name }}</div>
-            <button @click="addHero(hero.name, hero)">Add</button>
-          </div>
+  <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker" title="Pick a Hero">
+    <div class="container">
+      <div class="grid grid-cols-3 gap-4">
+        <div v-for="hero in heroData" :key="hero.name" class="flex flex-col items-center">
+          <img :src="hero.images.avatar" class="rounded-full" @click="() => assignHero(hero)" />
+          <div>{{ hero.name }}</div>
+          <button @click="addHero(hero.name, hero)">Add</button>
         </div>
       </div>
-    </template>
+    </div>
   </BaseModal>
-  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails">
+  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #header>
-      <div class="grid grid-cols-2">
-        <div class="font-medium">
-          {{ detailsMonster?.name }} ({{ detailsMonster?.baseColor }}) -
-          <span class="text-slate-600">[{{ detailsMonster?.content }}]</span>
-        </div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeDetails"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
+      <span class="text-slate-600">[{{ detailsMonster?.content }}]</span>
     </template>
     <template #default>
       <div class="container">

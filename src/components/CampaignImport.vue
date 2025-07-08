@@ -82,21 +82,7 @@ function closeModal() {
   >
     {{ t("label.import-campaign") }}
   </button>
-  <BaseModal :is-open="isOpen" @close-modal="closeModal" id="campaign-import-modal">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">{{ t("label.import-campaign") }}</div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal :is-open="isOpen" @close-modal="closeModal" id="campaign-import-modal" :title="t('label.import-campaign')">
     <template #default>
       <div class="py-4">Paste your token here</div>
       <textarea
