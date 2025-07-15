@@ -117,21 +117,7 @@ watch(selectedSkills, (newSkills) => {
     </div>
   </div>
 
-  <BaseModal :is-open="isOpen" @close-modal="closeModal">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">{{ t("text.select-action-cube-color") }}</div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal :is-open="isOpen" @close-modal="closeModal" :title="t('text.select-action-cube-color')">
     <template #default>
       <BaseList id="campaign-add-heroes">
         <template v-for="color in cubeColors" :key="color">

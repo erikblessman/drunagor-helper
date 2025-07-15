@@ -52,21 +52,7 @@ function removeHeroFromCampaign(heroId: string) {
   >
     {{ t("label.remove-hero") }}
   </button>
-  <BaseModal :is-open="isOpen" @close-modal="closeModal">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">{{ t("label.remove-hero") }}</div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal :is-open="isOpen" @close-modal="closeModal" :title="t('label.remove-hero')">
     <template #default>
       <BaseListSearch @search="query = $event" />
       <BaseList id="campaign-remove-heroes">

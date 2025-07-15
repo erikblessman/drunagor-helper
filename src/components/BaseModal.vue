@@ -2,8 +2,11 @@
 import { ref, toRef, watch } from "vue";
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle, DialogOverlay } from "@headlessui/vue";
 
+import { XMarkIcon } from "@heroicons/vue/24/solid";
+
 const props = defineProps<{
   isOpen: boolean;
+  title?: string;
 }>();
 
 const emit = defineEmits(["close-modal"]);
@@ -39,10 +42,22 @@ function setIsOpen(value: boolean) {
             <DialogPanel
               class="bg-base-300 w-full max-w-xl h-full lg:h-5/6 transform overflow-x-hidden overflow-y-auto rounded-2xl text-left align-middle shadow-xl transition-all"
             >
-              <DialogTitle class="sticky top-0 pt-4 px-4 bg-base-300 z-50">
-                <slot name="header"> </slot>
+              <DialogTitle class="sticky top-0 py-1 px-4 bg-base-300 z-50">
+                <div class="flex justify-between">
+                  <div v-if="title" class="font-medium text-nowrap mr-4">
+                    {{ title }}
+                  </div>
+                  <slot name="header"> </slot>
+                  <button
+                    id="close-modal"
+                    class="ml-4 px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg"
+                    @click="() => emit('close-modal')"
+                  >
+                    <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
+                  </button>
+                </div>
               </DialogTitle>
-              <div class="container px-4">
+              <div class="container px-4 bg-base-400 pt-4">
                 <slot></slot>
               </div>
             </DialogPanel>

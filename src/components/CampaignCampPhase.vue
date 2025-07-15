@@ -47,21 +47,7 @@ function campPhase() {
   >
     {{ t("label.camp-phase") }}
   </button>
-  <BaseModal :is-open="isOpen" @close-modal="closeModal">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="w-full font-medium place-self-center">Camp Phase</div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal title="Camp Phase" :is-open="isOpen" @close-modal="closeModal">
     <template #default>
       <div class="py-4">
         This will reset all statuses and sequential adventure states from this campaign. Are you sure?

@@ -6,31 +6,32 @@ import {
   ArrowUpCircleIcon,
   BackwardIcon,
   CheckCircleIcon,
-  UserCircleIcon,
   ForwardIcon,
   HeartIcon,
   MinusIcon,
   PlusIcon,
   RocketLaunchIcon,
-  TrashIcon,
-  XMarkIcon,
 } from "@heroicons/vue/24/solid";
 import { ref, computed } from "vue";
 // #endregion
 
-// #region internal imports
+// #region internal imports ------------------------------------------------------------------------
+import ActiveMonsterDetails from "@/components/initiative/ActiveMonsterDetails.vue";
+import DarknessTokenBag from "@/components/initiative/DarknessTokenBag.vue"
 import { HeroStore } from "@/store/HeroStore";
-import { useInitiativeStore, ringColors } from "@/store/InitiativeStore";
+import { useInitiativeStore } from "@/store/InitiativeStore";
 import MonsterPicker from "@/components/initiative/MonsterPicker.vue";
 import MonsterInitiative from "@/components/initiative/MonsterInitiative.vue";
-import { InitiativeColors, InitiativeList, InitiativeTypes, type InitiativeInfo } from "@/data/initiative/InitiativePlaces";
+import {
+  InitiativeList,
+  InitiativeTypes,
+  type InitiativeInfo
+} from "@/data/initiative/InitiativePlaces";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
-import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { HeroData } from "@/data/repository/HeroData";
-import { BlankToken, type IToken } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 // #region store bindings
@@ -45,6 +46,7 @@ const {
   incrementHp,
   removeHero,
   removeMonster,
+  updateHp,
 } = useInitiativeStore();
 const { heroes } = storeToRefs(HeroStore());
 const heroStore = HeroStore();
@@ -148,41 +150,11 @@ const getTokenCount = (initInfo: InitiativeInfo) => {
 
 // #region darkness tiles bag popup
 const isDarknessTokenBagOpen = ref(false);
-function getTokenColor(token: IToken): string {
-  if (!token.isDrawn) {
-    return "black";
-  }
-  switch (token.color) {
-    case InitiativeColors.BLUE:
-      return "blue";
-    case InitiativeColors.ORANGE:
-      return "orange";
-    case InitiativeColors.GRAY:
-      return "gray";
-    case InitiativeColors.GREEN:
-      return "green";
-    case InitiativeColors.RED:
-      return "red";
-    default:
-      return "pink";
-  }
-}
 // #endregion
 
 // #region details popup
 const detailsOpen = ref(false);
 const detailsMonster = ref<ActiveMonsterData | null>(null);
-const detailsMonsterCardUrl = computed((): string => {
-  const cards = detailsMonster?.value?.images?.cards;
-  const defaultImg = detailsMonster?.value?.images?.big ?? "";
-  if (!cards) {
-    console.warn("No cards found for monster", detailsMonster);
-    return defaultImg;
-  }
-  const index = (detailsMonster?.value as any)?.cardIndex || 0;
-  const rank = detailsMonster?.value?.rank || "rookie";
-  return cards[rank][index] || defaultImg;
-});
 function openDetails(monster: ActiveMonsterData) {
   detailsMonster.value = monster;
   detailsOpen.value = true;
@@ -190,19 +162,7 @@ function openDetails(monster: ActiveMonsterData) {
 function closeDetails() {
   detailsOpen.value = false;
 }
-let colorPickerVisible = ref(false);
-function toggleColorPicker() {
-  colorPickerVisible.value = !colorPickerVisible.value;
-}
-function changeColor(color: string) {
-  if (detailsMonster.value) {
-    detailsMonster.value.baseColor = color;
-  }
-}
-function drawToken(token: IToken) {
-  token.isDrawn = !token.isDrawn;
-}
-function updateMonsterHp(monster: any) {
+function updateMonsterHp(monster: any): void {
   const _maxHp = prompt('Max HP', monster.maxHp.toString());
   if (_maxHp) {
     const maxHp = parseInt(_maxHp);
@@ -217,8 +177,8 @@ function updateMonsterHp(monster: any) {
       monster.hp = hp;
     }
   }
+  detailsMonster.value = updateHp(monster);
 }
-
 // #endregion
 </script>
 
@@ -287,119 +247,38 @@ function updateMonsterHp(monster: any) {
   </div>
   <!-- Pop-Ups -->
   <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
-  <BaseModal :is-open="isDarknessTokenBagOpen" @close-modal="() => isDarknessTokenBagOpen = false">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="flex">
-          <div class="w-full font-medium place-self-center">Darkness&nbsp;Tokens</div>
-        </div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="() => isDarknessTokenBagOpen = false"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
-    <template #default>
-      <div class="container">
-        <div class="grid grid-cols-3 gap-4">
-          <div v-for="token in darknessTokens" :key="token.color + '|' + token.image" class="border-4 p-8 rounded-full flex flex-col items-center"
-          :style="{backgroundColor: getTokenColor(token)}" >
-            <img :src="token.isDrawn?token.image:BlankToken" @click="() => drawToken(token)" />
-          </div>
-        </div>
-      </div>
-    </template>
+  <BaseModal
+    title="Darkness Token Bag"
+    :is-open="isDarknessTokenBagOpen"
+    @close-modal="() => isDarknessTokenBagOpen = false">
+    <DarknessTokenBag />
   </BaseModal>
-  <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker">
-    <template #header>
-      <div class="font-medium">Pick a Hero</div>
-    </template>
-    <template #default>
-      <div class="container">
-        <div class="grid grid-cols-3 gap-4">
-          <div v-for="hero in heroData" :key="hero.name" class="flex flex-col items-center">
-            <img :src="hero.images.avatar" class="rounded-full" @click="() => assignHero(hero)" />
-            <div>{{ hero.name }}</div>
-            <button @click="addHero(hero.name, hero)">Add</button>
-          </div>
+  <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker" title="Pick a Hero">
+    <div class="container">
+      <div class="grid grid-cols-3 gap-4">
+        <div v-for="hero in heroData" :key="hero.name" class="flex flex-col items-center">
+          <img :src="hero.images.avatar" class="rounded-full" @click="() => assignHero(hero)" />
+          <div>{{ hero.name }}</div>
+          <button @click="addHero(hero.name, hero)">Add</button>
         </div>
       </div>
-    </template>
+    </div>
   </BaseModal>
-  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails">
-    <template #header>
-      <div class="grid grid-cols-2">
-        <div class="font-medium">
-          {{ detailsMonster?.name }} ({{ detailsMonster?.baseColor }}) -
-          <span class="text-slate-600">[{{ detailsMonster?.content }}]</span>
-        </div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeDetails"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
-    </template>
+  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
-      <div class="container">
-        <div class="grid grid-flow-col auto-cols-max">
-          <MinusIcon @click="detailsMonster = decrementHp(detailsMonster)" class="w-12" />
-          <div class="grid w-12" @click="() => updateMonsterHp(detailsMonster)">
-            <div class="col-start-1 row-start-1 justify-center">
-              <HeartIcon class="fill-red-500 w-12 self-center" />
-            </div>
-            <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
-              {{ detailsMonster?.hp }}
-            </div>
-          </div>
-          <PlusIcon @click="detailsMonster = incrementHp(detailsMonster)" class="w-12" />
-          <TrashIcon
-            class="fill-gray-600 w-12"
-            @click="
-              () => {
-                removeMonster(detailsMonster);
-                closeDetails();
-              }
-            "
-          />
-          <!-- div with ring color, onclick shows next div -->
-          <div
-            class="rounded-full w-12 h-12 border-8"
-            @click="toggleColorPicker"
-            :style="'border-color: ' + detailsMonster?.baseColor + ';'"
-          ></div>
-          <div class="grid grid-cols-3 gap-1" v-if="colorPickerVisible">
-            <div
-              v-for="color in ringColors"
-              :key="color"
-              class="rounded-full w-12 h-12 border-8"
-              :style="'border-color: ' + color + ';'"
-              @click="changeColor(color)"
-            ></div>
-          </div>
-          <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
-        </div>
-        <div class="grid grid-flow-col auto-cols-max">
-          <Conditions :monster="detailsMonster" />
-        </div>
-        <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'" @click="closeDetails">
-          <img
-            v-if="(detailsMonsterCardUrl?.length ?? 0) > 0"
-            :src="detailsMonsterCardUrl"
-            class="rounded-sm shadow dark:bg-gray-800 w-full" />
-          <UserCircleIcon v-else class="h-100 text-gray-200 rounded-lg" />
-        </div>
-        <img :src="detailsMonster?.images?.miniature" class="rounded-sm shadow dark:bg-gray-800 w-full" />
-      </div>
+      <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
+        @decrement-hp="() => {
+          detailsMonster = decrementHp(detailsMonster);
+          if (!detailsMonster) {
+            closeDetails();
+          }
+        }"
+        @increment-hp="() => detailsMonster = incrementHp(detailsMonster)"
+        @update-hp="() => updateMonsterHp(detailsMonster)"
+        @remove-monster="() => {
+          removeMonster(detailsMonster);
+          closeDetails();
+        }" />
     </template>
   </BaseModal>
 </template>

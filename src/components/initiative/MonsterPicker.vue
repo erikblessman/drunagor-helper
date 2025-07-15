@@ -106,35 +106,21 @@ function addCustom(): void {
 </script>
 
 <template>
-  <BaseModal :is-open="isOpen" @close-modal="closeModal">
+  <BaseModal :is-open="isOpen" @close-modal="closeModal" title="Add Monster">
     <template #header>
-      <div class="grid grid-cols-2">
-        <div class="flex">
-          <div class="w-full font-medium place-self-center">Add&nbsp;Monster</div>
-          <select class="bg-base-100 py-2 pl-3 pr-20 w-full leading-5 focus:ring-0 rounded-lg" v-model="rank">
-            <option value="rookie">Rookie</option>
-            <option value="fighter">Fighter</option>
-            <option value="veteran">Veteran</option>
-            <option value="champion">Champion</option>
-          </select>
-          <button
-            id="custom"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="addCustom"
-          >
-            <AdjustmentsHorizontalIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-        <div>
-          <button
-            id="close-modal"
-            class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg float-right"
-            @click="closeModal"
-          >
-            <XMarkIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
-          </button>
-        </div>
-      </div>
+      <select class="bg-base-100 py-2 pl-3 pr-20 w-full leading-5 focus:ring-0 rounded-lg" v-model="rank">
+        <option value="rookie">Rookie</option>
+        <option value="fighter">Fighter</option>
+        <option value="veteran">Veteran</option>
+        <option value="champion">Champion</option>
+      </select>
+      <button
+        id="custom"
+        class="px-2 py-2 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg"
+        @click="addCustom"
+      >
+        <AdjustmentsHorizontalIcon class="h-5 bg-neutral text-gray-200 uppercase font-semibold text-sm rounded-lg" />
+      </button>
     </template>
     <template #default>
       <BaseList id="monster-pick-list">
