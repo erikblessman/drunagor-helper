@@ -8,6 +8,7 @@ import { useInitiativeStore } from "@/store/InitiativeStore";
 import Conditions from "@/components/initiative/ConditionPicker.vue";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import { toRef } from "vue";
+import ActiveMonsterAvatar from "./ActiveMonsterAvatar.vue";
 // #endregion
 
 // #region props
@@ -44,16 +45,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
           v-touch:swipe.left="() => decrementHp(monster)"
         >
           <span @click="emit('open-details', monster)">
-            <img
-              v-if="(monster?.images?.big?.length ?? 0) > 0"
-              :src="monster.images.big"
-              :style="'border-color:' + monster.baseColor + ';'"
-              class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
-              :class="monster.size == 'large' ? 'w-32' : 'w-24'"
-            />
-            <UserCircleIcon v-else
-              :style="'border-color:' + monster.baseColor + ';'"
-              class="h-16 text-gray-200 rounded-lg" />
+            <ActiveMonsterAvatar :monster="monster" />
           </span>
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>
