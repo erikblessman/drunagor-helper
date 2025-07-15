@@ -72,13 +72,15 @@ export const useInitiativeStore = defineStore("initiative", () => {
       _initiativeList.value[mIndex] = monster;
     }
   };
-  const decrementHp = (monster: any): ActiveMonsterData => {
+  const decrementHp = (monster: any): ActiveMonsterData | null => {
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     storeMonster.hp -= 1;
     if (storeMonster.hp < 1) {
       storeMonster.hp = 0;
-      removeMonster(storeMonster);
+      if (removeMonster(storeMonster)) {
+        return null;
+      }
     }
     return storeMonster;
   };
@@ -107,6 +109,13 @@ export const useInitiativeStore = defineStore("initiative", () => {
     }
     return storeMonster;
   };
+  const updateHp = (monster: any): ActiveMonsterData => {
+    const mIndex = _getMonsterIndex(monster);
+    const storeMonster = _initiativeList.value[mIndex];
+    storeMonster.hp = monster.hp;
+    storeMonster.maxHp = monster.maxHp;
+    return storeMonster;
+  };
   const getInitiativeList = () => {
     return _initiativeList.value.sort((a, b) => {
       return b.initiative - a.initiative;
@@ -115,13 +124,15 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const removeHero = (dungeonRole: string) => {
     delete _heros.value[dungeonRole];
   };
-  const removeMonster = (monster: any) => {
+  const removeMonster = (monster: any): boolean => {
     if (autoConfirmDelete.value || confirm(`Delete ${monster.name} - ${monster.baseColor}?`)) {
       const index = _getMonsterIndex(monster);
       if (index > -1) {
         _initiativeList.value.splice(index, 1);
       }
+      return true;
     }
+    return false;
   };
   // #endregion
 
@@ -258,5 +269,6 @@ export const useInitiativeStore = defineStore("initiative", () => {
     incrementHp,
     removeHero,
     removeMonster,
+    updateHp,
   };
 });
