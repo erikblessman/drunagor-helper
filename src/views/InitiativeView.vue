@@ -13,6 +13,7 @@ import {
   RocketLaunchIcon,
 } from "@heroicons/vue/24/solid";
 import { ref, computed } from "vue";
+import { useToast } from "vue-toastification";
 // #endregion
 
 // #region internal imports ------------------------------------------------------------------------
@@ -32,7 +33,10 @@ import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import type { HeroData } from "@/data/repository/HeroData";
+import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
 // #endregion
+
+const toast = useToast();
 
 // #region store bindings
 const { autoSkip, autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
@@ -92,7 +96,13 @@ const openMonsterPicker = (): void => {
 };
 const pickMonster = (monster: any): void => {
   const activeMonster = addMonster(monster);
-  openDetails(activeMonster);
+  toast.success({
+    component: ActiveMonsterAvatar,
+    props: {
+      monster: activeMonster,
+      showNotes: true,
+    },
+  }, {timeout: false,});
 };
 // #endregion
 
