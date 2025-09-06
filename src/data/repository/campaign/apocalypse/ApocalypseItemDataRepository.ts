@@ -22,11 +22,11 @@ import * as _ from "lodash-es";
 export class ApocalypseItemDataRepository implements ItemDataRepository {
   private cards = [
     {
-      id: "artisans-tools",
+      id: "artisans-tools-veteran",
       itemType: "Consumable",
       cardType: "Chest",
       consumableType: "Tools",
-      translation_key: "consumable.apocalypse.artisans-tools",
+      translation_key: "consumable.apocalypse.artisans-tools-veteran",
     } as ConsumableItemData,
     {
       id: "axe-of-the-steppes",

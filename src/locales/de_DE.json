@@ -395,14 +395,14 @@
       "scroll-of-unmaking": "Rolle der Aufhebung"
     },
     "apocalypse": {
-      "artisans-tools": "Artisan's Tools (Veteran)",
+      "artisans-tools-veteran": "Artisan's Tools (Veteran)",
       "scroll-of-charm": "Scroll of Charm",
       "scroll-of-the-copy-cat": "Scroll of the Copy Cat",
       "scroll-of-translocation": "Scroll of Translocation",
       "treasure-trove": "Treasure trove (Veteran)"
     },
     "awakenings": {
-      "artisans-tools": "Artisan's Tools (Hero)",
+      "artisans-tools-hero": "Artisan's Tools (Hero)",
       "combustible-grenade": "Combustible Grenade",
       "dragons-breath": "Dragon's Breath",
       "potion-of-haste": "Potion of Haste",

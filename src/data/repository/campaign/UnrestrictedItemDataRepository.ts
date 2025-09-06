@@ -1031,11 +1031,11 @@ export class UnrestrictedItemDataRepository implements ItemDataRepository {
       translation_key: "armor.core.xerethian-breastplate",
     } as ArmorItemData,
     {
-      id: "artisans-tools",
+      id: "artisans-tools-veteran",
       itemType: "Consumable",
       cardType: "Chest",
       consumableType: "Tools",
-      translation_key: "consumable.apocalypse.artisans-tools",
+      translation_key: "consumable.apocalypse.artisans-tools-veteran",
     } as ConsumableItemData,
     {
       id: "axe-of-the-steppes",
@@ -1808,11 +1808,11 @@ export class UnrestrictedItemDataRepository implements ItemDataRepository {
       translation_key: "trinket.awakenings.cornucopia",
     } as ItemData,
     {
-      id: "artisans-tools",
+      id: "artisans-tools-hero",
       itemType: "Consumable",
       cardType: "Chest",
       consumableType: "Tools",
-      translation_key: "consumable.awakenings.artisans-tools",
+      translation_key: "consumable.awakenings.artisans-tools-hero",
     } as ConsumableItemData,
     {
       id: "azure-robins-knife",

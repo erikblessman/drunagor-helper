@@ -395,14 +395,14 @@
       "scroll-of-unmaking": "Parchemin de déconstruction"
     },
     "apocalypse": {
-      "artisans-tools": "Outils d'artisan (vétéran)",
+      "artisans-tools-veteran": "Outils d'artisan (vétéran)",
       "scroll-of-charm": "Parchemin de charme",
       "scroll-of-the-copy-cat": "Parchemin du chat copie",
       "scroll-of-translocation": "Parchemin de translocation",
       "treasure-trove": "Coffre au trésor (Vétéran)"
     },
     "awakenings": {
-      "artisans-tools": "Outils d'artisan (héros)",
+      "artisans-tools-hero": "Outils d'artisan (héros)",
       "combustible-grenade": "Grenade combustible",
       "dragons-breath": "Le souffle du dragon",
       "potion-of-haste": "Potion de hâte",

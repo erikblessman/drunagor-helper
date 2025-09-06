@@ -69,11 +69,11 @@ export class AwakeningsItemDataRepository implements ItemDataRepository {
       translation_key: "trinket.awakenings.cornucopia",
     } as ItemData,
     {
-      id: "artisans-tools",
+      id: "artisans-tools-hero",
       itemType: "Consumable",
       cardType: "Chest",
       consumableType: "Tools",
-      translation_key: "consumable.awakenings.artisans-tools",
+      translation_key: "consumable.awakenings.artisans-tools-hero",
     } as ConsumableItemData,
     {
       id: "azure-robins-knife",

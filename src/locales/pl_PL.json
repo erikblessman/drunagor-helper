@@ -395,14 +395,14 @@
       "scroll-of-unmaking": "Rola uchylenia"
     },
     "apocalypse": {
-      "artisans-tools": "Narzędzia rzemieślnika (Weteran)",
+      "artisans-tools-veteran": "Narzędzia rzemieślnika (Weteran)",
       "scroll-of-charm": "Zwój Uroku",
       "scroll-of-the-copy-cat": "Zwój kopiowanego kota",
       "scroll-of-translocation": "Zwój Translokacji",
       "treasure-trove": "Skarbiec (Weteran)"
     },
     "awakenings": {
-      "artisans-tools": "Narzędzia rzemieślnika (bohater)",
+      "artisans-tools-hero": "Narzędzia rzemieślnika (bohater)",
       "combustible-grenade": "Granat palny",
       "dragons-breath": "Oddech smoka",
       "potion-of-haste": "Mikstura pośpiechu",
