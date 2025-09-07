@@ -6,6 +6,7 @@ import { ChevronLeftIcon } from "@heroicons/vue/20/solid";
 import CampaignHeroItems from "@/components/CampaignHeroItems.vue";
 import CampaignHeroStash from "@/components/CampaignHeroStash.vue";
 import CampaignHeroSkills from "@/components/CampaignHeroSkills.vue";
+import CampaignHeroClassAbilities from "@/components/CampaignHeroClassAbilities.vue";
 import { ref } from "vue";
 import BaseDividerAlt from "@/components/BaseDividerAlt.vue";
 import { CampaignStore } from "@/store/CampaignStore";
@@ -89,6 +90,12 @@ function onStash() {
 
     <div class="py-2 w-full">
       <CampaignHeroSkills :campaign-id="campaignId" :hero-id="heroId"></CampaignHeroSkills>
+    </div>
+
+    <BaseDividerAlt>{{ t("label.class-abilities") }}</BaseDividerAlt>
+
+    <div class="py-2 w-full">
+      <CampaignHeroClassAbilities :campaign-id="campaignId" :hero-id="heroId"></CampaignHeroClassAbilities>
     </div>
   </div>
 </template>

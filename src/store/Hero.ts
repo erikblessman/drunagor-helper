@@ -34,6 +34,7 @@ export class Hero {
   public equipment: HeroEquipment = new HeroEquipment();
   public stashedCardIds: Array<string> = [];
   public skillIds: Array<string> = [];
+  public classAbilities: Array<string> = [];
   public dungeonRoleSkillCubeColors: {
     rankOne: string | null;
     rankTwo: string | null;
