@@ -72,10 +72,10 @@ export const useInitiativeStore = defineStore("initiative", () => {
       _initiativeList.value[mIndex] = monster;
     }
   };
-  const decrementHp = (monster: any): ActiveMonsterData | null => {
+  const decrementHp = (monster: any, n: number = -1): ActiveMonsterData | null => {
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
-    storeMonster.hp -= 1;
+    storeMonster.hp += n;
     if (storeMonster.hp < 1) {
       storeMonster.hp = 0;
       if (removeMonster(storeMonster)) {
@@ -98,14 +98,15 @@ export const useInitiativeStore = defineStore("initiative", () => {
       _initiativeList.value[mIndex] = monster;
     }
   };
-  const incrementHp = (monster: any): ActiveMonsterData => {
+  const incrementHp = (monster: any, n:number = 1): ActiveMonsterData => {
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     if (storeMonster.hp < 0) {
       storeMonster.hp = 0;
     }
-    if (storeMonster.hp != storeMonster.maxHp || confirm(`Override Max HP: ${storeMonster.maxHp}`)) {
-      storeMonster.hp++;
+    const newHp = storeMonster.hp + n;
+    if (newHp <= storeMonster.maxHp || confirm(`Override Max HP: ${storeMonster.maxHp}`)) {
+      storeMonster.hp = newHp;
     }
     return storeMonster;
   };

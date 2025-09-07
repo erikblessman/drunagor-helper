@@ -28,6 +28,17 @@ const emit = defineEmits(["open-details"]);
 // #region store bindings
 const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 // #endregion
+
+function applyDamage(monster:ActiveMonsterData): void {
+  const dmg:number = Number(prompt("Damage"));
+  if (!dmg || isNaN(dmg) || dmg == 0) {
+    return;
+  } else if (dmg < 0) {
+    decrementHp(monster, dmg);
+  } else {
+    incrementHp(monster, dmg);
+  }
+}
 </script>
 
 <template>
@@ -41,6 +52,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
       <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
         <div
           class="grid grid-flow-col auto-cols-max"
+          @click="() => applyDamage(monster)"
           v-touch:swipe.right="() => incrementHp(monster)"
           v-touch:swipe.left="() => decrementHp(monster)"
         >
