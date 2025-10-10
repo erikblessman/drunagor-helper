@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // #region external imports
-import { HeartIcon, UserCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { HeartIcon, TrashIcon } from "@heroicons/vue/24/solid";
 // #endregion
 
 // #region internal imports
@@ -30,7 +30,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 // #endregion
 
 function applyDamage(monster:ActiveMonsterData): void {
-  const dmg:number = Number(prompt("Damage"));
+  const dmg:number = -1 * Number(prompt("Damage"));
   if (!dmg || isNaN(dmg) || dmg == 0) {
     return;
   } else if (dmg < 0) {
@@ -52,7 +52,6 @@ function applyDamage(monster:ActiveMonsterData): void {
       <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
         <div
           class="grid grid-flow-col auto-cols-max"
-          @click="() => applyDamage(monster)"
           v-touch:swipe.right="() => incrementHp(monster)"
           v-touch:swipe.left="() => decrementHp(monster)"
         >
@@ -62,7 +61,7 @@ function applyDamage(monster:ActiveMonsterData): void {
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>
             <div class="grid grid-flow-col auto-cols-max">
-              <div class="grid w-12">
+              <div class="grid w-12" @click="() => applyDamage(monster)">
                 <div class="col-start-1 row-start-1 justify-center">
                   <HeartIcon class="fill-red-500 w-12 self-center" />
                 </div>
