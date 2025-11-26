@@ -47,7 +47,7 @@ const detailsMonsterCardUrl = computed((): string => {
 
 // #region functions -------------------------------------------------------------------------------
 function closeDetails() {
-    emit('close');
+  emit('close');
 }
 
 let colorPickerVisible = ref(false);
@@ -64,48 +64,48 @@ function changeColor(color: string) {
 </script>
 
 <template>
-    <div class="container">
-    <div class="grid grid-flow-col auto-cols-max">
-        <MinusIcon class="w-12" @click="emit('decrement-hp')" />
-        <div class="grid w-12" @click="emit('update-hp')">
+  <div class="container">
+    <div class="flex justify-between">
+      <MinusIcon class="w-12" @click="emit('decrement-hp')" />
+      <div class="grid w-12" @click="emit('update-hp')">
         <div class="col-start-1 row-start-1 justify-center">
-            <HeartIcon class="fill-red-500 w-12 self-center" />
+          <HeartIcon class="fill-red-500 w-12 self-center" />
         </div>
         <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
-            {{ detailsMonster?.hp }}
+          {{ detailsMonster?.hp }}
         </div>
-        </div>
-        <PlusIcon @click="() => emit('increment-hp')" class="w-12" />
-        <TrashIcon class="fill-gray-600 w-12" @click="() => emit('remove-monster')" />
-        <!-- div with ring color, onclick shows next div -->
+      </div>
+      <PlusIcon @click="() => emit('increment-hp')" class="w-12" />
+      <TrashIcon class="fill-gray-600 w-12" @click="() => emit('remove-monster')" />
+      <!-- div with ring color, onclick shows next div -->
+      <div
+        class="rounded-full w-12 h-12 border-8"
+        @click="toggleColorPicker"
+        :style="'border-color: ' + detailsMonster?.baseColor + ';'"
+      ></div>
+      <div class="grid grid-cols-3 gap-1" v-if="colorPickerVisible">
         <div
-            class="rounded-full w-12 h-12 border-8"
-            @click="toggleColorPicker"
-            :style="'border-color: ' + detailsMonster?.baseColor + ';'"
+          v-for="color in ringColors"
+          :key="color"
+          class="rounded-full w-12 h-12 border-8"
+          :style="'border-color: ' + color + ';'"
+          @click="changeColor(color)"
         ></div>
-        <div class="grid grid-cols-3 gap-1" v-if="colorPickerVisible">
-        <div
-            v-for="color in ringColors"
-            :key="color"
-            class="rounded-full w-12 h-12 border-8"
-            :style="'border-color: ' + color + ';'"
-            @click="changeColor(color)"
-        ></div>
-        </div>
-        <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
+      </div>
+      <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
     </div>
     <div class="grid grid-flow-col auto-cols-max">
-        <Conditions :monster="detailsMonster" />
+      <Conditions :monster="detailsMonster" />
     </div>
     <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'" @click="closeDetails">
-        <img
+      <img
         v-if="(detailsMonsterCardUrl?.length ?? 0) > 0"
         :src="detailsMonsterCardUrl"
         class="rounded-sm shadow dark:bg-gray-800 w-full" />
-        <UserCircleIcon v-else class="h-100 text-gray-200 rounded-lg" />
+      <UserCircleIcon v-else class="h-100 text-gray-200 rounded-lg" />
     </div>
     <img :src="detailsMonster?.images?.miniature" class="rounded-sm shadow dark:bg-gray-800 w-full" />
-    </div>
+  </div>
 </template>
 
 <style scoped></style>
