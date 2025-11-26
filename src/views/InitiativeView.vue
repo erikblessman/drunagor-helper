@@ -277,8 +277,8 @@ function updateMonsterHp(monster: any): void {
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
       <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
-        @decrement-hp="() => {
-          detailsMonster = decrementHp(detailsMonster);
+        @decrement-hp="(hp = -1) => {
+          detailsMonster = decrementHp(detailsMonster, hp);
           if (!detailsMonster) {
             closeDetails();
           }

@@ -69,6 +69,10 @@ function applyDamage(monster:ActiveMonsterData): void {
                   {{ monster.hp }}
                 </div>
               </div>
+              <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="decrementHp(-1)">1</div>
+              <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="decrementHp(1)">1</div>
+              <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="decrementHp(2)">2</div>
+              <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="decrementHp(3)">3</div>
               <Conditions :monster="monster" />
               <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
             </div>
