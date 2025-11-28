@@ -73,10 +73,10 @@ function changeColor(color: string) {
             {{ detailsMonster?.hp }}
           </div>
         </div>
+        <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -3)">3</div>
+        <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -2)">2</div>
         <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -1)">1</div>
         <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 1)">1</div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 2)">2</div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 3)">3</div>
       </div>
       <div class="flex">
         <!-- div with ring color, onclick shows next div -->
