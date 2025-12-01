@@ -22,23 +22,12 @@ const monsterList = toRef(props, "monsters");
 // #endregion
 
 // #region emits
-const emit = defineEmits(["open-details"]);
+const emit = defineEmits(["open-details", "update-hp"]);
 // #endregion
 
 // #region store bindings
 const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 // #endregion
-
-function applyDamage(monster:ActiveMonsterData): void {
-  const dmg:number = -1 * Number(prompt("Damage"));
-  if (!dmg || isNaN(dmg) || dmg == 0) {
-    return;
-  } else if (dmg < 0) {
-    decrementHp(monster, dmg);
-  } else {
-    incrementHp(monster, dmg);
-  }
-}
 </script>
 
 <template>
@@ -61,7 +50,7 @@ function applyDamage(monster:ActiveMonsterData): void {
           <div>
             <div class="font-semibold text-lg">{{ monster.name }} ({{ monster.color }})</div>
             <div class="grid grid-flow-col auto-cols-max">
-              <div class="grid w-12" @click="() => applyDamage(monster)">
+              <div class="grid w-12">
                 <div class="col-start-1 row-start-1 justify-center">
                   <HeartIcon class="fill-red-500 w-12 self-center" />
                 </div>

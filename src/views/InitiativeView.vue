@@ -177,19 +177,24 @@ function closeDetails() {
 }
 function updateMonsterHp(monster: any): void {
   const _maxHp = prompt('Max HP', monster.maxHp.toString());
-  if (_maxHp) {
-    const maxHp = parseInt(_maxHp);
-    if (!isNaN(maxHp)) {
-      monster.maxHp = maxHp;
-    }
+  if (!_maxHp) return;
+  const maxHp = parseInt(_maxHp);
+
+  const dmgTaken: number = monster.maxHp - monster.hp;
+  const defaultHp: number = maxHp - dmgTaken;
+
+  const _hp = prompt('HP (already adjusted for prev dmg)', defaultHp.toString());
+  if (!_hp) return;
+  const hp = parseInt(_hp);
+
+  if (!isNaN(maxHp)) {
+    monster.maxHp = maxHp;
   }
-  const _hp = prompt('HP', monster.hp.toString());
-  if (_hp) {
-    const hp = parseInt(_hp);
-    if (!isNaN(hp)) {
-      monster.hp = hp;
-    }
+
+  if (!isNaN(hp)) {
+    monster.hp = hp;
   }
+
   detailsMonster.value = updateHp(monster);
 }
 // #endregion
