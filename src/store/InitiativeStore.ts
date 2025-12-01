@@ -43,8 +43,11 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const addHero = (dungeonRole: string, hero: HeroData) => {
     _heros.value[dungeonRole] = hero;
   };
-  const addMonster = (monster: any): ActiveMonsterData => {
+  const addMonster = (monster: any): ActiveMonsterData | null => {
     const maxHp = _getDefaultHp(monster);
+    if (!maxHp) {
+      return null;
+    }
     const newMonster = {
       ...monster,
       hp: maxHp,
@@ -191,11 +194,11 @@ export const useInitiativeStore = defineStore("initiative", () => {
         return NaN;
     }
   };
-  const _getDefaultHp = (monster: any): number => {
+  const _getDefaultHp = (monster: any): number | null => {
     let difficultyModifier: number = 0;
     if (monster.id == "scenario-monster") {
       const s = prompt(`Enter Max HP for ${monster.name}`) || "99";
-      return parseInt(s) || 99;
+      return parseInt(s);
     }
     switch (monster.id) {
       case "corrupted-worm":
@@ -235,13 +238,17 @@ export const useInitiativeStore = defineStore("initiative", () => {
         maxHp = _hpProgressions[progressionIndex][rankIndex];
       }
     }
-    const defaultHp: number = maxHp ?? 1;
+    const defaultHp: number = maxHp ?? 99;
     if (!maxHp || !useDefaultHp.value) {
       const p: string = `Enter max HP for ${monster.name}`;
-      const hpStr: string = prompt(p, defaultHp.toString()) ?? "1";
-      maxHp = parseInt(hpStr);
+      const hpStr: string | null =   prompt(p, defaultHp.toString());
+      if (hpStr) {
+        maxHp = parseInt(hpStr);
+      } else {
+        maxHp = null;
+      }
     }
-    return maxHp ?? 1;
+    return maxHp;
   };
 
   const _getMonsterIndex = (monster: any): number => {

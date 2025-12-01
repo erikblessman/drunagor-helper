@@ -96,6 +96,9 @@ const openMonsterPicker = (): void => {
 };
 const pickMonster = (monster: any): void => {
   const activeMonster = addMonster(monster);
+  if (!activeMonster) {
+    return;
+  }
   toast.success({
     component: ActiveMonsterAvatar,
     props: {
