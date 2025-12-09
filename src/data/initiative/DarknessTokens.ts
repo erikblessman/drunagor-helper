@@ -10,47 +10,37 @@ import TokenZSm from "@/assets/darkness/z-small.png";
 import TokenZLg from "@/assets/darkness/z-large.png";
 export { default as BlankToken } from "@/assets/darkness/blank.png";
 
+export const TOKEN_BAG = 'Token Bag';
+export const INITIATIVE_TRACK = 'Initiative Track';
+
 export interface IToken {
   color: InitiativeColors,
   image: string,
-  isDrawn: boolean
+  isFaceUp: boolean,
+  label: string
 };
 
-export const DarknessTokens: IToken[] = [
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenCorner },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenL },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenT },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenZSm },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenLineSm },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenY },
-  { isDrawn: false, color: InitiativeColors.ORANGE, image: TokenC },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenLineLg },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenL },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenT },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenZLg },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenZSm },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenY },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenCorner },
-  { isDrawn: false, color: InitiativeColors.BLUE, image: TokenC },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenLineLg },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenCorner },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenZSm },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenZLg },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenLineSm },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenY },
-  { isDrawn: false, color: InitiativeColors.GREEN, image: TokenC },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenLineLg },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenL },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenT },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenZLg },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenLineSm },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenC },
-  { isDrawn: false, color: InitiativeColors.GRAY, image: TokenCorner },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenLineLg },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenL },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenT },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenZLg },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenLineSm },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenY },
-  { isDrawn: false, color: InitiativeColors.RED, image: TokenZSm },
+interface TokenSet {
+  color: InitiativeColors,
+  images: string[],
+};
+
+const TokenSetup: TokenSet[] = [
+  { color: InitiativeColors.ORANGE, images: [TokenCorner, TokenL, TokenT, TokenZSm, TokenLineSm, TokenY, TokenC,]},
+  { color: InitiativeColors.BLUE, images: [TokenLineLg, TokenL, TokenT, TokenZLg, TokenZSm, TokenY, TokenCorner, TokenC,]},
+  { color: InitiativeColors.GREEN, images: [TokenLineLg, TokenCorner, TokenZSm, TokenZLg, TokenLineSm, TokenY, TokenC,]},
+  { color: InitiativeColors.GRAY, images: [TokenLineLg, TokenL, TokenT, TokenZLg, TokenLineSm, TokenC, TokenCorner,]},
+  { color: InitiativeColors.RED, images: [TokenLineLg, TokenL, TokenT, TokenZLg, TokenLineSm, TokenY, TokenZSm,]},
 ];
+
+export const DarknessTokens: IToken[] = TokenSetup.flatMap((set: TokenSet): IToken[] => {
+  return set.images.map((img: string) => {
+    const token: IToken = {
+      color: set.color,
+      image: img,
+      isFaceUp: false,
+      label: '',
+    }
+    return token;
+  })
+});

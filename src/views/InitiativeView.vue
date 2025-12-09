@@ -34,6 +34,7 @@ import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import type { HeroData } from "@/data/repository/HeroData";
 import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
+import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
 // #endregion
 
 const toast = useToast();
@@ -157,7 +158,7 @@ const incrementTUrn = () => {
   } while (skipTurn && ++i < max);
 };
 const getTokenCount = (initInfo: InitiativeInfo) => {
-  return darknessTokens.value.filter(i => i.color == initInfo.color && i.isDrawn).length;
+  return darknessTokens.value.filter(token => token.color == initInfo.color && token.label === INITIATIVE_TRACK).length;
 }
 // #endregion
 
@@ -266,7 +267,7 @@ function updateMonsterHp(monster: any): void {
   <!-- Pop-Ups -->
   <MonsterPicker @pick-monster="pickMonster" ref="monsterPickerRef" />
   <BaseModal
-    title="Darkness Token Bag"
+    :title="`Darkness Token Bag ${darknessTokens.filter(t => t.label === '').length}`"
     :is-open="isDarknessTokenBagOpen"
     @close-modal="() => isDarknessTokenBagOpen = false">
     <DarknessTokenBag />

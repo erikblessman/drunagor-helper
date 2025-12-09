@@ -3,12 +3,16 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
-    "lib": ["es2017", "DOM"], 
+    "target": "es2019",
+    "lib": ["es2019.Array", "es2017", "DOM"], 
     "composite": true,
     "baseUrl": ".",
     "strict": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "verbatimModuleSyntax": true,
+    "importsNotUsedAsValues": "remove",
+    "preserveValueImports": false
   }
 }
