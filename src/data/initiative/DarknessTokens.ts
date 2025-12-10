@@ -17,7 +17,8 @@ export interface IToken {
   color: InitiativeColors,
   image: string,
   isFaceUp: boolean,
-  label: string
+  label: string,
+  timestamp: number | null
 };
 
 interface TokenSet {
@@ -40,6 +41,7 @@ export const DarknessTokens: IToken[] = TokenSetup.flatMap((set: TokenSet): ITok
       image: img,
       isFaceUp: false,
       label: '',
+      timestamp: null,
     }
     return token;
   })

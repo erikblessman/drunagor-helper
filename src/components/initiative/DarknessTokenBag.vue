@@ -9,8 +9,9 @@ import { useToast } from "vue-toastification";
 import { INITIATIVE_TRACK, TOKEN_BAG, type IToken } from "@/data/initiative/DarknessTokens";
 import { InitiativeColors } from "@/data/initiative/InitiativePlaces";
 import { useInitiativeStore } from "@/store/InitiativeStore";
-import { ArrowRightIcon, ArrowUpOnSquareIcon } from "@heroicons/vue/24/solid";
+import { ArrowRightIcon } from "@heroicons/vue/24/solid";
 import { computed, ref } from "vue";
+import { times } from "lodash-es";
 // #endregion
 
 // #region store bindings --------------------------------------------------------------------------
@@ -43,10 +44,12 @@ function drawToken() {
     toast.error(`No more ${currentColor.value ? currentColor.value + ' ' : ''}tokens in ${fromSet.value || TOKEN_BAG}`);
   } else {
     candidateList[0].label = toSet.value || INITIATIVE_TRACK;
+    candidateList[0].timestamp = timestamp.value;
   }
 }
 // #endregion
 
+const timestamp = ref<number>(Date.now());
 const tokenSets = computed(() => {
   const acc: Map<string, IToken[]> = new Map<string, IToken[]>();
   darknessTokens.value.reduce((acc, token: IToken) => {
@@ -58,7 +61,7 @@ const tokenSets = computed(() => {
     if (!tokenList) {
       acc.set(label, [token]);
     } else {
-      tokenList.push(token);
+      tokenList.unshift(token);
     }
     return acc;
   }, acc);
@@ -78,10 +81,10 @@ function colorSets(tokenSet: IToken[]) {
   }, acc);
 }
 
-let fromSet = ref('');
-let toSet = ref('');
+const fromSet = ref<string>('');
+const toSet = ref<string>('');
+const currentColor = ref<string>('');
 
-let currentColor = ref('');
 function setColor(color: InitiativeColors | '') {
   if (currentColor.value === color) {
     currentColor.value = '';
@@ -89,14 +92,25 @@ function setColor(color: InitiativeColors | '') {
     currentColor.value = color;
   }
 }
+
+function getSortHash(token: IToken): number {
+  return {
+    [InitiativeColors.ORANGE]: 1,
+    [InitiativeColors.GREEN]: 2,
+    [InitiativeColors.BLUE]: 3,
+    [InitiativeColors.RED]: 4,
+    [InitiativeColors.GRAY]: 5,
+  }[token.color] - (token.timestamp === timestamp.value ? 5 : 0);
+}
+
+function tokenSort(a: IToken, b: IToken): number {
+  return getSortHash(a) - getSortHash(b);
+}
 </script>
 
 <template>
   <div class="container">
     <div class="w-full flex pb-4 space-x-2">
-      <button type="button">
-        <ArrowUpOnSquareIcon class="h-12" @click="() => drawToken()" />
-      </button>
       <div class="grow">
         <select
           v-model="fromSet"
@@ -109,7 +123,9 @@ function setColor(color: InitiativeColors | '') {
           </option>
         </select>
       </div>
-      <ArrowRightIcon class="h-8 self-center" />
+      <button type="button">
+        <ArrowRightIcon class="h-8 self-center" @click="() => drawToken()" />
+      </button>
       <div class="grow self-center rounded-lg text-left">
         <input :placeholder="INITIATIVE_TRACK" type="text" id="to-set" v-model="toSet" class="w-full bg-base-100 focus:ring-0 rounded-lg self-center" />
       </div>
@@ -126,8 +142,13 @@ function setColor(color: InitiativeColors | '') {
     <div v-for="[label, tokenList] in tokenSets"class='p-3 border border-base-500 relative mt-4 rounded-lg'>
       <h2 class="absolute -top-5 translate-y-1 bg-base-100 px-2">{{ label  }} ({{ tokenList.length }})</h2>
       <div class="grid grid-flow-cols grid-cols-4 gap-4">
-        <div v-for="token in tokenList" :style="{backgroundColor: getTokenColor(token.color)}" class="border-4 p-4 rounded-full flex flex-col items-center">
-          <img :src="token.image" :data-token="JSON.stringify(token)" @click="() => token.label = ''"/>
+        <div v-for="token in tokenList.sort(tokenSort)"
+          :style="{
+            backgroundColor: getTokenColor(token.color),
+            borderColor: token.timestamp === timestamp ? 'white' : 'black',
+          }"
+          class="border-4 p-4 rounded-full flex flex-col items-center">
+          <img :src="token.image" @click="() => token.label = ''"/>
         </div>
       </div>
     </div>
