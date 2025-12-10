@@ -64,28 +64,27 @@ function changeColor(color: string) {
 <template>
   <div class="container">
     <div class="flex justify-between">
-      <div class="flex space-x-2">
-        <div class="grid w-12" @click="emit('update-hp')">
+      <div class="flex space-x-4">
+        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 1)">1</div>
+        <div class="grid w-16" @click="emit('update-hp')">
           <div class="col-start-1 row-start-1 justify-center">
-            <HeartIcon class="fill-red-500 w-12 self-center" />
+            <HeartIcon class="fill-red-500 h-16 self-center" />
           </div>
-          <div class="col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
+          <div class="text-xl col-start-1 row-start-1 self-center text-center font-semibold text-red self-center">
             {{ detailsMonster?.hp }}
           </div>
         </div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -3)">3</div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -2)">2</div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -1)">1</div>
-        <div class="self-center text-center font-bold text-white px-2 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 1)">1</div>
+        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -3)">3</div>
+        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -2)">2</div>
+        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -1)">1</div>
       </div>
-      <div class="flex">
-        <!-- div with ring color, onclick shows next div -->
-        <div
-          class="rounded-full w-12 h-12 border-8"
-          @click="toggleColorPicker"
-          :style="'border-color: ' + detailsMonster?.baseColor + ';'"
-        ></div>
-        <TrashIcon class="fill-gray-600 w-12" @click="() => emit('remove-monster')" />
+      <div
+        class="rounded-full w-12 h-12 border-8 self-center"
+        @click="toggleColorPicker"
+        :style="'border-color: ' + detailsMonster?.baseColor + ';'"
+      ></div>
+      <div class="flex space-x-4">
+        <TrashIcon class="fill-gray-600 w-12 self-center" @click="() => emit('remove-monster')" />
       </div>
       <div class="grid grid-cols-3 gap-1" v-if="colorPickerVisible">
         <div
