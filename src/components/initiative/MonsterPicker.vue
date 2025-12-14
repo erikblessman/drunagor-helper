@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import BaseDivider from "@/components/BaseDivider.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseList from "@/components/BaseList.vue";
 import BaseListItem from "@/components/BaseListItem.vue";
@@ -278,34 +279,35 @@ function addCustom(): void {
         </button>
       </div>
       <BaseList id="monster-pick-list">
+        <BaseDivider>Base Monsters</BaseDivider>
         <template v-for="monster in filteredMonsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
 
-        <div>Scenario Monsters</div>
+        <BaseDivider>Scenario Monsters</BaseDivider>
         <template v-for="monster in filteredScenarioMonsters" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
 
-        <div>Random Commanders</div>
+        <BaseDivider>Random Commanders</BaseDivider>
         <template v-for="monster in filteredRandomCommanders" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
 
-        <div>Scenario Commanders</div>
+        <BaseDivider>Scenario Commanders</BaseDivider>
         <template v-for="monster in filteredScenarioCommanders" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
           </BaseListItem>
         </template>
 
-        <div>Special Commanders</div>
+        <BaseDivider>Special Commanders</BaseDivider>
         <template v-for="monster in filteredSpecialCommanders" :key="monster.id">
           <BaseListItem :avatar="monster.images.big" @click="pickMonster(monster)">
             {{ monster.name }}
