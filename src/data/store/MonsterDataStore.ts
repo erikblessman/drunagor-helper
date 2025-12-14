@@ -95,6 +95,8 @@ import { CommanderBruteSideB } from "../content/core/monster/CommanderBruteSidaB
 import { CommanderThern } from "../content/spoilsofwar/monster/CommanderThern";
 import { CommanderTwins } from "../content/spoilsofwar/monster/CommanderTwins";
 
+import type { ContentId } from "../type/ContentId";
+
 export const MonsterDataStore = defineStore("data-monster", () => {
   const configurationStore = ConfigurationStore();
 
@@ -199,6 +201,8 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     new CommanderTwins(),
   ];
 
+  const commanders: MonsterData[] = randomCommanders.concat(scenarioCommanders).concat(specialCommanders);
+
   function find(monsterId: string): MonsterData {
     const monster = _.find(monsters, { id: monsterId });
     if (monster === undefined) {
@@ -223,14 +227,20 @@ export const MonsterDataStore = defineStore("data-monster", () => {
     return enabledMonsters;
   }
 
+  function isEnabled(contentId: ContentId): boolean {
+    return configurationStore.getEnabledMonsterContent().includes(contentId);
+  }
+
   return {
     monsters,
     randomCommanders,
     scenarioCommanders,
     scenarioMonsters,
     specialCommanders,
+    commanders,
     find,
     findAll,
     findAllEnabled,
+    isEnabled,
   };
 });

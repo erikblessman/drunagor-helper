@@ -21,3 +21,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #dde1e4;
 }
+
+@layer base {
+  input {
+    @apply w-full bg-base-100 border-0 focus:ring-0 rounded-lg
+  }
+
+  button {
+    @apply p-2 bg-neutral text-gray-200 rounded-lg
+  }
+}

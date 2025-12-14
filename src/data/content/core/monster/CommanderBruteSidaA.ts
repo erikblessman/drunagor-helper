@@ -7,7 +7,7 @@ import type { MonsterColor } from "@/data/type/MonsterColor";
 import type { VariantId } from "@/data/type/VariantId";
 
 export class CommanderBruteSideA implements MonsterData {
-  id = "commander-brute";
+  id = "commander-brute-side-a";
   name = "Commander Brute (Side A)";
   content: ContentId = "core";
   variants: VariantId[] = ["standard"];
