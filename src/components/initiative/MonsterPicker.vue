@@ -11,7 +11,6 @@ import { CheckCircleIcon } from "@heroicons/vue/24/outline";
 import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
 import { InitiativeList } from "@/data/initiative/InitiativePlaces";
-import { stringifyQuery } from "vue-router";
 import type { MonsterColor } from "@/data/type/MonsterColor";
 
 const toast = useToast();
