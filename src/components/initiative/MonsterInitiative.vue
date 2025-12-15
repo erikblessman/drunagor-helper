@@ -64,8 +64,10 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
                 <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="decrementHp(monster, -2)">2</div>
                 <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="decrementHp(monster, -1)">1</div>
               </div>
-              <Conditions :monster="monster" />
               <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
+            </div>
+            <div class="flex">
+              <Conditions :monster="monster" />
             </div>
           </div>
         </div>
