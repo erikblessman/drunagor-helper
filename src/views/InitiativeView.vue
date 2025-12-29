@@ -131,7 +131,7 @@ const iList = computed(() => {
   return a;
 });
 const adjustTurn = (diff: number) => {
-  turnIndex.value = (turnIndex.value + diff);
+  turnIndex.value = Math.max(0, (turnIndex.value + diff));
 };
 const roundNumber = computed(() => {
   return 1 + Math.floor(turnIndex.value/InitiativeList.length);
@@ -204,26 +204,24 @@ function updateMonsterHp(monster: any): void {
 <template>
   <div class="grid place-items-center w-full">
     <!-- #region Action Buttons -->
-    <div class="w-full flex sticky">
-      <div class="flex justify-start">
+    <div class="w-full flex justify-between">
+      <div class="flex gap-4">
+        <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
         <BackwardIcon class="w-8 rounded-lg mx-1" @click="decrementTurn" />
         <div class="flex justify-center rounded-full text-2xl font-black border-2 w-8 p-1">{{ roundNumber }}</div>
         <ForwardIcon class="w-8 rounded-lg mx-1" @click="incrementTUrn" />
-        <PlusIcon class="w-8 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
-        <ArrowPathIcon class="w-8 text-red-400 rounded-lg mx-1" @click="clearInitiative" />
       </div>
-      <div class="ml-auto">
-        <div class="w-full flex">
-          <OnOffButton :flag="autoSkip" @click="autoSkip = !autoSkip" class="p-1 m-1">
-            <RocketLaunchIcon class="w-8" />
-          </OnOffButton>
-          <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete" class="p-1 m-1">
-            <CheckCircleIcon class="w-8" />
-          </OnOffButton>
-          <OnOffButton :flag="useDefaultHp" @click="useDefaultHp = !useDefaultHp" class="p-1 m-1">
-            <HeartIcon class="w-8" />
-          </OnOffButton>
-        </div>
+      <PlusIcon class="w-10 bg-slate-800 rounded-lg mx-1" @click="openMonsterPicker" />
+      <div class="flex">
+        <OnOffButton :flag="autoSkip" @click="autoSkip = !autoSkip" class="p-1 m-1">
+          <RocketLaunchIcon class="w-8" />
+        </OnOffButton>
+        <OnOffButton :flag="autoConfirmDelete" @click="autoConfirmDelete = !autoConfirmDelete" class="p-1 m-1">
+          <CheckCircleIcon class="w-8" />
+        </OnOffButton>
+        <OnOffButton :flag="useDefaultHp" @click="useDefaultHp = !useDefaultHp" class="p-1 m-1">
+          <HeartIcon class="w-8" />
+        </OnOffButton>
       </div>
     </div>
     <!-- #endregion Action Buttons -->
