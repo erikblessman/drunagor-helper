@@ -31,7 +31,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
 </script>
 
 <template>
-  <div class="grid grid-cols-12" id="initiative-container">
+  <div class="grid grid-cols-12" id="initiative-container" v-if="monsters.length > 0 || tokenCount > 0">
     <div>
       <div class="flex flex-row">
         <img :src="turnImgUrl" />{{ tokenCount }}
