@@ -197,8 +197,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const _getDefaultHp = (monster: any): number | null => {
     let difficultyModifier: number = 0;
     if (monster.id == "scenario-monster") {
-      const s = prompt(`Enter Max HP for ${monster.name}`) || "99";
-      return parseInt(s);
+      return 99;
     }
     switch (monster.id) {
       case "corrupted-worm":
