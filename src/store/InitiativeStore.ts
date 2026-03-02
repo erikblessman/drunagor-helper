@@ -237,15 +237,8 @@ export const useInitiativeStore = defineStore("initiative", () => {
         maxHp = _hpProgressions[progressionIndex][rankIndex];
       }
     }
-    const defaultHp: number = maxHp ?? 99;
     if (!maxHp || !useDefaultHp.value) {
-      const p: string = `Enter max HP for ${monster.name}`;
-      const hpStr: string | null =   prompt(p, defaultHp.toString());
-      if (hpStr) {
-        maxHp = parseInt(hpStr);
-      } else {
-        maxHp = null;
-      }
+      maxHp = 99;
     }
     return maxHp;
   };
