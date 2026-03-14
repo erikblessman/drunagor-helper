@@ -23,6 +23,6 @@ export class TheFallenMaiden implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.the-fallen-maiden";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

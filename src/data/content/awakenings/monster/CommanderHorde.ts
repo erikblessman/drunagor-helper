@@ -23,6 +23,6 @@ export class CommanderHorde implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.commander-horde";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

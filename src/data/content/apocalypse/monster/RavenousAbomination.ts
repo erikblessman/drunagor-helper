@@ -23,7 +23,7 @@ export class RavenousAbomination implements MonsterData {
     },
   };
   color: MonsterColor = "other";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_GRAY;
   translation_key = "monster.ravenous-abomination";
 }

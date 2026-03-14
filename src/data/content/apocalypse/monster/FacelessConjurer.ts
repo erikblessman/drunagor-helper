@@ -29,7 +29,7 @@ export class FacelessConjurer implements MonsterData {
     },
   };
   color: MonsterColor = "gray";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_ORANGE;
   translation_key = "monster.faceless-conjurer";
 }

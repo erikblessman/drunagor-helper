@@ -23,6 +23,6 @@ export class Scavenger implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.scavenger";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

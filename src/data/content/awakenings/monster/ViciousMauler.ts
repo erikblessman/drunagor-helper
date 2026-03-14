@@ -24,6 +24,6 @@ export class ViciousMauler implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.vicious-mauler";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_GRAY;
 }

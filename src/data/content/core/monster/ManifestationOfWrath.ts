@@ -24,7 +24,7 @@ export class ManifestationOfWrath implements MonsterData {
     },
   };
   color: MonsterColor = "other";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_BLUE;
   translation_key = "monster.manifestation-of-wrath";
 }

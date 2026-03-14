@@ -23,7 +23,7 @@ export class TormentOfEnvy implements MonsterData {
     },
   };
   color: MonsterColor = "other";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_ORANGE;
   translation_key = "monster.torment-of-envy";
 }

@@ -23,6 +23,6 @@ export class CommanderHunter implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.commander-hunter";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

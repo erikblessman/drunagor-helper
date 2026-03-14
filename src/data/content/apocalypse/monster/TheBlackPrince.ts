@@ -23,6 +23,6 @@ export class TheBlackPrince implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.the-black-prince";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

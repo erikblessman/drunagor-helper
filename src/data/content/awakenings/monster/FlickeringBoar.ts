@@ -24,6 +24,6 @@ export class FlickeringBoar implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.flickering-boar";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.BOTTOM_ORANGE;
 }

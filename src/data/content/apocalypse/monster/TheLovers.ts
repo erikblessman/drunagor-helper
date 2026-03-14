@@ -23,6 +23,6 @@ export class TheLovers implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.the-lovers";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
 }

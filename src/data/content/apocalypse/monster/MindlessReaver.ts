@@ -23,7 +23,7 @@ export class MindlessReaver implements MonsterData {
     },
   };
   color: MonsterColor = "other";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_GRAY;
   translation_key = "monster.mindless-reaver";
 }

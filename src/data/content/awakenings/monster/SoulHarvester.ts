@@ -23,6 +23,6 @@ export class SoulHarvester implements MonsterData {
   };
   color: MonsterColor = "other";
   translation_key = "monster.soul-harvester";
-  size: string = "small";
+  size: string = "large";
   initiative: number = InitiativePlaces.TOP_ORANGE;
 }
