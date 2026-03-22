@@ -71,6 +71,14 @@ const filteredSpecialCommanders = computed<MonsterData[]>(() => {
   }
   return filterMonsters(monsterStore.specialCommanders)
 });
+const filteredCommanders = computed<MonsterData[]>(() => {
+  const validColors: ColorFilter[] = ['commander'];
+  if (colorFilter.value !== null && !validColors.includes(colorFilter.value)) {
+    console.log({filter: colorFilter.value, validColors});
+    return [];
+  }
+  return filterMonsters(monsterStore.commanders)
+});
 const allMonsters = computed<MonsterData[]>(() => {
   return filteredMonsters.value
     .concat(filteredScenarioMonsters.value)
@@ -134,11 +142,17 @@ function pickMonster(monster: MonsterData) {
 }
 
 function randomMonster() {
-  if (!rankSelection.value) {
+  let list: MonsterData[];
+  if (colorFilter.value === 'commander') {
+    list = filteredCommanders.value;
+  } else if (colorFilter.value === 'scenario-monster') {
+    list = filteredScenarioMonsters.value;
+  } else if (!rankSelection.value) {
     alert('Please select a rank first (R|F|V|C)');
     return;
+  } else {
+    list = allMonsters.value;
   }
-  const list: MonsterData[] = colorFilter.value === 'commander' ? filteredRandomCommanders.value : allMonsters.value;
   let randomMonster: MonsterData | undefined = _.sample(list);
   if (randomMonster) {
     const tag = prompt("Tag", randomMonster.color.substring(0, 1).toUpperCase());
