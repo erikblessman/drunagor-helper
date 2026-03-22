@@ -155,14 +155,7 @@ function randomMonster() {
   }
   let randomMonster: MonsterData | undefined = _.sample(list);
   if (randomMonster) {
-    const tag = prompt("Tag", randomMonster.color.substring(0, 1).toUpperCase());
-    if (tag !== null) {
-      let name = randomMonster.name;
-      if (tag.length > 0) {
-        name += " [" + tag + "]";
-      }
-      pickMonster({ ...randomMonster, name: name });
-    }
+    pickMonster({ ...randomMonster });
   } else {
     toast.error("No monsters of that color");
   }
