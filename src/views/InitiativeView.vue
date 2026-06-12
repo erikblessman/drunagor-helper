@@ -32,6 +32,7 @@ import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import BaseDivider from "@/components/BaseDivider.vue";
 import OnOffButton from "@/components/common/OnOffButton.vue";
 import BaseModal from "@/components/BaseModal.vue";
+import KeypadModal from "@/components/KeypadModal.vue";
 import type { HeroData } from "@/data/repository/HeroData";
 import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
 import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
@@ -176,27 +177,33 @@ function openDetails(monster: ActiveMonsterData) {
 function closeDetails() {
   detailsOpen.value = false;
 }
-function updateMonsterHp(monster: any): void {
-  const _maxHp = prompt('Max HP', monster.maxHp.toString());
-  if (!_maxHp) return;
-  const maxHp = parseInt(_maxHp);
+const isHpModalOpen = ref(false);
+const hpStep = ref<1 | 2>(1);
+const hpModalInitialValue = ref(0);
+let pendingMaxHp = 0;
 
-  const dmgTaken: number = monster.maxHp - monster.hp;
-  const defaultHp: number = maxHp - dmgTaken;
+function updateMonsterHp(monster: ActiveMonsterData | null): void {
+  if (!monster) return;
+  hpStep.value = 1;
+  hpModalInitialValue.value = monster.maxHp;
+  isHpModalOpen.value = true;
+}
 
-  const _hp = prompt('HP (already adjusted for prev dmg)', defaultHp.toString());
-  if (!_hp) return;
-  const hp = parseInt(_hp);
-
-  if (!isNaN(maxHp)) {
-    monster.maxHp = maxHp;
+function onHpKeypadConfirm(value: number): void {
+  if (hpStep.value === 1) {
+    pendingMaxHp = value;
+    const dmgTaken = (detailsMonster.value?.maxHp ?? 0) - (detailsMonster.value?.hp ?? 0);
+    hpModalInitialValue.value = Math.max(0, value - dmgTaken);
+    hpStep.value = 2;
+  } else {
+    if (detailsMonster.value) {
+      detailsMonster.value.maxHp = pendingMaxHp;
+      detailsMonster.value.hp = value;
+      detailsMonster.value = updateHp(detailsMonster.value);
+    }
+    isHpModalOpen.value = false;
+    hpStep.value = 1;
   }
-
-  if (!isNaN(hp)) {
-    monster.hp = hp;
-  }
-
-  detailsMonster.value = updateHp(monster);
 }
 // #endregion
 </script>
@@ -281,6 +288,13 @@ function updateMonsterHp(monster: any): void {
       </div>
     </div>
   </BaseModal>
+  <KeypadModal
+    :is-open="isHpModalOpen"
+    :title="hpStep === 1 ? 'Max HP' : 'Current HP'"
+    :initial-value="hpModalInitialValue"
+    @close="isHpModalOpen = false"
+    @confirm="onHpKeypadConfirm"
+  />
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
       <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
