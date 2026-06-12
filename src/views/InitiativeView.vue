@@ -4,8 +4,11 @@ import { storeToRefs } from "pinia";
 import {
   ArrowPathIcon,
   ArrowUpCircleIcon,
+  ArrowUturnLeftIcon,
   BackwardIcon,
   CheckCircleIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   ForwardIcon,
   HeartIcon,
   MinusIcon,
@@ -41,7 +44,7 @@ import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
 const toast = useToast();
 
 // #region store bindings
-const { autoSkip, autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp } = storeToRefs(useInitiativeStore());
+const { autoSkip, autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp, canUndo, _history } = storeToRefs(useInitiativeStore());
 const {
   getInitiativeList,
   addHero,
@@ -53,9 +56,15 @@ const {
   removeHero,
   removeMonster,
   updateHp,
+  undo,
 } = useInitiativeStore();
 const { heroes } = storeToRefs(HeroStore());
 const heroStore = HeroStore();
+// #endregion
+
+// #region history
+const historyOpen = ref(false);
+const recentHistory = computed(() => [..._history.value].reverse().slice(0, 5));
 // #endregion
 
 // #region hero picker
@@ -232,6 +241,42 @@ function onHpKeypadConfirm(value: number): void {
       </div>
     </div>
     <!-- #endregion Action Buttons -->
+
+    <!-- #region History -->
+    <div class="w-full mt-2">
+      <div class="flex items-center justify-between">
+        <button
+          class="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-200"
+          @click="historyOpen = !historyOpen"
+        >
+          <ChevronDownIcon v-if="!historyOpen" class="w-4" />
+          <ChevronUpIcon v-if="historyOpen" class="w-4" />
+          History
+        </button>
+        <button
+          class="flex items-center gap-1 text-sm font-semibold px-3 py-1 rounded-lg"
+          :class="canUndo ? 'bg-base-200 text-gray-200 hover:bg-base-100' : 'text-gray-600 cursor-not-allowed'"
+          :disabled="!canUndo"
+          @click="undo"
+        >
+          <ArrowUturnLeftIcon class="w-4" />
+          Undo
+        </button>
+      </div>
+      <div v-show="historyOpen" class="mt-1 divide-y divide-base-200">
+        <div v-if="recentHistory.length === 0" class="text-xs text-gray-500 py-1">No history yet</div>
+        <div
+          v-for="(entry, i) in recentHistory"
+          :key="i"
+          class="text-xs py-1"
+          :class="i === 0 ? 'text-gray-200' : 'text-gray-500'"
+        >
+          {{ entry.label }}
+        </div>
+      </div>
+    </div>
+    <!-- #endregion History -->
+
     <BaseDivider>Initiative</BaseDivider>
     <!-- #region Initiative List -->
     <div container class="divide-y">

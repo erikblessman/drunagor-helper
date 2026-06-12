@@ -1,4 +1,5 @@
 // #region external imports
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 // #endregion
@@ -37,6 +38,22 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const darknessTokens = useStorage("initiative.Tokens", _.shuffle(DarknessTokens) as IToken[]);
   const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
   const _heros = useStorage("initiative.Heros", {} as Record<string, HeroData>);
+  const _history = ref<{ label: string; snapshot: any[] }[]>([]);
+  const MAX_HISTORY = 20;
+  // #endregion
+
+  // #region history
+  const _snapshot = (label: string) => {
+    _history.value.push({ label, snapshot: _.cloneDeep(_initiativeList.value) });
+    if (_history.value.length > MAX_HISTORY) {
+      _history.value.shift();
+    }
+  };
+  const canUndo = computed(() => _history.value.length > 0);
+  const undo = () => {
+    if (_history.value.length === 0) return;
+    _initiativeList.value = _history.value.pop()!.snapshot;
+  };
   // #endregion
 
   // #region store functions
@@ -44,6 +61,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     _heros.value[dungeonRole] = hero;
   };
   const addMonster = (monster: any): ActiveMonsterData | null => {
+    _snapshot(`Added ${monster.name}`);
     const maxHp = _getDefaultHp(monster);
     if (!maxHp) {
       return null;
@@ -62,12 +80,14 @@ export const useInitiativeStore = defineStore("initiative", () => {
   };
   const clearInitiative = () => {
     if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
+      _snapshot('Cleared initiative');
       turnIndex.value = 0;
       darknessTokens.value = _.shuffle(DarknessTokens);
       _initiativeList.value = [];
     }
   };
   const decrementCondition = (monster: ActiveMonsterData, condition: ICondition) => {
+    _snapshot(`${monster.name}: ${condition.name} -1`);
     const mIndex = _getMonsterIndex(monster);
     const cIndex = monster.conditions.findIndex((c) => c.name == condition.name);
     if (cIndex > -1 && monster.conditions[cIndex].count > 0) {
@@ -76,12 +96,14 @@ export const useInitiativeStore = defineStore("initiative", () => {
     }
   };
   const decrementHp = (monster: any, n: number = -1): ActiveMonsterData | null => {
+    _snapshot(`${monster.name} ${n} HP`);
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     storeMonster.hp += n;
     if (storeMonster.hp < 1) {
       storeMonster.hp = 0;
-      if (removeMonster(storeMonster)) {
+      if (autoConfirmDelete.value || confirm(`Delete ${monster.name} - ${monster.baseColor}?`)) {
+        _doRemoveMonster(storeMonster);
         return null;
       }
     }
@@ -94,6 +116,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     return _heros.value[dungeonRole];
   };
   const incrementCondition = (monster: ActiveMonsterData, condition: ICondition) => {
+    _snapshot(`${monster.name}: ${condition.name} +1`);
     const mIndex = _getMonsterIndex(monster);
     const cIndex = monster.conditions.findIndex((c) => c.name == condition.name);
     if (cIndex > -1 && monster.conditions[cIndex].count < monster.conditions[cIndex].maxCount) {
@@ -102,6 +125,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     }
   };
   const incrementHp = (monster: any, n:number = 1): ActiveMonsterData => {
+    _snapshot(`${monster.name} +${n} HP`);
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     if (storeMonster.hp < 0) {
@@ -114,6 +138,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     return storeMonster;
   };
   const updateHp = (monster: any): ActiveMonsterData => {
+    _snapshot(`${monster.name} HP → ${monster.hp}/${monster.maxHp}`);
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     storeMonster.hp = monster.hp;
@@ -130,10 +155,8 @@ export const useInitiativeStore = defineStore("initiative", () => {
   };
   const removeMonster = (monster: any): boolean => {
     if (autoConfirmDelete.value || confirm(`Delete ${monster.name} - ${monster.baseColor}?`)) {
-      const index = _getMonsterIndex(monster);
-      if (index > -1) {
-        _initiativeList.value.splice(index, 1);
-      }
+      _snapshot(`Removed ${monster.name}`);
+      _doRemoveMonster(monster);
       return true;
     }
     return false;
@@ -148,6 +171,12 @@ export const useInitiativeStore = defineStore("initiative", () => {
   // #endregion
 
   // #region non-exported functions
+  const _doRemoveMonster = (monster: any) => {
+    const index = _getMonsterIndex(monster);
+    if (index > -1) {
+      _initiativeList.value.splice(index, 1);
+    }
+  };
   const _nextAvailableColor = (monster: any): string => {
     let ringSize = monster.size || "small";
     if (monster.name == FacelessConjurer.name) {
@@ -257,6 +286,8 @@ export const useInitiativeStore = defineStore("initiative", () => {
     turnIndex,
     darknessTokens,
     useDefaultHp,
+    canUndo,
+    _history,
     // functions
     addHero,
     addMonster,
@@ -270,5 +301,6 @@ export const useInitiativeStore = defineStore("initiative", () => {
     removeHero,
     removeMonster,
     updateHp,
+    undo,
   };
 });
