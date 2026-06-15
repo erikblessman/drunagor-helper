@@ -39,6 +39,7 @@ import BaseModal from "@/components/BaseModal.vue";
 import KeypadModal from "@/components/KeypadModal.vue";
 import type { HeroData } from "@/data/repository/HeroData";
 import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
+import HeroModal from "@/components/initiative/HeroModal.vue";
 import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
 // #endregion
 
@@ -100,6 +101,13 @@ const assignHero = (hero: HeroData): void => {
   addHero(dungeonRoleToPick.value as string, hero);
   closeHeroPicker();
 };
+// #endregion
+
+// #region hero modal
+const heroModalRole = ref<string | null>(null);
+const heroModalData = computed(() => heroModalRole.value ? getHero(heroModalRole.value) : null);
+const openHeroModal = (role: string) => { heroModalRole.value = role; };
+const closeHeroModal = () => { heroModalRole.value = null; };
 // #endregion
 
 // #region monster picker
@@ -315,7 +323,7 @@ function onHpKeypadConfirm(value: number): void {
             <PlusIcon class="w-8 bg-slate-800 rounded-lg ml-4" @click="() => (dungeonRoleToPick = initInfo.text)" />
           </div>
           <div v-else class="col-span-11 col-start-2 text-4xl font-extrabold mb-4 flex">
-            <img :src="getHero(initInfo.text)?.images?.avatar || ''" class="rounded-full w-16 h-16" />
+            <img :src="getHero(initInfo.text)?.images?.avatar || ''" class="rounded-full w-16 h-16 cursor-pointer" @click="() => openHeroModal(initInfo.text)" />
             <div class="flex flex-row ml-4">
               {{ getHero(initInfo.text)?.name }}
               <MinusIcon class="w-8 h-8 bg-slate-800 rounded-lg ml-4 mt-2" @click="() => removeHero(initInfo.text)" />
@@ -358,6 +366,14 @@ function onHpKeypadConfirm(value: number): void {
       </div>
     </div>
   </BaseModal>
+  <HeroModal
+    v-if="heroModalData && activeCampaignId"
+    :is-open="heroModalRole != null"
+    :hero-id="heroModalData.id"
+    :campaign-id="activeCampaignId"
+    :hero-data="heroModalData"
+    @close="closeHeroModal"
+  />
   <KeypadModal
     :is-open="isHpModalOpen"
     :title="hpStep === 1 ? 'Max HP' : 'Current HP'"
