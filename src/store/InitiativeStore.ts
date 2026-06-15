@@ -34,6 +34,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const autoSkip = useStorage("initiative.AutoSkip", true);
   const autoConfirmDelete = useStorage("initiative.AutoConfirmDelete", false);
   const useDefaultHp = useStorage("initiative.UseDefaultHp", true);
+  const activeCampaignId = useStorage("initiative.activeCampaignId", null as string | null);
   const turnIndex = useStorage("initiative.turnIndex", 0);
   const darknessTokens = useStorage("initiative.Tokens", _.shuffle(DarknessTokens) as IToken[]);
   const _initiativeList = useStorage("initiative.InitiativeList", [] as any[]);
@@ -282,6 +283,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     // properties
     autoSkip,
     autoConfirmDelete,
+    activeCampaignId,
     ringColors,
     turnIndex,
     darknessTokens,

@@ -23,6 +23,7 @@ import { useToast } from "vue-toastification";
 import ActiveMonsterDetails from "@/components/initiative/ActiveMonsterDetails.vue";
 import DarknessTokenBag from "@/components/initiative/DarknessTokenBag.vue"
 import { HeroStore } from "@/store/HeroStore";
+import { CampaignStore } from "@/store/CampaignStore";
 import { useInitiativeStore } from "@/store/InitiativeStore";
 import MonsterPicker from "@/components/initiative/MonsterPicker.vue";
 import MonsterInitiative from "@/components/initiative/MonsterInitiative.vue";
@@ -44,7 +45,7 @@ import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
 const toast = useToast();
 
 // #region store bindings
-const { autoSkip, autoConfirmDelete, darknessTokens, turnIndex, useDefaultHp, canUndo, _history } = storeToRefs(useInitiativeStore());
+const { autoSkip, autoConfirmDelete, activeCampaignId, darknessTokens, turnIndex, useDefaultHp, canUndo, _history } = storeToRefs(useInitiativeStore());
 const {
   getInitiativeList,
   addHero,
@@ -58,8 +59,8 @@ const {
   updateHp,
   undo,
 } = useInitiativeStore();
-const { heroes } = storeToRefs(HeroStore());
 const heroStore = HeroStore();
+const { campaigns } = storeToRefs(CampaignStore());
 // #endregion
 
 // #region history
@@ -72,23 +73,28 @@ const dungeonRoleToPick = ref<string | null>(null);
 const closeHeroPicker = (): void => {
   dungeonRoleToPick.value = null;
 };
-const heroData: HeroData[] = heroes.value.map((hero) => {
-  return heroStore.getHero(hero.heroId) ?? {
-    id: hero.heroId,
-    name: "UNKNOWN HERO",
-    content: "core",
-    class: "Warrior",
-    path: "Strength",
-    race: "Human",
-    proficiencies: {
-      weapon: ["Heavy"],
-      offHand: ["Off Hand Weapon"],
-      armor: ["Plate"],
-  },
-  images: {
-    avatar: 'https://cdn-icons-png.freepik.com/256/11748/11748483.png',
-  },
-};
+const heroData = computed<HeroData[]>(() => {
+  const campaignHeroes = activeCampaignId.value
+    ? heroStore.findAllInCampaign(activeCampaignId.value)
+    : [];
+  return campaignHeroes.map((hero) => {
+    return heroStore.getHero(hero.heroId) ?? {
+      id: hero.heroId,
+      name: "UNKNOWN HERO",
+      content: "core",
+      class: "Warrior",
+      path: "Strength",
+      race: "Human",
+      proficiencies: {
+        weapon: ["Heavy"],
+        offHand: ["Off Hand Weapon"],
+        armor: ["Plate"],
+      },
+      images: {
+        avatar: 'https://cdn-icons-png.freepik.com/256/11748/11748483.png',
+      },
+    };
+  });
 });
 const assignHero = (hero: HeroData): void => {
   addHero(dungeonRoleToPick.value as string, hero);
@@ -242,11 +248,11 @@ function onHpKeypadConfirm(value: number): void {
     </div>
     <!-- #endregion Action Buttons -->
 
-    <!-- #region History -->
+    <!-- #region History / Undo / Campaign -->
     <div class="w-full mt-2">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
         <button
-          class="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-200"
+          class="flex items-center gap-1 text-sm font-semibold px-2 py-0.5 rounded-lg shrink-0 bg-sky-900 text-sky-300 hover:bg-sky-800"
           @click="historyOpen = !historyOpen"
         >
           <ChevronDownIcon v-if="!historyOpen" class="w-4" />
@@ -254,14 +260,27 @@ function onHpKeypadConfirm(value: number): void {
           History
         </button>
         <button
-          class="flex items-center gap-1 text-sm font-semibold px-3 py-1 rounded-lg"
-          :class="canUndo ? 'bg-base-200 text-gray-200 hover:bg-base-100' : 'text-gray-600 cursor-not-allowed'"
+          class="flex items-center gap-1 text-sm font-semibold px-2 py-0.5 rounded-lg shrink-0"
+          :class="canUndo ? 'bg-red-900 text-red-300 hover:bg-red-800' : 'bg-slate-800 text-gray-600 cursor-not-allowed'"
           :disabled="!canUndo"
           @click="undo"
         >
           <ArrowUturnLeftIcon class="w-4" />
           Undo
         </button>
+        <select
+          v-model="activeCampaignId"
+          class="bg-slate-800 rounded px-2 py-0.5 text-sm flex-1 min-w-0"
+        >
+          <option :value="null">-- Campaign --</option>
+          <option
+            v-for="campaign in campaigns"
+            :key="campaign.campaignId"
+            :value="campaign.campaignId"
+          >
+            {{ campaign.name || campaign.campaign }}
+          </option>
+        </select>
       </div>
       <div v-show="historyOpen" class="mt-1 divide-y divide-base-200">
         <div v-if="recentHistory.length === 0" class="text-xs text-gray-500 py-1">No history yet</div>
@@ -275,7 +294,7 @@ function onHpKeypadConfirm(value: number): void {
         </div>
       </div>
     </div>
-    <!-- #endregion History -->
+    <!-- #endregion History / Undo / Campaign -->
 
     <BaseDivider>Initiative</BaseDivider>
     <!-- #region Initiative List -->
@@ -324,11 +343,17 @@ function onHpKeypadConfirm(value: number): void {
   </BaseModal>
   <BaseModal :is-open="dungeonRoleToPick != null" @close-modal="closeHeroPicker" title="Pick a Hero">
     <div class="container">
-      <div class="grid grid-cols-3 gap-4">
+      <div v-if="!activeCampaignId" class="text-gray-400 text-sm py-4 text-center">
+        Select a campaign above to choose heroes.
+      </div>
+      <div v-else-if="heroData.length === 0" class="text-gray-400 text-sm py-4 text-center">
+        No heroes in this campaign yet.
+      </div>
+      <div v-else class="grid grid-cols-3 gap-4">
         <div v-for="hero in heroData" :key="hero.name" class="flex flex-col items-center">
           <img :src="hero.images.avatar" class="rounded-full" @click="() => assignHero(hero)" />
           <div>{{ hero.name }}</div>
-          <button @click="addHero(hero.name, hero)">Add</button>
+          <button @click="assignHero(hero)">Add</button>
         </div>
       </div>
     </div>
