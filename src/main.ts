@@ -14,7 +14,6 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import HeroDetailView from "@/views/HeroDetailView.vue";
 import CampaignHeroSequentialAdventure from "@/components/CampaignHeroSequentialAdventure.vue";
-import Vue3TouchEvents from "vue3-touch-events";
 import * as enUS from "@/locales/en_US.json";
 import * as deDE from "@/locales/de_DE.json";
 import * as frFR from "@/locales/fr_FR.json";
@@ -89,7 +88,6 @@ app.use(i18n);
 app.use(pinia);
 app.use(router);
 app.use(Toast, { timeout: 3000 });
-app.use(Vue3TouchEvents);
 
 app.mount("#app");
 
