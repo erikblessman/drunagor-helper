@@ -26,7 +26,7 @@ const emit = defineEmits(["open-details", "change-hp"]);
 // #endregion
 
 // #region store bindings
-const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
+const { removeMonster } = useInitiativeStore();
 // #endregion
 </script>
 
@@ -39,11 +39,7 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
     </div>
     <div class="col-span-11">
       <template v-for="monster in monsterList.sort((a, b) => a.msTimestamp - b.msTimestamp)" :key="monster.msTimestamp">
-        <div
-          class="flex ml-4"
-          v-touch:swipe.right="() => incrementHp(monster)"
-          v-touch:swipe.left="() => decrementHp(monster)"
-        >
+        <div class="flex ml-4">
           <span @click="emit('open-details', monster)">
             <ActiveMonsterAvatar :monster="monster" />
           </span>
