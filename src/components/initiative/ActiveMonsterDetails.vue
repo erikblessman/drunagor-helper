@@ -73,6 +73,9 @@ function changeColor(color: string) {
             {{ detailsMonster?.hp }}
           </div>
         </div>
+        <div class="flex flex-wrap items-center">
+          <Conditions :monster="detailsMonster" />
+        </div>
       </div>
       <div
         class="rounded-full w-12 h-12 border-8 self-center"
@@ -92,9 +95,6 @@ function changeColor(color: string) {
         ></div>
       </div>
       <!-- div showing all colors, each within a div where onclick sets monster.baseColor -->
-    </div>
-    <div class="grid grid-flow-col auto-cols-max">
-      <Conditions :monster="detailsMonster" />
     </div>
     <div class="border-8" :style="'border-color:' + detailsMonster?.baseColor + ';'" @click="closeDetails">
       <img

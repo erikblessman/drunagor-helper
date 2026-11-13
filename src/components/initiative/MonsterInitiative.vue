@@ -59,11 +59,11 @@ const { decrementHp, incrementHp, removeMonster } = useInitiativeStore();
                     {{ monster.hp }}
                   </div>
                 </div>
+                <div class="flex flex-wrap items-center">
+                  <Conditions :monster="monster" />
+                </div>
               </div>
               <TrashIcon class="fill-gray-600 w-12" @click="removeMonster(monster)" />
-            </div>
-            <div class="flex">
-              <Conditions :monster="monster" />
             </div>
           </div>
         </div>
