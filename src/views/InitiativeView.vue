@@ -264,6 +264,8 @@ function onHpKeypadConfirm(value: number): void {
 
 <template>
   <div class="grid place-items-center w-full">
+    <!-- Header controls stay pinned just below the main menu (h-16) -->
+    <div class="w-full sticky top-16 z-[5] bg-base-300 pt-2 pb-2">
     <!-- #region Action Buttons -->
     <div class="w-full flex justify-between">
       <div class="flex gap-4">
@@ -334,6 +336,7 @@ function onHpKeypadConfirm(value: number): void {
       </div>
     </div>
     <!-- #endregion History / Undo / Campaign -->
+    </div>
 
     <BaseDivider>Initiative</BaseDivider>
     <!-- #region Initiative List -->
