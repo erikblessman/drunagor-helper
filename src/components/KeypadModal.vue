@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, useSlots, watch } from "vue";
 import BaseModal from "@/components/BaseModal.vue";
 
 const props = defineProps<{
@@ -12,6 +12,9 @@ const emit = defineEmits<{
   close: [];
   confirm: [value: number];
 }>();
+
+// When an "actions" slot is provided, it replaces the ✓ button and receives the entered value.
+const slots = useSlots();
 
 const inputValue = ref("");
 
@@ -34,6 +37,10 @@ function pressDigit(d: string) {
 
 function pressClear() {
   inputValue.value = "";
+}
+
+function pressBackspace() {
+  inputValue.value = inputValue.value.slice(0, -1);
 }
 
 const canConfirm = () => inputValue.value.length > 0 && !isNaN(parseInt(inputValue.value));
@@ -70,6 +77,14 @@ function pressConfirm() {
         </button>
 
         <button
+          v-if="slots.actions"
+          class="bg-base-200 rounded-xl text-3xl font-bold py-5 active:opacity-60"
+          @click="pressBackspace"
+        >
+          ⌫
+        </button>
+        <button
+          v-else
           class="rounded-xl text-3xl font-bold py-5 active:opacity-60"
           :class="canConfirm() ? 'bg-primary text-black' : 'bg-base-200 opacity-30 cursor-not-allowed'"
           :disabled="!canConfirm()"
@@ -78,6 +93,11 @@ function pressConfirm() {
           ✓
         </button>
       </div>
+
+      <slot
+        name="actions"
+        :value="canConfirm() ? parseInt(inputValue) : 0"
+      />
     </div>
   </BaseModal>
 </template>

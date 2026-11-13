@@ -25,7 +25,7 @@ const detailsMonster = toRef(props, "detailsMonster");
 // #endregion
 
 // #region emits
-const emit = defineEmits(["close", "decrement-hp", "increment-hp", "update-hp", "remove-monster"]);
+const emit = defineEmits(["close", "change-hp", "remove-monster"]);
 // #endregion
 
 // #region computed
@@ -65,8 +65,7 @@ function changeColor(color: string) {
   <div class="container">
     <div class="flex justify-between">
       <div class="flex space-x-4">
-        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-green-900 bg-green-600 rounded-xl" @click="emit('increment-hp', 1)">1</div>
-        <div class="grid w-16" @click="emit('update-hp')">
+        <div class="grid w-16 cursor-pointer" @click="emit('change-hp')">
           <div class="col-start-1 row-start-1 justify-center">
             <HeartIcon class="fill-red-500 h-16 self-center" />
           </div>
@@ -74,9 +73,6 @@ function changeColor(color: string) {
             {{ detailsMonster?.hp }}
           </div>
         </div>
-        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -3)">3</div>
-        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -2)">2</div>
-        <div class="text-2xl self-center text-center font-bold text-white px-3 py-1 border-4 border-red-900 bg-red-600 rounded-xl" @click="emit('decrement-hp', -1)">1</div>
       </div>
       <div
         class="rounded-full w-12 h-12 border-8 self-center"

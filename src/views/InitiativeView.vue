@@ -205,8 +205,39 @@ const hpStep = ref<1 | 2>(1);
 const hpModalInitialValue = ref(0);
 let pendingMaxHp = 0;
 
+const isHpChangeModalOpen = ref(false);
+// Monster targeted by the HP modals; may come from the details popup or an initiative row.
+const hpMonster = ref<ActiveMonsterData | null>(null);
+
+function openHpChange(monster: ActiveMonsterData | null): void {
+  if (!monster) return;
+  hpMonster.value = monster;
+  isHpChangeModalOpen.value = true;
+}
+
+function applyDamage(amount: number): void {
+  if (!hpMonster.value || amount <= 0) return;
+  isHpChangeModalOpen.value = false;
+  const isDetailsMonster = detailsMonster.value?.msTimestamp === hpMonster.value.msTimestamp;
+  hpMonster.value = decrementHp(hpMonster.value, -amount);
+  if (isDetailsMonster) {
+    detailsMonster.value = hpMonster.value;
+    if (!detailsMonster.value) {
+      closeDetails();
+    }
+  }
+}
+
+function applyHealing(amount: number): void {
+  if (!hpMonster.value || amount <= 0) return;
+  isHpChangeModalOpen.value = false;
+  hpMonster.value = incrementHp(hpMonster.value, amount);
+}
+
 function updateMonsterHp(monster: ActiveMonsterData | null): void {
   if (!monster) return;
+  isHpChangeModalOpen.value = false;
+  hpMonster.value = monster;
   hpStep.value = 1;
   hpModalInitialValue.value = monster.maxHp;
   isHpModalOpen.value = true;
@@ -215,14 +246,14 @@ function updateMonsterHp(monster: ActiveMonsterData | null): void {
 function onHpKeypadConfirm(value: number): void {
   if (hpStep.value === 1) {
     pendingMaxHp = value;
-    const dmgTaken = (detailsMonster.value?.maxHp ?? 0) - (detailsMonster.value?.hp ?? 0);
+    const dmgTaken = (hpMonster.value?.maxHp ?? 0) - (hpMonster.value?.hp ?? 0);
     hpModalInitialValue.value = Math.max(0, value - dmgTaken);
     hpStep.value = 2;
   } else {
-    if (detailsMonster.value) {
-      detailsMonster.value.maxHp = pendingMaxHp;
-      detailsMonster.value.hp = value;
-      detailsMonster.value = updateHp(detailsMonster.value);
+    if (hpMonster.value) {
+      hpMonster.value.maxHp = pendingMaxHp;
+      hpMonster.value.hp = value;
+      hpMonster.value = updateHp(hpMonster.value);
     }
     isHpModalOpen.value = false;
     hpStep.value = 1;
@@ -315,6 +346,7 @@ function onHpKeypadConfirm(value: number): void {
           :monsters="monsterByInitiative(initInfo.index)"
           :tokenCount="getTokenCount(initInfo)"
           @openDetails="openDetails"
+          @change-hp="openHpChange"
         />
         <!-- Hero Initiatives -->
         <div v-else-if="initInfo.type === InitiativeTypes.HERO" class="grid grid-cols-12 divide-y" id="initiative-container">
@@ -375,6 +407,36 @@ function onHpKeypadConfirm(value: number): void {
     @close="closeHeroModal"
   />
   <KeypadModal
+    :is-open="isHpChangeModalOpen"
+    :title="`${hpMonster?.name ?? ''} HP ${hpMonster?.hp ?? 0}/${hpMonster?.maxHp ?? 0}`"
+    @close="isHpChangeModalOpen = false"
+  >
+    <template #actions="{ value }">
+      <div class="grid grid-cols-2 gap-3 w-full">
+        <button
+          class="rounded-xl text-2xl font-bold py-4 text-white border-4 border-red-900 bg-red-600 active:opacity-60 disabled:opacity-30"
+          :disabled="value <= 0"
+          @click="applyDamage(value)"
+        >
+          Damage
+        </button>
+        <button
+          class="rounded-xl text-2xl font-bold py-4 text-white border-4 border-green-900 bg-green-600 active:opacity-60 disabled:opacity-30"
+          :disabled="value <= 0"
+          @click="applyHealing(value)"
+        >
+          Heal
+        </button>
+      </div>
+      <button
+        class="text-sm font-semibold px-3 py-1 rounded-lg bg-slate-800 text-gray-300"
+        @click="updateMonsterHp(hpMonster)"
+      >
+        Set Max / Current HP
+      </button>
+    </template>
+  </KeypadModal>
+  <KeypadModal
     :is-open="isHpModalOpen"
     :title="hpStep === 1 ? 'Max HP' : 'Current HP'"
     :initial-value="hpModalInitialValue"
@@ -384,14 +446,7 @@ function onHpKeypadConfirm(value: number): void {
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
       <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
-        @decrement-hp="(hp = -1) => {
-          detailsMonster = decrementHp(detailsMonster, hp);
-          if (!detailsMonster) {
-            closeDetails();
-          }
-        }"
-        @increment-hp="() => detailsMonster = incrementHp(detailsMonster)"
-        @update-hp="() => updateMonsterHp(detailsMonster)"
+        @change-hp="() => openHpChange(detailsMonster)"
         @remove-monster="() => {
           removeMonster(detailsMonster);
           closeDetails();
