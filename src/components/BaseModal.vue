@@ -40,7 +40,7 @@ function setIsOpen(value: boolean) {
             enter-to="opacity-100 scale-100"
           >
             <DialogPanel
-              class="bg-base-300 w-full max-w-xl h-full lg:h-5/6 transform overflow-x-hidden overflow-y-auto rounded-2xl text-left align-middle shadow-xl transition-all"
+              class="bg-base-300 w-full max-w-xl max-h-full lg:max-h-[83.333%] transform overflow-x-hidden overflow-y-auto rounded-2xl text-left align-middle shadow-xl transition-all"
             >
               <DialogTitle class="sticky top-0 py-1 px-4 bg-base-300 z-50">
                 <div class="flex justify-between">
@@ -57,7 +57,7 @@ function setIsOpen(value: boolean) {
                   </button>
                 </div>
               </DialogTitle>
-              <div class="container px-4 bg-base-400 pt-4">
+              <div class="container px-4 bg-base-400 py-4">
                 <slot></slot>
               </div>
             </DialogPanel>
