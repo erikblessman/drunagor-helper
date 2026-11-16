@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MainMenu from "@/components/MainMenu.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import MainMenu from "@/components/MainMenu.vue";
   <div class="container mx-auto 2xl:w-2/4 lg:w-3/4 p-4">
     <router-view> </router-view>
   </div>
+  <ConfirmDialog />
 </template>
 
 <style scoped></style>

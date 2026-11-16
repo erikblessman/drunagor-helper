@@ -27,6 +27,7 @@ import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
 import { DarknessTokens, type IToken } from "@/data/initiative/DarknessTokens";
 import _ from "lodash";
+import { confirmDialog } from "@/composables/useConfirmDialog";
 // #endregion
 
 export const useInitiativeStore = defineStore("initiative", () => {
@@ -79,8 +80,16 @@ export const useInitiativeStore = defineStore("initiative", () => {
     _initiativeList.value.push(newMonster);
     return _initiativeList.value[_initiativeList.value.length - 1];
   };
-  const clearInitiative = () => {
-    if (autoConfirmDelete.value || confirm("Are you sure you want to clear the initiative?")) {
+  const clearInitiative = async () => {
+    if (
+      autoConfirmDelete.value ||
+      (await confirmDialog({
+        title: "Clear Initiative",
+        message: "Are you sure you want to clear the initiative?",
+        confirmText: "Clear",
+        danger: true,
+      }))
+    ) {
       _snapshot('Cleared initiative');
       turnIndex.value = 0;
       darknessTokens.value = _.shuffle(DarknessTokens);
@@ -96,7 +105,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
       _initiativeList.value[mIndex] = monster;
     }
   };
-  const decrementHp = (monster: any, n: number = -1): ActiveMonsterData | null => {
+  const decrementHp = (monster: any, n: number = -1): Promise<ActiveMonsterData | null> => {
     _snapshot(`${monster.name} ${n} HP`);
     const mIndex = _getMonsterIndex(monster);
     return _loseHp(_initiativeList.value[mIndex], -n);
@@ -111,7 +120,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     const poison = count(Poison.name);
     return { burn, bleed, poison, total: burn + bleed + poison };
   };
-  const applyConditionDamage = (monster: any): ActiveMonsterData | null => {
+  const applyConditionDamage = async (monster: any): Promise<ActiveMonsterData | null> => {
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     if (!storeMonster) return null;
@@ -130,7 +139,10 @@ export const useInitiativeStore = defineStore("initiative", () => {
   };
   // Applies damage, letting the monster's Shield absorb as much as possible first.
   // Blocked damage is removed from the Shield count. Recorded as a single undo step.
-  const applyDamage = (monster: any, amount: number): { monster: ActiveMonsterData | null; blocked: number } => {
+  const applyDamage = async (
+    monster: any,
+    amount: number
+  ): Promise<{ monster: ActiveMonsterData | null; blocked: number }> => {
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
     const shield = storeMonster.conditions?.find((c: ICondition) => c.name == Shield.name);
@@ -147,13 +159,22 @@ export const useInitiativeStore = defineStore("initiative", () => {
     if (remaining <= 0) {
       return { monster: storeMonster, blocked };
     }
-    return { monster: _loseHp(storeMonster, remaining), blocked };
+    return { monster: await _loseHp(storeMonster, remaining), blocked };
   };
-  const _loseHp = (storeMonster: any, amount: number): ActiveMonsterData | null => {
+  const _confirmDelete = async (monster: any, message: string): Promise<boolean> =>
+    autoConfirmDelete.value ||
+    confirmDialog({
+      title: "Remove Monster",
+      message: `${message}\nRemove ${monster.name} (${monster.baseColor})?`,
+      confirmText: "Remove",
+      cancelText: "Keep",
+      danger: true,
+    });
+  const _loseHp = async (storeMonster: any, amount: number): Promise<ActiveMonsterData | null> => {
     storeMonster.hp -= amount;
     if (storeMonster.hp < 1) {
       storeMonster.hp = 0;
-      if (autoConfirmDelete.value || confirm(`Delete ${storeMonster.name} - ${storeMonster.baseColor}?`)) {
+      if (await _confirmDelete(storeMonster, `${storeMonster.name} is at 0 HP.`)) {
         _doRemoveMonster(storeMonster);
         return null;
       }
@@ -175,7 +196,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
       _initiativeList.value[mIndex] = monster;
     }
   };
-  const incrementHp = (monster: any, n:number = 1): ActiveMonsterData => {
+  const incrementHp = async (monster: any, n: number = 1): Promise<ActiveMonsterData> => {
     _snapshot(`${monster.name} +${n} HP`);
     const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
@@ -183,7 +204,14 @@ export const useInitiativeStore = defineStore("initiative", () => {
       storeMonster.hp = 0;
     }
     const newHp = storeMonster.hp + n;
-    if (newHp <= storeMonster.maxHp || confirm(`Override Max HP: ${storeMonster.maxHp}`)) {
+    if (
+      newHp <= storeMonster.maxHp ||
+      (await confirmDialog({
+        title: "Exceed Max HP",
+        message: `Healing ${storeMonster.name} to ${newHp} HP exceeds its max of ${storeMonster.maxHp}.\nHeal above max HP?`,
+        confirmText: "Heal",
+      }))
+    ) {
       storeMonster.hp = newHp;
     }
     return storeMonster;
@@ -204,8 +232,16 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const removeHero = (dungeonRole: string) => {
     delete _heros.value[dungeonRole];
   };
-  const removeMonster = (monster: any): boolean => {
-    if (autoConfirmDelete.value || confirm(`Delete ${monster.name} - ${monster.baseColor}?`)) {
+  const removeMonster = async (monster: any): Promise<boolean> => {
+    if (
+      autoConfirmDelete.value ||
+      (await confirmDialog({
+        title: "Remove Monster",
+        message: `Remove ${monster.name} (${monster.baseColor})?`,
+        confirmText: "Remove",
+        danger: true,
+      }))
+    ) {
       _snapshot(`Removed ${monster.name}`);
       _doRemoveMonster(monster);
       return true;

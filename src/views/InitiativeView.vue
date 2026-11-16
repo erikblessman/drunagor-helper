@@ -42,6 +42,7 @@ import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue
 import HeroModal from "@/components/initiative/HeroModal.vue";
 import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
 import { Shield } from "@/data/conditions/Condition";
+import { isConfirmDialogOpen } from "@/composables/useConfirmDialog";
 // #endregion
 
 const toast = useToast();
@@ -202,7 +203,7 @@ function queueConditionDamage(): void {
   );
 }
 
-function resolveConditionDamage(apply: boolean): void {
+async function resolveConditionDamage(apply: boolean): Promise<void> {
   const monster = conditionDamageQueue.value.shift();
   if (!monster || !apply) return;
   const { burn, bleed, poison, total } = getConditionDamage(monster);
@@ -212,8 +213,8 @@ function resolveConditionDamage(apply: boolean): void {
     poison ? `Poison ${poison}` : "",
   ].filter(Boolean);
   const isDetailsMonster = detailsMonster.value?.msTimestamp === monster.msTimestamp;
-  const result = applyConditionDamage(monster);
   toast.info(`${monster.name}: took ${total} damage from ${parts.join(", ")}.`);
+  const result = await applyConditionDamage(monster);
   if (isDetailsMonster) {
     detailsMonster.value = result;
     if (!result) closeDetails();
@@ -239,6 +240,11 @@ function openDetails(monster: ActiveMonsterData) {
 function closeDetails() {
   detailsOpen.value = false;
 }
+async function removeDetailsMonster() {
+  if (await removeMonster(detailsMonster.value)) {
+    closeDetails();
+  }
+}
 const isHpModalOpen = ref(false);
 const hpStep = ref<1 | 2>(1);
 const hpModalInitialValue = ref(0);
@@ -254,7 +260,7 @@ function openHpChange(monster: ActiveMonsterData | null): void {
   isHpChangeModalOpen.value = true;
 }
 
-function applyDamage(amount: number): void {
+async function applyDamage(amount: number): Promise<void> {
   if (!hpMonster.value || amount <= 0) return;
   isHpChangeModalOpen.value = false;
   const isDetailsMonster = detailsMonster.value?.msTimestamp === hpMonster.value.msTimestamp;
@@ -267,7 +273,7 @@ function applyDamage(amount: number): void {
         `${amount - blocked} damage applied.`
     );
   }
-  hpMonster.value = applyDamageToMonster(hpMonster.value, amount).monster;
+  hpMonster.value = (await applyDamageToMonster(hpMonster.value, amount)).monster;
   if (isDetailsMonster) {
     detailsMonster.value = hpMonster.value;
     if (!detailsMonster.value) {
@@ -280,10 +286,10 @@ function getShieldCount(monster: ActiveMonsterData | null): number {
   return monster?.conditions?.find((c) => c.name === Shield.name)?.count ?? 0;
 }
 
-function applyHealing(amount: number): void {
+async function applyHealing(amount: number): Promise<void> {
   if (!hpMonster.value || amount <= 0) return;
   isHpChangeModalOpen.value = false;
-  hpMonster.value = incrementHp(hpMonster.value, amount);
+  hpMonster.value = await incrementHp(hpMonster.value, amount);
 }
 
 function updateMonsterHp(monster: ActiveMonsterData | null): void {
@@ -499,7 +505,7 @@ function onHpKeypadConfirm(value: number): void {
     @confirm="onHpKeypadConfirm"
   />
   <BaseModal
-    :is-open="conditionDamageMonster != null"
+    :is-open="conditionDamageMonster != null && !isConfirmDialogOpen"
     :title="`${conditionDamageMonster?.name ?? ''} (${conditionDamageMonster?.baseColor ?? ''})`"
     @close-modal="resolveConditionDamage(false)"
   >
@@ -532,14 +538,11 @@ function onHpKeypadConfirm(value: number): void {
       </div>
     </div>
   </BaseModal>
-  <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
+  <BaseModal :is-open="detailsOpen && !isConfirmDialogOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
       <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
         @change-hp="() => openHpChange(detailsMonster)"
-        @remove-monster="() => {
-          removeMonster(detailsMonster);
-          closeDetails();
-        }" />
+        @remove-monster="removeDetailsMonster" />
     </template>
   </BaseModal>
 </template>
