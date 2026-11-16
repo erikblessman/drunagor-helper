@@ -148,7 +148,7 @@ function randomMonster() {
   } else if (colorFilter.value === 'scenario-monster') {
     list = filteredScenarioMonsters.value;
   } else if (!rankSelection.value) {
-    alert('Please select a rank first (R|F|V|C)');
+    isRankNoticeOpen.value = true;
     return;
   } else {
     list = allMonsters.value;
@@ -168,13 +168,39 @@ function calcInitiative(color: string, position: string) : number {
   return initObj?.index ?? 1;
 }
 
+// #region dialogs
+const isRankNoticeOpen = ref(false);
+
+const initiativeColors = [
+  { name: "Orange", css: "bg-orange-500" },
+  { name: "Green", css: "bg-green-600" },
+  { name: "Blue", css: "bg-blue-600" },
+  { name: "Red", css: "bg-red-600" },
+  { name: "Gray", css: "bg-gray-500" },
+] as const;
+const initiativePositions = ["Top", "Bottom"] as const;
+
+const isCustomOpen = ref(false);
+const customName = ref("Special");
+const customColor = ref<string>("Gray");
+const customPosition = ref<string>("Bottom");
+const canAddCustom = computed(() => customName.value.trim().length > 0);
+
 function addCustom(): void {
-  const name: string | null = prompt("Name", "Special");
-  if (name === null) { return; }
-  const color: string | null = prompt("Color", "Gray");
-  if (color === null) { return; }
-  const position: string | null = prompt("Top/Bottom", "Bottom");
-  if (position === null) { return; }
+  customName.value = "Special";
+  customColor.value = "Gray";
+  customPosition.value = "Bottom";
+  isCustomOpen.value = true;
+}
+
+function confirmCustom(): void {
+  if (!canAddCustom.value) return;
+  isCustomOpen.value = false;
+  createCustomMonster(customName.value.trim(), customColor.value, customPosition.value);
+}
+// #endregion
+
+function createCustomMonster(name: string, color: string, position: string): void {
   const initiative: number = calcInitiative(color, position);
   const monster: ActiveMonsterData = {
     id: name,
@@ -320,6 +346,65 @@ function addCustom(): void {
           </BaseListItem>
         </template>
       </BaseList>
+
+      <!-- Nested inside the picker so clicks here aren't treated as outside clicks that close it -->
+      <BaseModal :is-open="isRankNoticeOpen" title="Select a Rank" @close-modal="isRankNoticeOpen = false">
+        <div class="flex flex-col gap-4 py-2">
+          <div class="text-center">Please select a rank first (R | F | V | C) to add a random monster.</div>
+          <button class="rounded-xl font-bold py-3 bg-primary text-black" @click="isRankNoticeOpen = false">OK</button>
+        </div>
+      </BaseModal>
+
+      <BaseModal :is-open="isCustomOpen" title="Custom Monster" @close-modal="isCustomOpen = false">
+        <form class="flex flex-col gap-4 py-2" @submit.prevent="confirmCustom">
+          <label class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Name</span>
+            <input v-model="customName" class="w-full" autofocus />
+          </label>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Initiative color</span>
+            <div class="grid grid-cols-5 gap-2">
+              <button
+                v-for="c in initiativeColors"
+                :key="c.name"
+                type="button"
+                class="h-12 rounded-lg text-xs font-bold text-white"
+                :class="[c.css, customColor === c.name ? 'ring-4 ring-highlight' : 'opacity-60']"
+                @click="customColor = c.name"
+              >
+                {{ c.name }}
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Position</span>
+            <div class="grid grid-cols-2 gap-2">
+              <button
+                v-for="p in initiativePositions"
+                :key="p"
+                type="button"
+                class="h-12 rounded-lg font-bold bg-slate-700"
+                :class="customPosition === p ? 'ring-4 ring-highlight' : 'opacity-60'"
+                @click="customPosition = p"
+              >
+                {{ p }}
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <button type="button" class="rounded-xl font-bold py-3 bg-slate-600" @click="isCustomOpen = false">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="rounded-xl font-bold py-3 bg-primary text-black disabled:opacity-30"
+              :disabled="!canAddCustom"
+            >
+              Add
+            </button>
+          </div>
+        </form>
+      </BaseModal>
     </template>
   </BaseModal>
 </template>
