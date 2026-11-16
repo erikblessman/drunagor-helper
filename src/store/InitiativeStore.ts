@@ -1,6 +1,6 @@
 // #region external imports
 import { computed, ref } from "vue";
-import { defineStore } from "pinia";
+import { acceptHMRUpdate, defineStore } from "pinia";
 import { useStorage } from "@vueuse/core";
 // #endregion
 
@@ -21,7 +21,7 @@ export const ringColors = {
   Tan: "SaddleBrown",
 };
 
-import { Conditions, Shield, type ICondition } from "@/data/conditions/Condition";
+import { Bleed, Burn, Conditions, Poison, Shield, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
@@ -100,6 +100,33 @@ export const useInitiativeStore = defineStore("initiative", () => {
     _snapshot(`${monster.name} ${n} HP`);
     const mIndex = _getMonsterIndex(monster);
     return _loseHp(_initiativeList.value[mIndex], -n);
+  };
+  // Start-of-turn damage from Burn, Bleed and Poison: each deals damage equal to its count.
+  // Bleed is then cleared, Burn drops by 1, Poison stays. Shield does not apply. Single undo step.
+  const getConditionDamage = (monster: any): { burn: number; bleed: number; poison: number; total: number } => {
+    const count = (name: string): number =>
+      monster?.conditions?.find((c: ICondition) => c.name == name)?.count ?? 0;
+    const burn = count(Burn.name);
+    const bleed = count(Bleed.name);
+    const poison = count(Poison.name);
+    return { burn, bleed, poison, total: burn + bleed + poison };
+  };
+  const applyConditionDamage = (monster: any): ActiveMonsterData | null => {
+    const mIndex = _getMonsterIndex(monster);
+    const storeMonster = _initiativeList.value[mIndex];
+    if (!storeMonster) return null;
+    const { total } = getConditionDamage(storeMonster);
+    if (total <= 0) return storeMonster;
+    _snapshot(`${storeMonster.name} -${total} HP (conditions)`);
+    const bleed = storeMonster.conditions.find((c: ICondition) => c.name == Bleed.name);
+    if (bleed) {
+      bleed.count = 0;
+    }
+    const burn = storeMonster.conditions.find((c: ICondition) => c.name == Burn.name);
+    if (burn && burn.count > 0) {
+      burn.count--;
+    }
+    return _loseHp(storeMonster, total);
   };
   // Applies damage, letting the monster's Shield absorb as much as possible first.
   // Blocked damage is removed from the Shield count. Recorded as a single undo step.
@@ -316,8 +343,10 @@ export const useInitiativeStore = defineStore("initiative", () => {
     // functions
     addHero,
     addMonster,
+    applyConditionDamage,
     applyDamage,
     clearInitiative,
+    getConditionDamage,
     decrementCondition,
     decrementHp,
     getHero,
@@ -330,3 +359,8 @@ export const useInitiativeStore = defineStore("initiative", () => {
     undo,
   };
 });
+
+// Let Vite hot-swap this store so newly added actions are available without a full reload.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useInitiativeStore, import.meta.hot));
+}

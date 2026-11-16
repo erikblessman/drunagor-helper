@@ -52,8 +52,10 @@ const {
   getInitiativeList,
   addHero,
   addMonster,
+  applyConditionDamage,
   applyDamage: applyDamageToMonster,
   clearInitiative,
+  getConditionDamage,
   getHero,
   incrementHp,
   removeHero,
@@ -181,7 +183,43 @@ const incrementTUrn = () => {
         break;
     }
   } while (skipTurn && ++i < max);
+  queueConditionDamage();
 };
+
+// #region start-of-turn condition damage (Burn / Bleed / Poison)
+const conditionDamageQueue = ref<ActiveMonsterData[]>([]);
+const conditionDamageMonster = computed(() => conditionDamageQueue.value[0] ?? null);
+const conditionDamage = computed(() => getConditionDamage(conditionDamageMonster.value));
+
+function queueConditionDamage(): void {
+  const current = iList.value[0];
+  if (current?.type !== InitiativeTypes.MONSTER) {
+    conditionDamageQueue.value = [];
+    return;
+  }
+  conditionDamageQueue.value = monsterByInitiative(current.index).filter(
+    (m: ActiveMonsterData) => getConditionDamage(m).total > 0
+  );
+}
+
+function resolveConditionDamage(apply: boolean): void {
+  const monster = conditionDamageQueue.value.shift();
+  if (!monster || !apply) return;
+  const { burn, bleed, poison, total } = getConditionDamage(monster);
+  const parts = [
+    burn ? `Burn ${burn} (now ${burn - 1})` : "",
+    bleed ? `Bleed ${bleed} (cleared)` : "",
+    poison ? `Poison ${poison}` : "",
+  ].filter(Boolean);
+  const isDetailsMonster = detailsMonster.value?.msTimestamp === monster.msTimestamp;
+  const result = applyConditionDamage(monster);
+  toast.info(`${monster.name}: took ${total} damage from ${parts.join(", ")}.`);
+  if (isDetailsMonster) {
+    detailsMonster.value = result;
+    if (!result) closeDetails();
+  }
+}
+// #endregion
 const getTokenCount = (initInfo: InitiativeInfo) => {
   return darknessTokens.value.filter(token => token.color == initInfo.color && token.label === INITIATIVE_TRACK).length;
 }
@@ -460,6 +498,40 @@ function onHpKeypadConfirm(value: number): void {
     @close="isHpModalOpen = false"
     @confirm="onHpKeypadConfirm"
   />
+  <BaseModal
+    :is-open="conditionDamageMonster != null"
+    :title="`${conditionDamageMonster?.name ?? ''} (${conditionDamageMonster?.baseColor ?? ''})`"
+    @close-modal="resolveConditionDamage(false)"
+  >
+    <div class="flex flex-col gap-4 py-2">
+      <div class="text-center text-lg">
+        Apply <span class="font-bold text-red-400">{{ conditionDamage.total }}</span> condition damage?
+      </div>
+      <ul class="text-center text-sm text-gray-300">
+        <li v-if="conditionDamage.burn">Burn {{ conditionDamage.burn }}: {{ conditionDamage.burn }} damage, Burn drops to {{ conditionDamage.burn - 1 }}</li>
+        <li v-if="conditionDamage.bleed">Bleed {{ conditionDamage.bleed }}: {{ conditionDamage.bleed }} damage, Bleed removed</li>
+        <li v-if="conditionDamage.poison">Poison {{ conditionDamage.poison }}: {{ conditionDamage.poison }} damage</li>
+      </ul>
+      <div class="text-center text-sm text-gray-400">
+        HP {{ conditionDamageMonster?.hp ?? 0 }}/{{ conditionDamageMonster?.maxHp ?? 0 }} →
+        {{ Math.max(0, (conditionDamageMonster?.hp ?? 0) - conditionDamage.total) }}
+      </div>
+      <div class="grid grid-cols-2 gap-3 w-full">
+        <button
+          class="rounded-xl text-2xl font-bold py-4 text-white border-4 border-red-900 bg-red-600 active:opacity-60"
+          @click="resolveConditionDamage(true)"
+        >
+          Apply
+        </button>
+        <button
+          class="rounded-xl text-2xl font-bold py-4 text-white border-4 border-slate-900 bg-slate-600 active:opacity-60"
+          @click="resolveConditionDamage(false)"
+        >
+          Skip
+        </button>
+      </div>
+    </div>
+  </BaseModal>
   <BaseModal :is-open="detailsOpen" @close-modal="closeDetails" :title="`${detailsMonster?.name} (${detailsMonster?.baseColor})`">
     <template #default>
       <ActiveMonsterDetails :detailsMonster="detailsMonster" @close="closeDetails"
