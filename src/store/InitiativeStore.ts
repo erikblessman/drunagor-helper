@@ -21,7 +21,7 @@ export const ringColors = {
   Tan: "SaddleBrown",
 };
 
-import { Conditions, type ICondition } from "@/data/conditions/Condition";
+import { Conditions, Shield, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
@@ -99,11 +99,34 @@ export const useInitiativeStore = defineStore("initiative", () => {
   const decrementHp = (monster: any, n: number = -1): ActiveMonsterData | null => {
     _snapshot(`${monster.name} ${n} HP`);
     const mIndex = _getMonsterIndex(monster);
+    return _loseHp(_initiativeList.value[mIndex], -n);
+  };
+  // Applies damage, letting the monster's Shield absorb as much as possible first.
+  // Blocked damage is removed from the Shield count. Recorded as a single undo step.
+  const applyDamage = (monster: any, amount: number): { monster: ActiveMonsterData | null; blocked: number } => {
+    const mIndex = _getMonsterIndex(monster);
     const storeMonster = _initiativeList.value[mIndex];
-    storeMonster.hp += n;
+    const shield = storeMonster.conditions?.find((c: ICondition) => c.name == Shield.name);
+    const blocked = Math.min(shield?.count ?? 0, amount);
+    _snapshot(
+      blocked > 0
+        ? `${monster.name} -${amount - blocked} HP (Shield blocked ${blocked})`
+        : `${monster.name} -${amount} HP`
+    );
+    if (shield && blocked > 0) {
+      shield.count -= blocked;
+    }
+    const remaining = amount - blocked;
+    if (remaining <= 0) {
+      return { monster: storeMonster, blocked };
+    }
+    return { monster: _loseHp(storeMonster, remaining), blocked };
+  };
+  const _loseHp = (storeMonster: any, amount: number): ActiveMonsterData | null => {
+    storeMonster.hp -= amount;
     if (storeMonster.hp < 1) {
       storeMonster.hp = 0;
-      if (autoConfirmDelete.value || confirm(`Delete ${monster.name} - ${monster.baseColor}?`)) {
+      if (autoConfirmDelete.value || confirm(`Delete ${storeMonster.name} - ${storeMonster.baseColor}?`)) {
         _doRemoveMonster(storeMonster);
         return null;
       }
@@ -293,6 +316,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     // functions
     addHero,
     addMonster,
+    applyDamage,
     clearInitiative,
     decrementCondition,
     decrementHp,

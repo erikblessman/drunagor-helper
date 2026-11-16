@@ -41,6 +41,7 @@ import type { HeroData } from "@/data/repository/HeroData";
 import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
 import HeroModal from "@/components/initiative/HeroModal.vue";
 import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
+import { Shield } from "@/data/conditions/Condition";
 // #endregion
 
 const toast = useToast();
@@ -51,8 +52,8 @@ const {
   getInitiativeList,
   addHero,
   addMonster,
+  applyDamage: applyDamageToMonster,
   clearInitiative,
-  decrementHp,
   getHero,
   incrementHp,
   removeHero,
@@ -219,13 +220,26 @@ function applyDamage(amount: number): void {
   if (!hpMonster.value || amount <= 0) return;
   isHpChangeModalOpen.value = false;
   const isDetailsMonster = detailsMonster.value?.msTimestamp === hpMonster.value.msTimestamp;
-  hpMonster.value = decrementHp(hpMonster.value, -amount);
+  const name = hpMonster.value.name;
+  const shieldCount = getShieldCount(hpMonster.value);
+  if (shieldCount > 0) {
+    const blocked = Math.min(shieldCount, amount);
+    toast.info(
+      `${name}: Shield blocked ${blocked} of ${amount} damage (Shield ${shieldCount} → ${shieldCount - blocked}). ` +
+        `${amount - blocked} damage applied.`
+    );
+  }
+  hpMonster.value = applyDamageToMonster(hpMonster.value, amount).monster;
   if (isDetailsMonster) {
     detailsMonster.value = hpMonster.value;
     if (!detailsMonster.value) {
       closeDetails();
     }
   }
+}
+
+function getShieldCount(monster: ActiveMonsterData | null): number {
+  return monster?.conditions?.find((c) => c.name === Shield.name)?.count ?? 0;
 }
 
 function applyHealing(amount: number): void {
@@ -411,7 +425,7 @@ function onHpKeypadConfirm(value: number): void {
   />
   <KeypadModal
     :is-open="isHpChangeModalOpen"
-    :title="`${hpMonster?.name ?? ''} HP ${hpMonster?.hp ?? 0}/${hpMonster?.maxHp ?? 0}`"
+    :title="`${hpMonster?.name ?? ''} HP ${hpMonster?.hp ?? 0}/${hpMonster?.maxHp ?? 0}${getShieldCount(hpMonster) > 0 ? ` · Shield ${getShieldCount(hpMonster)}` : ''}`"
     @close="isHpChangeModalOpen = false"
   >
     <template #actions="{ value }">
