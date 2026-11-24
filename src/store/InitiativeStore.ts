@@ -21,7 +21,7 @@ export const ringColors = {
   Tan: "SaddleBrown",
 };
 
-import { Bleed, Burn, Conditions, Poison, Shield, Stun, type ICondition } from "@/data/conditions/Condition";
+import { Bleed, Burn, Conditions, Poison, Shield, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
@@ -161,17 +161,18 @@ export const useInitiativeStore = defineStore("initiative", () => {
     }
     return { monster: await _loseHp(storeMonster, remaining), blocked };
   };
-  // Stun lasts until the end of the monster's turn. Returns the names of monsters that were un-stunned.
-  const clearStun = (monsters: any[]): string[] => {
-    const stunned = monsters
+  // Clears the given status from each monster that has it, as a single undo step.
+  // Returns the names of the monsters whose status was cleared.
+  const clearStatus = (monsters: any[], status: ICondition): string[] => {
+    const affected = monsters
       .map((m) => _initiativeList.value[_getMonsterIndex(m)])
-      .filter((m) => (m?.conditions?.find((c: ICondition) => c.name == Stun.name)?.count ?? 0) > 0);
-    if (stunned.length === 0) return [];
-    _snapshot(`Cleared Stun: ${stunned.map((m) => m.name).join(", ")}`);
-    for (const m of stunned) {
-      m.conditions.find((c: ICondition) => c.name == Stun.name).count = 0;
+      .filter((m) => (m?.conditions?.find((c: ICondition) => c.name == status.name)?.count ?? 0) > 0);
+    if (affected.length === 0) return [];
+    _snapshot(`Cleared ${status.name}: ${affected.map((m) => m.name).join(", ")}`);
+    for (const m of affected) {
+      m.conditions.find((c: ICondition) => c.name == status.name).count = 0;
     }
-    return stunned.map((m) => m.name);
+    return affected.map((m) => m.name);
   };
   const _confirmDelete = async (monster: any, message: string): Promise<boolean> =>
     autoConfirmDelete.value ||
@@ -394,7 +395,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     applyConditionDamage,
     applyDamage,
     clearInitiative,
-    clearStun,
+    clearStatus,
     getConditionDamage,
     decrementCondition,
     decrementHp,

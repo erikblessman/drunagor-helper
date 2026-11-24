@@ -41,7 +41,7 @@ import type { HeroData } from "@/data/repository/HeroData";
 import ActiveMonsterAvatar from "@/components/initiative/ActiveMonsterAvatar.vue";
 import HeroModal from "@/components/initiative/HeroModal.vue";
 import { INITIATIVE_TRACK } from "@/data/initiative/DarknessTokens";
-import { Shield } from "@/data/conditions/Condition";
+import { Shield, Stun } from "@/data/conditions/Condition";
 import { isConfirmDialogOpen } from "@/composables/useConfirmDialog";
 // #endregion
 
@@ -54,7 +54,7 @@ const {
   addHero,
   addMonster,
   applyConditionDamage,
-  clearStun,
+  clearStatus,
   applyDamage: applyDamageToMonster,
   clearInitiative,
   getConditionDamage,
@@ -172,7 +172,7 @@ const incrementTUrn = () => {
   // The current monsters' turn is ending, so their Stun wears off.
   const ending = iList.value[0];
   if (ending?.type === InitiativeTypes.MONSTER) {
-    const cleared = clearStun(monsterByInitiative(ending.index));
+    const cleared = clearStatus(monsterByInitiative(ending.index), Stun);
     if (cleared.length > 0) {
       toast.info(`Stun cleared: ${cleared.join(", ")}.`);
     }
