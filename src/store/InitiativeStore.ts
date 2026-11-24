@@ -161,6 +161,19 @@ export const useInitiativeStore = defineStore("initiative", () => {
     }
     return { monster: await _loseHp(storeMonster, remaining), blocked };
   };
+  // Clears the given status from each monster that has it, as a single undo step.
+  // Returns the names of the monsters whose status was cleared.
+  const clearStatus = (monsters: any[], status: ICondition): string[] => {
+    const affected = monsters
+      .map((m) => _initiativeList.value[_getMonsterIndex(m)])
+      .filter((m) => (m?.conditions?.find((c: ICondition) => c.name == status.name)?.count ?? 0) > 0);
+    if (affected.length === 0) return [];
+    _snapshot(`Cleared ${status.name}: ${affected.map((m) => m.name).join(", ")}`);
+    for (const m of affected) {
+      m.conditions.find((c: ICondition) => c.name == status.name).count = 0;
+    }
+    return affected.map((m) => m.name);
+  };
   const _confirmDelete = async (monster: any, message: string): Promise<boolean> =>
     autoConfirmDelete.value ||
     confirmDialog({
@@ -382,6 +395,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     applyConditionDamage,
     applyDamage,
     clearInitiative,
+    clearStatus,
     getConditionDamage,
     decrementCondition,
     decrementHp,
