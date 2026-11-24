@@ -28,9 +28,13 @@ const monster = toRef(props, "monster");
             class="bg-white border-8 rounded-full shadow dark:bg-gray-800"
             :class="monster.size == 'large' ? 'w-32' : 'w-24'"
         />
-        <UserCircleIcon v-else
+        <!-- No art (e.g. custom monsters): same ring-colored border and size as an image avatar -->
+        <div v-else
             :style="'border-color:' + monster.baseColor + ';'"
-            class="h-16 text-gray-200 rounded-lg" />
+            class="flex items-center justify-center aspect-square bg-white border-8 rounded-full shadow dark:bg-gray-800"
+            :class="monster.size == 'large' ? 'w-32' : 'w-24'">
+            <UserCircleIcon class="w-full h-full text-gray-400" />
+        </div>
         <div v-if="showNotes" class="font-semibold text-lg">
             <div>{{ monster.name }}</div>
             <div>{{ monster.color }} {{ monster.rank }}</div>
