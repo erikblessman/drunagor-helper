@@ -54,6 +54,7 @@ const {
   addHero,
   addMonster,
   applyConditionDamage,
+  clearStun,
   applyDamage: applyDamageToMonster,
   clearInitiative,
   getConditionDamage,
@@ -168,6 +169,14 @@ const decrementTurn = () => {
   adjustTurn(-1);
 };
 const incrementTUrn = () => {
+  // The current monsters' turn is ending, so their Stun wears off.
+  const ending = iList.value[0];
+  if (ending?.type === InitiativeTypes.MONSTER) {
+    const cleared = clearStun(monsterByInitiative(ending.index));
+    if (cleared.length > 0) {
+      toast.info(`Stun cleared: ${cleared.join(", ")}.`);
+    }
+  }
   const max = 20;
   let i = 0;
   let skipTurn: boolean = autoSkip.value;

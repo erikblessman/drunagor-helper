@@ -21,7 +21,7 @@ export const ringColors = {
   Tan: "SaddleBrown",
 };
 
-import { Bleed, Burn, Conditions, Poison, Shield, type ICondition } from "@/data/conditions/Condition";
+import { Bleed, Burn, Conditions, Poison, Shield, Stun, type ICondition } from "@/data/conditions/Condition";
 import { FacelessConjurer } from "@/data/content/apocalypse/monster/FacelessConjurer";
 import type { ActiveMonsterData } from "@/data/store/MonsterData";
 import type { HeroData } from "@/data/repository/HeroData";
@@ -160,6 +160,18 @@ export const useInitiativeStore = defineStore("initiative", () => {
       return { monster: storeMonster, blocked };
     }
     return { monster: await _loseHp(storeMonster, remaining), blocked };
+  };
+  // Stun lasts until the end of the monster's turn. Returns the names of monsters that were un-stunned.
+  const clearStun = (monsters: any[]): string[] => {
+    const stunned = monsters
+      .map((m) => _initiativeList.value[_getMonsterIndex(m)])
+      .filter((m) => (m?.conditions?.find((c: ICondition) => c.name == Stun.name)?.count ?? 0) > 0);
+    if (stunned.length === 0) return [];
+    _snapshot(`Cleared Stun: ${stunned.map((m) => m.name).join(", ")}`);
+    for (const m of stunned) {
+      m.conditions.find((c: ICondition) => c.name == Stun.name).count = 0;
+    }
+    return stunned.map((m) => m.name);
   };
   const _confirmDelete = async (monster: any, message: string): Promise<boolean> =>
     autoConfirmDelete.value ||
@@ -382,6 +394,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     applyConditionDamage,
     applyDamage,
     clearInitiative,
+    clearStun,
     getConditionDamage,
     decrementCondition,
     decrementHp,
