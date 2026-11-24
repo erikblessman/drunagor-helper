@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import BaseDivider from "@/components/BaseDivider.vue";
 import BaseModal from "@/components/BaseModal.vue";
+import KeypadModal from "@/components/KeypadModal.vue";
 import BaseList from "@/components/BaseList.vue";
 import BaseListItem from "@/components/BaseListItem.vue";
 import { useToast } from "vue-toastification";
@@ -12,8 +13,10 @@ import { MonsterDataStore } from "@/data/store/MonsterDataStore";
 import type { ActiveMonsterData, MonsterData } from "@/data/store/MonsterData";
 import { InitiativeList } from "@/data/initiative/InitiativePlaces";
 import type { MonsterColor } from "@/data/type/MonsterColor";
+import { useInitiativeStore } from "@/store/InitiativeStore";
 
 const toast = useToast();
+const initiativeStore = useInitiativeStore();
 
 const isOpen = ref(false);
 
@@ -180,16 +183,58 @@ const initiativeColors = [
 ] as const;
 const initiativePositions = ["Top", "Bottom"] as const;
 
+const monsterColors: { id: MonsterColor; name: string; css: string }[] = [
+  { id: "white", name: "White", css: "bg-white text-black" },
+  { id: "gray", name: "Gray", css: "bg-slate-500 text-white" },
+  { id: "black", name: "Black", css: "bg-black text-white" },
+];
+type Rank = NonNullable<RankFilter>;
+const ranks: { id: Rank; name: string }[] = [
+  { id: "rookie", name: "Rookie" },
+  { id: "fighter", name: "Fighter" },
+  { id: "veteran", name: "Veteran" },
+  { id: "champion", name: "Champion" },
+];
+
 const isCustomOpen = ref(false);
-const customName = ref("Special");
+const customName = ref("");
 const customColor = ref<string>("Gray");
 const customPosition = ref<string>("Bottom");
-const canAddCustom = computed(() => customName.value.trim().length > 0);
+const customMonsterColor = ref<MonsterColor>("black");
+const customRank = ref<Rank>("champion");
+const customMaxHp = ref<number>(0);
+const canAddCustom = computed(() => customName.value.trim().length > 0 && customMaxHp.value > 0);
+
+function defaultCustomHp(): number {
+  return initiativeStore.getDefaultHp({ color: customMonsterColor.value, rank: customRank.value }) ?? 0;
+}
+// Repopulate Max HP with the default whenever monster color or rank changes.
+watch([customMonsterColor, customRank], () => {
+  customMaxHp.value = defaultCustomHp();
+});
+
+const isMaxHpKeypadOpen = ref(false);
+
+function openMaxHpKeypad(event: FocusEvent): void {
+  // Drop focus first so closing the keypad (which restores focus) doesn't immediately reopen it.
+  (event.target as HTMLInputElement).blur();
+  isMaxHpKeypadOpen.value = true;
+}
+
+function confirmMaxHp(value: number): void {
+  customMaxHp.value = value;
+  isMaxHpKeypadOpen.value = false;
+}
 
 function addCustom(): void {
-  customName.value = "Special";
+  customName.value = "";
   customColor.value = "Gray";
   customPosition.value = "Bottom";
+  const filterColor = colorFilter.value;
+  customMonsterColor.value =
+    filterColor === "white" || filterColor === "gray" || filterColor === "black" ? filterColor : "black";
+  customRank.value = rankSelection.value ?? "champion";
+  customMaxHp.value = defaultCustomHp();
   isCustomOpen.value = true;
 }
 
@@ -202,17 +247,18 @@ function confirmCustom(): void {
 
 function createCustomMonster(name: string, color: string, position: string): void {
   const initiative: number = calcInitiative(color, position);
+  const maxHp = Math.floor(customMaxHp.value);
   const monster: ActiveMonsterData = {
     id: name,
     name: name,
-    hp: 0,
-    maxHp: 0,
+    hp: maxHp,
+    maxHp: maxHp,
     content: "core",
     baseColor: '',
     msTimestamp: Date.now(),
     active: true,
     conditions: [],
-    rank: 'champion',
+    rank: customRank.value,
     variants: [],
     images: {
       big: '',
@@ -224,12 +270,13 @@ function createCustomMonster(name: string, color: string, position: string): voi
         champion: [],
       },
     },
-    color: "black",
+    color: customMonsterColor.value,
     size: "small",
     initiative: initiative,
     translation_key: ''
   };
-  pickMonster(monster);
+  // Emit directly so the dialog's rank isn't overwritten by the picker's rank filter.
+  emit("pick-monster", { ...monster, variant: "standard" });
 }
 </script>
 
@@ -362,6 +409,46 @@ function createCustomMonster(name: string, color: string, position: string): voi
             <input v-model="customName" class="w-full" autofocus />
           </label>
           <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Monster color</span>
+            <div class="grid grid-cols-3 gap-2">
+              <button
+                v-for="c in monsterColors"
+                :key="c.id"
+                type="button"
+                class="h-12 rounded-lg text-xs font-bold"
+                :class="[c.css, customMonsterColor === c.id ? 'ring-4 ring-highlight' : 'opacity-60']"
+                @click="customMonsterColor = c.id"
+              >
+                {{ c.name }}
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Rank</span>
+            <div class="grid grid-cols-4 gap-2">
+              <button
+                v-for="r in ranks"
+                :key="r.id"
+                type="button"
+                class="h-12 rounded-lg text-xs font-bold bg-slate-700"
+                :class="customRank === r.id ? 'ring-4 ring-highlight' : 'opacity-60'"
+                @click="customRank = r.id"
+              >
+                {{ r.name }}
+              </button>
+            </div>
+          </div>
+          <label class="flex flex-col gap-1">
+            <span class="text-sm text-gray-400">Max HP</span>
+            <input
+              :value="customMaxHp"
+              readonly
+              inputmode="none"
+              class="w-full cursor-pointer"
+              @focus="openMaxHpKeypad"
+            />
+          </label>
+          <div class="flex flex-col gap-1">
             <span class="text-sm text-gray-400">Initiative color</span>
             <div class="grid grid-cols-5 gap-2">
               <button
@@ -404,6 +491,15 @@ function createCustomMonster(name: string, color: string, position: string): voi
             </button>
           </div>
         </form>
+
+        <!-- Nested inside the custom dialog so keypad clicks don't close it -->
+        <KeypadModal
+          :is-open="isMaxHpKeypadOpen"
+          title="Max HP"
+          :initial-value="customMaxHp"
+          @close="isMaxHpKeypadOpen = false"
+          @confirm="confirmMaxHp"
+        />
       </BaseModal>
     </template>
   </BaseModal>

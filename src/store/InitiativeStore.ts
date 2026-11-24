@@ -64,7 +64,8 @@ export const useInitiativeStore = defineStore("initiative", () => {
   };
   const addMonster = (monster: any): ActiveMonsterData | null => {
     _snapshot(`Added ${monster.name}`);
-    const maxHp = _getDefaultHp(monster);
+    // Custom monsters arrive with a user-chosen max HP; everything else uses the color × rank default.
+    const maxHp = monster.maxHp > 0 ? monster.maxHp : _getDefaultHp(monster);
     if (!maxHp) {
       return null;
     }
@@ -392,6 +393,7 @@ export const useInitiativeStore = defineStore("initiative", () => {
     removeHero,
     removeMonster,
     updateHp,
+    getDefaultHp: _getDefaultHp,
     undo,
   };
 });
